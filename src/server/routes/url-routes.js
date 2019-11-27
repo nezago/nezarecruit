@@ -1,7 +1,7 @@
 import Router from 'express';
 import path from 'path';
 import { authenticate } from '../middlewares/auth';
-// import tableCreation from '../middlewares/tableRefreshProdMode';
+import tableCreation from '../middlewares/tableRefreshProdMode';
 
 const myUrls = Router();
 
@@ -23,9 +23,9 @@ myUrls.get('/auth/auth-user', authenticate, (req, res, next) => {
   next();
 });
 
-// myUrls.get('/refresh-tables', tableCreation, (req, res, next) => {
-//   res.send('waiting...');
-//   next();
-// });
+myUrls.get('/refresh-tables', tableCreation, (req, res, next) => {
+  res.send('waiting...');
+  next();
+});
 
 export default myUrls;
