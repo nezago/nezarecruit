@@ -1,0 +1,148 @@
+body {
+  background-color: rgba(12, 0, 12, 0.24);
+  background-repeat: no-repeat;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-size: cover;
+  background-position: center;
+}
+.bg-custom {
+  background-color: rgba(75, 3, 75, 0.555);
+}
+.width-98 {
+  width: 98%;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.width-60 {
+  width: 60%;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.width-80 {
+  width: 80%;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.vertical-center {
+  margin-top: 20%;
+  margin-bottom: 20%;
+  justify-content: center;
+}
+.hidden-div {
+  display: none;
+}
+.black-bordered-element {
+  border: 3px solid #000000;
+}
+
+.black-transparent-element {
+  background-color: rgba(2, 2, 2, 0.781);
+}
+.rounded-corners {
+  border-radius: 15px;
+}
+.rounded-left-top {
+  border-top-left-radius: 15px;
+}
+.rounded-left-bottom {
+  border-bottom-left-radius: 15px;
+}
+.rounded-right-top {
+  border-top-right-radius: 15px;
+}
+.rounded-right-bottom {
+  border-bottom-right-radius: 15px;
+}
+.padding-15 {
+  padding: 15px;
+}
+.text-17 {
+  font-size: 17px;
+}
+.text-50 {
+  font-size: 50px;
+}
+.text-red {
+  color: #200101e5;
+}
+.text-purple {
+  color: #b301cae5;
+}
+.text-blue {
+  color: #011675e5;
+}
+.text-green {
+  color: #044e0ae5;
+}
+.hand-cursor {
+  cursor: pointer;
+}
+.shadows {
+  box-shadow: 5px 5px 5px #0000006b;
+}
+.text-22 {
+  font-size: 22px;
+}
+.margin-top-25 {
+  margin-top: 25%;
+}
+
+.application-form {
+  border: 3px double rgb(100, 104, 99);
+  border-radius: 15px;
+  background-color: rgba(140, 145, 144, 0.253);
+  padding: 5px;
+}
+/* NAVBAR */
+nav {
+  display: inline-block;
+  text-align: right;
+}
+nav ul {
+  list-style-type: none;
+}
+nav li {
+  display: inline-block;
+  margin-right: 15px;
+}
+nav a {
+  font-size: 1.4em;
+  color: rgb(190, 200, 188);
+  padding-bottom: 3px;
+  text-decoration: none;
+  margin-right: 12px;
+}
+nav a:hover {
+  color: aliceblue;
+  text-decoration: none;
+}
+.sticky-element {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  right: 0;
+  left: 0;
+  top: 0;
+}
+
+/*TBALES*/
+table,
+th,
+td {
+  border: 1px solid #000;
+}
+table {
+  margin-top: 8%;
+  width: 80%;
+}
+header {
+  font-size: 30px;
+  color: rgb(3, 3, 117);
+  justify-content: center;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 5%;
+}

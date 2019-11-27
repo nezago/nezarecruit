@@ -1,0 +1,56 @@
+{
+  "name": "nezarecruit",
+  "version": "20.1.1",
+  "description": "This project is to manage recruitment process for nezagroup",
+  "main": "app.js",
+  "scripts": {
+    "dev": "NODE_ENV=dev nodemon --exec babel-node src/server/app.js",
+    "start": "NODE_ENV=production babel-node src/server/app.js",
+    "migrate-production": "NODE_ENV=production babel-node ./src/server/models/db/migrations/migrate-all-tables.js",
+    "migrate-dev": "NODE_ENV=dev babel-node ./src/server/models/db/migrations/migrate-all-tables.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/de-scholar/nezado.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "postgresql",
+    "rest-api",
+    "pug",
+    "react-js",
+    "react-native",
+    "git",
+    "pivotal-tracker"
+  ],
+  "author": "descholar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/de-scholar/nezarecruit/issues"
+  },
+  "homepage": "https://github.com/de-scholar/nezarecruit#readme",
+  "dependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/node": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
+    "babel-eslint": "^10.0.3",
+    "bcrypt": "^3.0.6",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "path": "^0.12.7",
+    "pg": "^7.12.1",
+    "pug": "^2.0.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
+    "eslint": "^6.7.1",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^1.7.0"
+  }
+}
