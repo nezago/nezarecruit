@@ -1,5 +1,11 @@
-import { validateEmail, validatePassword } from '../../helpers/functions/validations';
+import { validateEmail, validatePassword, validateFname } from '../../helpers/functions/validations';
 
+
+/** ====================================================================================
+ *
+ *  USERS
+ * =====================================================================================
+ */
 export const validateSignup = (req, res, next) => {
   const {
     fname,
@@ -8,8 +14,8 @@ export const validateSignup = (req, res, next) => {
     password,
   } = req.body;
 
-  if (fname.length < 2) {
-    res.status(400).send('Your familly name must have at least two characters!');
+  if (!validateFname(fname)) {
+    res.status(400).send('Your familly name has illegal characters!');
   } else if (dateofbirth.length === 0) {
     res.status(400).send('Please enter your date of birth!');
   } else if (!validateEmail(email)) {
@@ -34,5 +40,44 @@ export const validateLogin = (req, res, next) => {
     }
   } else {
     res.status(400).send('Enter your Email please!');
+  }
+};
+
+
+/** ================================================================================================
+ *
+ * APPLICATIONS
+ * =================================================================================================
+ */
+export const validateApplicationForm = (req, res, next) => {
+  const {
+    fname,
+    educationlevel,
+    graduationyear,
+    employedbefore,
+    startedprogrammingyear,
+    currentlyemployed,
+    dateofbirth,
+    email,
+  } = req.body;
+
+  if (!validateFname(fname)) {
+    res.status(400).send('Your application is not accepted, because your familly name contains illegal characters!');
+  } else if (educationlevel.length < 1) {
+    res.status(400).send('You must precise your education level');
+  } else if (graduationyear.length < 4) {
+    res.status(400).send('The graduation year you chose is invalid, it must be between 1901-2020');
+  } else if (employedbefore.length < 1) {
+    res.status(400).send('You must precise if you have ever been employed or not');
+  } else if (startedprogrammingyear.length < 4) {
+    res.status(400).send('The year of your pragramming start is invalid!');
+  } else if (currentlyemployed.length < 1) {
+    res.status(400).send('You must precise if you are currently employed or not');
+  } else if (dateofbirth.length === 0) {
+    res.status(400).send('We want to know your date of birth please');
+  } else if (!validateEmail(email)) {
+    res.status(400).send('The email you put is invalid');
+  } else {
+    next();
   }
 };

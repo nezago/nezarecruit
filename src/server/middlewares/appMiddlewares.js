@@ -13,6 +13,7 @@ const appMiddlewares = (app, path, express) => {
   app.use(express.json());
   app.use('/', routes.myUrls);
   app.use('/users', routes.userRouter);
+  app.use('/applications', routes.applyRouter);
 };
 
 export default appMiddlewares;
