@@ -85,8 +85,8 @@ export const CREATE_TABLE_APPLICATIONS = `DROP TABLE IF EXISTS
      phone_number VARCHAR(20),
      linkedin_profile VARCHAR(255),
      applied_at timestamp,
-     read BOOLEAN DEFAULT false,
-     replied BOOLEAN DEFAULT false,
+     read boolean DEFAULT false,
+     replied boolean DEFAULT false,
      replied_at timestamp);`;
 
 export const ADD_NEW_APPLICATION = `INSERT INTO applications_for_job (
@@ -138,3 +138,24 @@ applications_for_job WHERE read=true
 export const GET_ALL_APPLICATIONS = `SELECT * FROM 
 applications_for_job ORDER BY application_id DESC`;
 /** ======================================================================== */
+
+/** ========================================================================\
+ *
+ * TABLE INITIAL EMAIL STATUS
+ */
+export const CREATE_TABLE_INITIAL_EMAIL_FOR_APPLICATION_STATUS = `
+DROP TABLE IF EXISTS initial_email_status_for_application CASCADE; 
+    CREATE TABLE IF NOT EXISTS initial_email_status_for_application (
+    status_id SERIAL PRIMARY KEY, 
+    email VARCHAR(50),
+    email_sent_status boolean DEFAULT true,
+    user_registered_at timestamp,
+    CONSTRAINT initial_email_for_application_status_fk FOREIGN KEY(email) REFERENCES applications_for_job(email));
+`;
+
+/** SAVING NEW STATUS */
+export const ADD_NEW_INITIAL_EMAIL_STATUS = `
+INSERT INTO initial_email_status_for_application(
+    email,email_sent_status,user_registered_at
+) VALUES ($1,$2,NOW());
+`;
