@@ -4,7 +4,7 @@ import { hashPassword } from '../../../helper-functions/passwordEncryption';
 import {
   CREATE_TABLE_USERS,
   ADD_DEFAULT_USER,
-  CREATE_TABLE_APPLICATIONS,
+  CREATE_TABLE_APPLY_FOR_SOFTWARE_DEV_JUNIOR,
   CREATE_TABLE_INITIAL_EMAIL_FOR_APPLICATION_STATUS,
 } from '../settings/SQLqueries';
 
@@ -20,8 +20,8 @@ const migrateTables = async (isDone) => {
   console.log('inserting descholar as default user...');
   await connect().query(ADD_DEFAULT_USER(hashedPass));
 
-  console.log('creating table applications... ');
-  await connect().query(CREATE_TABLE_APPLICATIONS);
+  console.log('creating table applications for software dev juniors... ');
+  await connect().query(CREATE_TABLE_APPLY_FOR_SOFTWARE_DEV_JUNIOR);
 
   console.log('creating table initial email status ...');
   await connect().query(CREATE_TABLE_INITIAL_EMAIL_FOR_APPLICATION_STATUS);

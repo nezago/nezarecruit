@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { validateSignup, validateLogin } from '../middlewares/validations';
-import models from '../models';
+import { validateSignup, validateLogin } from '../../middlewares/validations';
+import models from '../../models';
 
 const userRouter = new Router();
 

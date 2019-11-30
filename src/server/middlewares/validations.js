@@ -53,11 +53,10 @@ export const validateApplicationForm = (req, res, next) => {
   const {
     fname,
     educationlevel,
-    graduationyear,
     employedbefore,
-    startedprogrammingyear,
+    codingexperience,
     currentlyemployed,
-    dateofbirth,
+    yearofbirth,
     email,
   } = req.body;
 
@@ -65,16 +64,14 @@ export const validateApplicationForm = (req, res, next) => {
     res.status(400).send('Your application is not accepted, because your familly name contains illegal characters!');
   } else if (educationlevel.length < 1) {
     res.status(400).send('You must precise your education level');
-  } else if (graduationyear.length < 4) {
-    res.status(400).send('The graduation year you chose is invalid, it must be between 1901-2020');
   } else if (employedbefore.length < 1) {
     res.status(400).send('You must precise if you have ever been employed or not');
-  } else if (startedprogrammingyear.length < 4) {
+  } else if (codingexperience.length === 0) {
     res.status(400).send('The year of your pragramming start is invalid!');
   } else if (currentlyemployed.length < 1) {
     res.status(400).send('You must precise if you are currently employed or not');
-  } else if (dateofbirth.length === 0) {
-    res.status(400).send('We want to know your date of birth please');
+  } else if (parseInt(yearofbirth) < 1969 || parseInt(yearofbirth) > 2001) {
+    res.status(400).send('Your age is not eligible to apply for this job');
   } else if (!validateEmail(email)) {
     res.status(400).send('The email you put is invalid');
   } else {

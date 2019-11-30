@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import connect from './db/settings/connectToDb';
-import { ADD_NEW_APPLICATION, ADD_NEW_INITIAL_EMAIL_STATUS } from './db/settings/SQLqueries';
+import { ADD_NEW_APPLICATION, ADD_NEW_INITIAL_EMAIL_STATUS, CHECK_EMAIL_FROM_TABLE_APPLICATIONS } from './db/settings/SQLqueries';
+import { checkIfEmailExistFromTableUsers } from './users-model';
 
 export const addApplicationForm = async (req, res, next) => {
   const {
@@ -8,15 +9,14 @@ export const addApplicationForm = async (req, res, next) => {
     midname,
     lname,
     gender,
-    countryresidence,
+    nationality,
     educationlevel,
-    graduationyear,
-    fieldofstudy,
+    optionofstudy,
     employedbefore,
     jobposition,
-    startedprogrammingyear,
+    codingexperience,
     currentlyemployed,
-    dateofbirth,
+    yearofbirth,
     email,
     phonenumber,
     linkedinprofile,
@@ -28,21 +28,20 @@ export const addApplicationForm = async (req, res, next) => {
       midname,
       lname,
       gender,
-      countryresidence,
+      nationality,
       educationlevel,
-      parseInt(graduationyear),
-      fieldofstudy,
+      optionofstudy,
       employedbefore,
       jobposition,
-      parseInt(startedprogrammingyear),
+      parseInt(codingexperience),
       currentlyemployed,
-      dateofbirth,
+      parseInt(yearofbirth),
       email,
       phonenumber,
       linkedinprofile,
     ], (err, results) => {
       if (err) {
-        res.status(500).send('Something unexpected occured, try again!');
+        res.status(500).send(`name : ${err.name}, details: ${err.detail}`);
         process.exit(0);
       }
       if (results.rowCount === 1) {
@@ -57,7 +56,7 @@ export const addApplicationForm = async (req, res, next) => {
           hardwork to prove yorself that you are worth to join this movement.</p>
           
           <h3>Link</h3>
-          <p>Go to https://nezado.herokuapp.com/ to follow all you need to know inorder to join!</p>
+          <p>Go to http://bit.ly/neza-go-to-learn to follow all you need to know inorder to join!</p>
           <hr/>
           Neza Group Top Talent recruitment Team<br/>
           Mobile : +250722792371<br/>
@@ -86,7 +85,7 @@ export const addApplicationForm = async (req, res, next) => {
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
             /** THIS CODES WILL RUN IF EMAIL FAILED TO BE SENT */
-            connect().query(ADD_NEW_INITIAL_EMAIL_STATUS, [email, false],
+            connect().query(ADD_NEW_INITIAL_EMAIL_STATUS, [email, false, error],
               (statusErroe, statusResult) => {
                 if (statusErroe) {
                   res.status(201).send(`Dear ${fname} your application has been accepted,
@@ -115,4 +114,16 @@ export const addApplicationForm = async (req, res, next) => {
       }
     });
 };
-export const checkEmailFromApplications = () => { };
+export const checkEmailFromApplicationsAndUsers = (req, res, next) => {
+  const { email } = req.body;
+  connect().query(CHECK_EMAIL_FROM_TABLE_APPLICATIONS, [email], (err, results) => {
+    if (err) {
+      res.status(500).send(`Sorry, the server failed to check ${email} from the database, try again`);
+      process.exit(0);
+    } else if (results.rows[0].exists) {
+      res.status(200).send(results.rows[0].exists);
+    } else {
+      checkIfEmailExistFromTableUsers(req, res, next);
+    }
+  });
+};
