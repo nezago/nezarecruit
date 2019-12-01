@@ -1,6 +1,59 @@
 import { validateEmail, validateFname } from '../../../../../../helpers/functions/validations';
-import { yearsOfBirth, getNationlitites, getEducationLevels } from '../../../../../../helpers/resources/list-of-needed-resouces';
+import {
+  yearsOfBirth,
+  getNationlitites,
+  getEducationLevels,
+  getOptionOfStudy,
+  getCodingExperience,
+} from '../../../../../../helpers/resources/list-of-needed-resouces';
 
+/** DISPLAY OPTIONS */
+
+export const displyEducationLevels = (fields) => {
+  const { educationlevelField } = fields;
+  getEducationLevels().forEach((currEducLevel) => {
+    educationlevelField.add(new Option(currEducLevel, currEducLevel));
+  });
+};
+
+export const displayOptionsOfStudy = (fields) => {
+  const { optionofstudyField } = fields;
+  getOptionOfStudy().forEach((currOption) => {
+    optionofstudyField.add(new Option(currOption, currOption));
+  });
+};
+
+// export const handleEmployedBefore = (employmentStatus) => { };
+
+export const displayCodingExperience = (fields) => {
+  const { codingexperienceField } = fields;
+  getCodingExperience().forEach((currCodExp) => {
+    codingexperienceField.add(new Option(currCodExp, currCodExp));
+  });
+};
+
+// export const handleCurrentlyEmployed = (currentlyEmployed) => { };
+
+export const displayYearOfBirth = (fields) => {
+  const { yearofbirthField } = fields;
+  yearsOfBirth().forEach((currYear) => {
+    yearofbirthField.add(
+      new Option(currYear, currYear),
+    );
+  });
+};
+
+export const displayNationality = (fields) => {
+  const { nationalityField } = fields;
+  getNationlitites().forEach((currNatiolanality) => {
+    nationalityField.add(
+      new Option(currNatiolanality, currNatiolanality),
+    );
+  });
+};
+
+
+/** HANDLERS */
 export const handleFnameTyping = (fields, component) => {
   const { fnameField, fnameError } = fields;
   const fname = fnameField.value;
@@ -11,41 +64,15 @@ export const handleFnameTyping = (fields, component) => {
   } else {
     fnameError.innerHTML = '';
     component.setState({ fname });
+    console.log(component.state);
   }
 };
 
-export const handleEducationLevel = (fields) => {
-  const { educationlevelField } = fields;
-  getEducationLevels().forEach((currEducLevel) => {
-    educationlevelField.add(new Option(currEducLevel, currEducLevel));
-  });
+export const handleTyping = (event, component) => {
+  component.setState({ [event.target.name]: event.target.value });
 };
 
-export const handleEmployedBefore = (employmentStatus) => { };
-
-export const handleCodingExperience = (codingExperience) => { };
-
-export const handleCurrentlyEmployed = (currentlyEmployed) => { };
-
-export const handleYearOfBirth = (fields) => {
-  const { yearofbirthField } = fields;
-  yearsOfBirth().forEach((currYear) => {
-    yearofbirthField.add(
-      new Option(currYear, currYear),
-    );
-  });
-};
-
-export const handleNationality = (fields) => {
-  const { nationalityField } = fields;
-  getNationlitites().forEach((currNatiolanality) => {
-    nationalityField.add(
-      new Option(currNatiolanality, currNatiolanality),
-    );
-  });
-};
-
-export const handleEmail = (fields, checkEmailFromBb) => {
+export const handleEmailTyping = (fields, checkEmailFromBb) => {
   let emailStatus;
   const { emailError, emailField, emailChecking } = fields;
   const email = emailField.value;

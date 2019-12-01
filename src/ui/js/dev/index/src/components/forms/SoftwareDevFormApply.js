@@ -1,10 +1,18 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-shadow */
 /* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
-  handleEmail, handleFnameTyping, handleYearOfBirth, handleNationality, handleEducationLevel,
+  handleFnameTyping,
+  displayYearOfBirth,
+  displayNationality,
+  displyEducationLevels,
+  displayOptionsOfStudy,
+  displayCodingExperience,
+  handleEmailTyping,
+  handleTyping,
 } from '../../helper-functions/handlers';
 import { checkEmailFromBb } from '../../actions/retrieveDataFromDb';
 
@@ -34,8 +42,17 @@ class SoftwareDevFormApply extends Component {
       nationalityError: document.getElementById('nationalityError'),
       educationlevelField: document.getElementById('educationlevel'),
       educationlevelError: document.getElementById('educationlevelError'),
+      optionofstudyField: document.getElementById('optionofstudy'),
+      optionofstudyError: document.getElementById('optionofstudyError'),
+      codingexperienceField: document.getElementById('codingexperience'),
+      codingExperienceError: document.getElementById('codingExperienceError'),
     };
     this.setState({ fields });
+    displayNationality(fields);
+    displayOptionsOfStudy(fields);
+    displayYearOfBirth(fields);
+    displyEducationLevels(fields);
+    displayCodingExperience(fields);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -57,8 +74,8 @@ class SoftwareDevFormApply extends Component {
   }
 
   render() {
-    const { fields } = this.state;
     const { checkEmailFromBb } = this.props;
+    const { fields } = this.state;
     return (
       <main
         id="applicationFormDiv"
@@ -82,7 +99,7 @@ class SoftwareDevFormApply extends Component {
                   id="fname"
                   placeholder="eg.: KAMIKAZI"
                   className="form-control-sm form-control rounded-corners col-md-8"
-                  onChange={() => handleFnameTyping(fields, this)}
+                  onInput={() => handleFnameTyping(fields, this)}
                 />
               </label>
 
@@ -105,6 +122,7 @@ class SoftwareDevFormApply extends Component {
                   id="midname"
                   placeholder="eg.: Anne"
                   className="col-md-8 form-control-sm form-control rounded-corners"
+                  onInput={() => handleTyping(event, this)}
                 />
               </label>
 
@@ -123,6 +141,7 @@ class SoftwareDevFormApply extends Component {
                   id="lname"
                   placeholder="eg.: Maria"
                   className="col-md-8 form-control-sm form-control rounded-corners"
+                  onInput={() => handleTyping(event, this)}
                 />
               </label>
 
@@ -139,10 +158,14 @@ class SoftwareDevFormApply extends Component {
                 <label htmlFor="female" className="hand-cursor">
                   <span className="col-md-2">Female</span>
                   <input type="radio" name="gender" value="F" id="female" />
+                  onChange=
+                  {() => handleTyping(event, this)}
                 </label>
                 <label htmlFor="male" className="hand-cursor">
                   <span className="col-md-2">Male</span>
                   <input type="radio" name="gender" value="M" id="male" />
+                  onChange=
+                  {() => handleTyping(event, this)}
                 </label>
               </label>
 
@@ -157,7 +180,6 @@ class SoftwareDevFormApply extends Component {
                   name="yearofbirth"
                   id="yearofbirth"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
-                  onFocus={() => handleYearOfBirth(fields)}
                 >
                   <option value="" disabled selected>---select your year of birth---</option>
                 </select>
@@ -176,7 +198,6 @@ class SoftwareDevFormApply extends Component {
                   name="nationality"
                   id="nationality"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
-                  onFocus={() => handleNationality(fields)}
                 >
                   <option value="" disabled selected>---select your nationality---</option>
                 </select>
@@ -190,12 +211,11 @@ class SoftwareDevFormApply extends Component {
                 htmlFor="educationlevel"
                 className="hand-cursor form-group form-row"
               >
-                <span className="col-md-4">educationlevel :</span>
+                <span className="col-md-4">Education level :</span>
                 <select
                   name="educationlevel"
                   id="educationlevel"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
-                  onFocus={() => handleEducationLevel(fields)}
                 >
                   <option value="" disabled selected>---select your educationlevel---</option>
                 </select>
@@ -287,7 +307,7 @@ class SoftwareDevFormApply extends Component {
                   id="codingexperience"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
                 >
-                  <option value="" disabled selected>---select your option of study---</option>
+                  <option value="" disabled selected>---select your coding experience---</option>
                 </select>
               </label>
               <div>
@@ -308,7 +328,7 @@ class SoftwareDevFormApply extends Component {
                   id="email"
                   placeholder="eg.: you@nezado.com"
                   className="col-md-8 form-control-sm form-control rounded-corners"
-                  onChange={() => handleEmail(fields, checkEmailFromBb)}
+                  onInput={() => handleEmailTyping(fields, checkEmailFromBb)}
                 />
               </label>
 
