@@ -53,7 +53,7 @@ export const displayNationality = (fields) => {
 };
 
 
-/** HANDLERS */
+/** HANDLE CHANGE */
 export const handleFnameTyping = (fields, component) => {
   const { fnameField, fnameError } = fields;
   const fname = fnameField.value;
@@ -64,11 +64,10 @@ export const handleFnameTyping = (fields, component) => {
   } else {
     fnameError.innerHTML = '';
     component.setState({ fname });
-    console.log(component.state);
   }
 };
 
-export const handleTyping = (event, component) => {
+export const handleFieldChange = (event, component) => {
   component.setState({ [event.target.name]: event.target.value });
 };
 
@@ -84,4 +83,39 @@ export const handleEmailTyping = (fields, checkEmailFromBb) => {
     emailChecking.classList.remove('hidden-div');
   }
   emailError.innerHTML = emailStatus;
+};
+
+/** HANDLE BLUR */
+export const handleFnameBlur = (fields) => {
+  const { fnameField, fnameError } = fields;
+  const fname = fnameField.value;
+
+  if (!validateFname(fname)) {
+    fnameError.classList.add('field-error');
+    fnameError.innerHTML = `Your application must have a valid Family name, be cautious while 
+    you are typing family name, don't put spaces, nor special characters, if you have many names,
+    please use middle name and last name fields!`;
+  } else {
+    fnameError.classList.remove('field-error');
+    fnameError.innerHTML = '';
+  }
+};
+
+
+export const handleEducationLevelBlur = (fields) => {
+  const { educationlevelField, educationlevelError } = fields;
+  const educationLevel = educationlevelField.value;
+
+  if (educationLevel.length === 0) {
+    educationlevelError.classList.add('field-error');
+    educationlevelError.innerHTML = 'Your application is valid if you select your education level!';
+  } else {
+    educationlevelError.classList.remove('field-error');
+    educationlevelError.innerHTML = '';
+  }
+};
+
+
+export const handleSubmitApplication = (component) => {
+  console.log(component.state);
 };

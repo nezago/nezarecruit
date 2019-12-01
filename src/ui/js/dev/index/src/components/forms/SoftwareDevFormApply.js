@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-shadow */
 /* eslint-disable react/prop-types */
@@ -12,7 +13,10 @@ import {
   displayOptionsOfStudy,
   displayCodingExperience,
   handleEmailTyping,
-  handleTyping,
+  handleFieldChange,
+  handleSubmitApplication,
+  handleFnameBlur,
+  handleEducationLevelBlur,
 } from '../../helper-functions/handlers';
 import { checkEmailFromBb } from '../../actions/retrieveDataFromDb';
 
@@ -68,6 +72,7 @@ class SoftwareDevFormApply extends Component {
         } else {
           emailError.innerHTML = '';
           emailChecking.classList.add('hidden-div');
+          this.setState({ email: document.getElementById('email').value });
         }
       }
     }
@@ -100,6 +105,7 @@ class SoftwareDevFormApply extends Component {
                   placeholder="eg.: KAMIKAZI"
                   className="form-control-sm form-control rounded-corners col-md-8"
                   onInput={() => handleFnameTyping(fields, this)}
+                  onBlur={() => handleFnameBlur(fields)}
                 />
               </label>
 
@@ -122,7 +128,7 @@ class SoftwareDevFormApply extends Component {
                   id="midname"
                   placeholder="eg.: Anne"
                   className="col-md-8 form-control-sm form-control rounded-corners"
-                  onInput={() => handleTyping(event, this)}
+                  onInput={() => handleFieldChange(event, this)}
                 />
               </label>
 
@@ -141,7 +147,7 @@ class SoftwareDevFormApply extends Component {
                   id="lname"
                   placeholder="eg.: Maria"
                   className="col-md-8 form-control-sm form-control rounded-corners"
-                  onInput={() => handleTyping(event, this)}
+                  onInput={() => handleFieldChange(event, this)}
                 />
               </label>
 
@@ -157,15 +163,25 @@ class SoftwareDevFormApply extends Component {
 
                 <label htmlFor="female" className="hand-cursor">
                   <span className="col-md-2">Female</span>
-                  <input type="radio" name="gender" value="F" id="female" />
-                  onChange=
-                  {() => handleTyping(event, this)}
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="F"
+                    id="female"
+                    onChange={() => handleFieldChange(event, this)}
+                  />
+
                 </label>
                 <label htmlFor="male" className="hand-cursor">
                   <span className="col-md-2">Male</span>
-                  <input type="radio" name="gender" value="M" id="male" />
-                  onChange=
-                  {() => handleTyping(event, this)}
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="M"
+                    id="male"
+                    onChange={() => handleFieldChange(event, this)}
+                  />
+
                 </label>
               </label>
 
@@ -180,8 +196,9 @@ class SoftwareDevFormApply extends Component {
                   name="yearofbirth"
                   id="yearofbirth"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
+                  onChange={() => handleFieldChange(event, this)}
                 >
-                  <option value="" disabled selected>---select your year of birth---</option>
+                  <option value="">---select your year of birth---</option>
                 </select>
               </label>
               <div>
@@ -198,8 +215,9 @@ class SoftwareDevFormApply extends Component {
                   name="nationality"
                   id="nationality"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
+                  onChange={() => handleFieldChange(event, this)}
                 >
-                  <option value="" disabled selected>---select your nationality---</option>
+                  <option value="">---select your nationality---</option>
                 </select>
               </label>
               <div>
@@ -216,12 +234,14 @@ class SoftwareDevFormApply extends Component {
                   name="educationlevel"
                   id="educationlevel"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
+                  onChange={() => handleFieldChange(event, this)}
+                  onBlur={() => handleEducationLevelBlur(fields)}
                 >
-                  <option value="" disabled selected>---select your educationlevel---</option>
+                  <option value="">---select your educationlevel---</option>
                 </select>
               </label>
               <div>
-                <span id="educationLevelError" />
+                <span id="educationlevelError" />
               </div>
 
               {/** FIELD OF STUDY PORTION */}
@@ -234,12 +254,13 @@ class SoftwareDevFormApply extends Component {
                   name="optionofstudy"
                   id="optionofstudy"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
+                  onChange={() => { handleFieldChange(event, this); }}
                 >
-                  <option value="" disabled selected>---select your option of study---</option>
+                  <option value="">---select your option of study---</option>
                 </select>
               </label>
               <div>
-                <span id="optionOfStudyError" />
+                <span id="optionofstudyError" />
               </div>
 
               {/** EPLOYMENT HISTORY PORTION */}
@@ -253,11 +274,23 @@ class SoftwareDevFormApply extends Component {
 
                 <label htmlFor="yesEmployedBefore" className="hand-cursor">
                   <span className="col-md-2">Yes</span>
-                  <input type="radio" name="employedbefore" value="Yes" id="yesEmployedBefore" />
+                  <input
+                    type="radio"
+                    name="employedbefore"
+                    value="Yes"
+                    id="yesEmployedBefore"
+                    onChange={() => handleFieldChange(event, this)}
+                  />
                 </label>
                 <label htmlFor="notEmployedBefore" className="hand-cursor">
                   <span className="col-md-2">No</span>
-                  <input type="radio" name="employedbefore" value="No" id="notEmployedBefore" />
+                  <input
+                    type="radio"
+                    name="employedbefore"
+                    value="No"
+                    id="notEmployedBefore"
+                    onChange={() => handleFieldChange(event, this)}
+                  />
                 </label>
               </label>
 
@@ -274,6 +307,7 @@ class SoftwareDevFormApply extends Component {
                   id="jobposition"
                   placeholder="eg.: Senior Software developer"
                   className="form-control-sm form-control rounded-corners col-md-8"
+                  onInput={() => handleFieldChange(event, this)}
                 />
               </label>
 
@@ -288,11 +322,23 @@ class SoftwareDevFormApply extends Component {
 
                 <label htmlFor="yesStillWorking" className="hand-cursor">
                   <span className="col-md-2">Yes</span>
-                  <input type="radio" name="currentlyemployed" value="Yes" id="yesStillWorking" />
+                  <input
+                    type="radio"
+                    name="currentlyemployed"
+                    value="Yes"
+                    id="yesStillWorking"
+                    onChange={() => handleFieldChange(event, this)}
+                  />
                 </label>
                 <label htmlFor="notStillWorking" className="hand-cursor">
                   <span className="col-md-2">No</span>
-                  <input type="radio" name="currentlyemployed" value="No" id="notStillWorking" />
+                  <input
+                    type="radio"
+                    name="currentlyemployed"
+                    value="No"
+                    id="notStillWorking"
+                    onChange={() => handleFieldChange(event, this)}
+                  />
                 </label>
               </label>
 
@@ -306,8 +352,9 @@ class SoftwareDevFormApply extends Component {
                   name="codingexperience"
                   id="codingexperience"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
+                  onChange={() => handleFieldChange(event, this)}
                 >
-                  <option value="" disabled selected>---select your coding experience---</option>
+                  <option value="">---select your coding experience---</option>
                 </select>
               </label>
               <div>
@@ -359,6 +406,7 @@ class SoftwareDevFormApply extends Component {
                   id="phonenumber"
                   placeholder="eg.: myphonenumber"
                   className="col-md-8 form-control-sm form-control rounded-corners"
+                  onInput={() => handleFieldChange(event, this)}
                 />
               </label>
 
@@ -381,6 +429,7 @@ class SoftwareDevFormApply extends Component {
                   id="linkedinprofile"
                   placeholder="eg.: https://www.linkedin.com/in/mugirase-emmanuel-a90b49143/"
                   className="col-md-8 form-control-sm form-control rounded-corners"
+                  onInput={() => handleFieldChange(event, this)}
                 />
               </label>
 
@@ -391,6 +440,7 @@ class SoftwareDevFormApply extends Component {
               <button
                 type="button"
                 className="col-md-12 btn btn-block btn-info btn-sm rounded-corners"
+                onClick={() => handleSubmitApplication(this)}
               >
                 Send Application
               </button>

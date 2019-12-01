@@ -78,6 +78,13 @@ body {
   border-bottom-right-radius: 15px;
 }
 
+.field-error {
+  color: rgb(255, 255, 255);
+  background-color: rgb(124, 5, 5);
+  padding: 2px;
+  border-radius: 30px;
+  font-style: italic;
+}
 .padding-15 {
   padding: 15px;
 }
