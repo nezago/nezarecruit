@@ -115,6 +115,27 @@ export const handleEducationLevelBlur = (fields) => {
   }
 };
 
+export const handleCodingExperienceBlur = (fields) => {
+  const { codingexperienceField, codingexperienceError } = fields;
+  const codingexperience = codingexperienceField.value;
+
+  if (codingexperience.length === 0) {
+    codingexperienceError.classList.add('field-error');
+    codingexperienceError.innerHTML = 'Your application is valid if you select your coding experience!';
+  } else {
+    codingexperienceError.classList.remove('field-error');
+    codingexperienceError.innerHTML = '';
+  }
+};
+
+export const handleFieldBlur = (event) => {
+  const inputedValue = event.target.value;
+  if (inputedValue.length === 0) {
+    event.target.classList.add('field-error');
+  } else {
+    event.target.classList.remove('field-error');
+  }
+};
 
 export const handleSubmitApplication = (component) => {
   console.log(component.state);

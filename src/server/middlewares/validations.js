@@ -53,7 +53,6 @@ export const validateApplicationForm = (req, res, next) => {
   const {
     fname,
     educationlevel,
-    employedbefore,
     codingexperience,
     currentlyemployed,
     yearofbirth,
@@ -64,8 +63,6 @@ export const validateApplicationForm = (req, res, next) => {
     res.status(400).send('Your application is not accepted, because your familly name contains illegal characters!');
   } else if (educationlevel.length < 1) {
     res.status(400).send('You must precise your education level');
-  } else if (employedbefore.length < 1) {
-    res.status(400).send('You must precise if you have ever been employed or not');
   } else if (codingexperience.length === 0) {
     res.status(400).send('The year of your pragramming start is invalid!');
   } else if (currentlyemployed.length < 1) {

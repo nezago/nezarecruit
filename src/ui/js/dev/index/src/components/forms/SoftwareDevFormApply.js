@@ -17,6 +17,8 @@ import {
   handleSubmitApplication,
   handleFnameBlur,
   handleEducationLevelBlur,
+  handleCodingExperienceBlur,
+  handleFieldBlur,
 } from '../../helper-functions/handlers';
 import { checkEmailFromBb } from '../../actions/retrieveDataFromDb';
 
@@ -49,7 +51,7 @@ class SoftwareDevFormApply extends Component {
       optionofstudyField: document.getElementById('optionofstudy'),
       optionofstudyError: document.getElementById('optionofstudyError'),
       codingexperienceField: document.getElementById('codingexperience'),
-      codingExperienceError: document.getElementById('codingExperienceError'),
+      codingexperienceError: document.getElementById('codingExperienceError'),
     };
     this.setState({ fields });
     displayNationality(fields);
@@ -197,6 +199,7 @@ class SoftwareDevFormApply extends Component {
                   id="yearofbirth"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
                   onChange={() => handleFieldChange(event, this)}
+                  onBlur={() => handleFieldBlur(event)}
                 >
                   <option value="">---select your year of birth---</option>
                 </select>
@@ -353,6 +356,7 @@ class SoftwareDevFormApply extends Component {
                   id="codingexperience"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
                   onChange={() => handleFieldChange(event, this)}
+                  onBlur={() => handleCodingExperienceBlur(fields)}
                 >
                   <option value="">---select your coding experience---</option>
                 </select>
