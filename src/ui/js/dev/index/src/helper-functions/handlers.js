@@ -128,15 +128,47 @@ export const handleCodingExperienceBlur = (fields) => {
   }
 };
 
-export const handleFieldBlur = (event) => {
-  const inputedValue = event.target.value;
-  if (inputedValue.length === 0) {
-    event.target.classList.add('field-error');
+export const handleYearOfBirthBlur = (fields) => {
+  const { yearofbirthField, yearofbirthError } = fields;
+  const codingexperience = yearofbirthField.value;
+
+  if (codingexperience.length === 0) {
+    yearofbirthError.classList.add('field-error');
+    yearofbirthError.innerHTML = 'Your application is valid if you select your age!';
   } else {
-    event.target.classList.remove('field-error');
+    yearofbirthError.classList.remove('field-error');
+    yearofbirthError.innerHTML = '';
   }
 };
 
-export const handleSubmitApplication = (component) => {
-  console.log(component.state);
+export const handleSubmitApplication = (component, fields) => {
+  const {
+    codingexperience,
+    currentlyemployed,
+    educationlevel,
+    email,
+    employedbefore,
+    fname,
+    gender,
+    jobposition,
+    linkedinprofile,
+    lname,
+    midname,
+    nationality,
+    optionofstudy,
+    phonenumber,
+    yearofbirth,
+  } = component.state;
+  const {
+    emailError,
+    fnameError,
+    yearofbirthError,
+    educationlevelError,
+    codingexperienceError,
+    currentlyeployedError,
+  } = fields;
+
+  if (currentlyemployed.length === 0) {
+    currentlyeployedError.innerHTML = 'You must precise if you are employed elsewhere or not!';
+  }
 };

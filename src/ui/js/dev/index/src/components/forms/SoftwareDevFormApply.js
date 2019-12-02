@@ -18,7 +18,7 @@ import {
   handleFnameBlur,
   handleEducationLevelBlur,
   handleCodingExperienceBlur,
-  handleFieldBlur,
+  handleYearOfBirthBlur,
 } from '../../helper-functions/handlers';
 import { checkEmailFromBb } from '../../actions/retrieveDataFromDb';
 
@@ -28,6 +28,21 @@ class SoftwareDevFormApply extends Component {
 
     this.state = {
       fields: {},
+      codingexperience: '',
+      currentlyemployed: '',
+      educationlevel: '',
+      email: '',
+      employedbefore: '',
+      fname: '',
+      gender: '',
+      jobposition: '',
+      linkedinprofile: '',
+      lname: '',
+      midname: '',
+      nationality: '',
+      optionofstudy: '',
+      phonenumber: '',
+      yearofbirth: '',
     };
     this.props = {
       checkEmailFromBb: PropTypes.func.isRequired,
@@ -52,6 +67,7 @@ class SoftwareDevFormApply extends Component {
       optionofstudyError: document.getElementById('optionofstudyError'),
       codingexperienceField: document.getElementById('codingexperience'),
       codingexperienceError: document.getElementById('codingExperienceError'),
+      currentlyeployedError: document.getElementById('currentlyeployedError'),
     };
     this.setState({ fields });
     displayNationality(fields);
@@ -199,7 +215,7 @@ class SoftwareDevFormApply extends Component {
                   id="yearofbirth"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
                   onChange={() => handleFieldChange(event, this)}
-                  onBlur={() => handleFieldBlur(event)}
+                  onBlur={() => handleYearOfBirthBlur(fields)}
                 >
                   <option value="">---select your year of birth---</option>
                 </select>
@@ -240,7 +256,7 @@ class SoftwareDevFormApply extends Component {
                   onChange={() => handleFieldChange(event, this)}
                   onBlur={() => handleEducationLevelBlur(fields)}
                 >
-                  <option value="">---select your educationlevel---</option>
+                  <option value="">---select your education level---</option>
                 </select>
               </label>
               <div>
@@ -345,6 +361,10 @@ class SoftwareDevFormApply extends Component {
                 </label>
               </label>
 
+              <div className="text-center text-danger">
+                <span id="currentlyeployedError" />
+              </div>
+
               {/** CODING EXPERIENCE */}
               <label
                 htmlFor="codingexperience"
@@ -444,7 +464,7 @@ class SoftwareDevFormApply extends Component {
               <button
                 type="button"
                 className="col-md-12 btn btn-block btn-info btn-sm rounded-corners"
-                onClick={() => handleSubmitApplication(this)}
+                onClick={() => handleSubmitApplication(this, fields)}
               >
                 Send Application
               </button>
