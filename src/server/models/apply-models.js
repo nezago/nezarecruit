@@ -106,8 +106,16 @@ export const addApplicationForm = async (req, res, next) => {
               });
           } else if (info) {
             /** THESE CODES WILL RUN IF EMAIL HAS BEEN SEND SUCCESSFULLY */
-            res.status(201).send(`Congraturations dear ${fname}, your application has been accepted,
-            and we sent you an email on ${email}, please check it and follow all process!`);
+            res.status(201).send(`
+
+            <div className="text-center">
+            <h3>Feedback</h3>
+
+            <p>Congratulations dear <strong>${fname}</strong>, your application has been accepted,
+            and we sent you an email on <em>${email}</em>, which informs you about the remaining 
+            process to follow, please be as regular as possible, and don't miss any step!</p>
+            </div>
+            `);
             next();
           }
         });

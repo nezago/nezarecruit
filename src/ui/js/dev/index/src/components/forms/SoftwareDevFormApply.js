@@ -70,6 +70,7 @@ class SoftwareDevFormApply extends Component {
       codingexperienceField: document.getElementById('codingexperience'),
       codingexperienceError: document.getElementById('codingExperienceError'),
       currentlyeployedError: document.getElementById('currentlyeployedError'),
+      sendApplicationBtn: document.getElementById('send-application-btn'),
     };
     this.setState({ fields });
     displayNationality(fields);
@@ -83,9 +84,13 @@ class SoftwareDevFormApply extends Component {
     if (nextProps) {
       const { dataFromDb } = nextProps;
       if (dataFromDb) {
-        const { isEmailExistsFromDatabase } = dataFromDb;
+        /** CHECKING IF EMAIL EXISTS IN DB */
+        const { isEmailExistsFromDatabase, applyInfo } = dataFromDb;
         const emailError = document.getElementById('emailError');
         const emailChecking = document.getElementById('emailChecking');
+        const feedbackDiv = document.getElementById('feedback-div');
+        const applicationDiv = document.getElementById('application-div');
+
         if (isEmailExistsFromDatabase) {
           emailError.innerHTML = 'Hey! Your email is being used by someone else on our systems, so please use another email, otherwise your application will be rejected!';
           emailChecking.classList.add('hidden-div');
@@ -93,6 +98,11 @@ class SoftwareDevFormApply extends Component {
           emailError.innerHTML = '';
           emailChecking.classList.add('hidden-div');
           this.setState({ email: document.getElementById('email').value });
+        }
+        if (applyInfo) {
+          applicationDiv.classList.add('hidden-div');
+          feedbackDiv.classList.remove('hidden-div');
+          feedbackDiv.innerHTML = applyInfo;
         }
       }
     }
@@ -106,7 +116,8 @@ class SoftwareDevFormApply extends Component {
         id="applicationFormDiv"
         className="shadows mb-5 mt-5 width-98 text-white black-bordered-element black-transparent-element rounded-corners padding-15"
       >
-        <form>
+        <div className="hidden-div text-22 text-white padding-15 width-40" id="feedback-div" />
+        <div id="application-div">
           <div className="application-form width-50">
             <div>
               <h3 className="text-center text-success">Fill this form, and then click on send Application</h3>
@@ -466,13 +477,14 @@ class SoftwareDevFormApply extends Component {
               <button
                 type="button"
                 className="col-md-12 btn btn-block btn-info btn-sm rounded-corners"
+                id="send-application-btn"
                 onClick={() => handleSubmitApplication(this, fields, submitNewApplicationForm)}
               >
                 Send Application
               </button>
             </div>
           </div>
-        </form>
+        </div>
       </main>
     );
   }

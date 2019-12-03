@@ -166,6 +166,7 @@ export const handleSubmitApplication = (component, fields, sendApplicationForm) 
     educationlevelError,
     codingexperienceError,
     currentlyeployedError,
+    sendApplicationBtn,
   } = fields;
 
   if (currentlyemployed.length === 0) {
@@ -204,6 +205,7 @@ export const handleSubmitApplication = (component, fields, sendApplicationForm) 
       phonenumber,
       linkedinprofile,
     };
+    sendApplicationBtn.innerText = 'Processing your application';
     sendApplicationForm(newAppForm);
   }
 };
