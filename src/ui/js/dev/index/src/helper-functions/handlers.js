@@ -32,7 +32,7 @@ export const displayCodingExperience = (fields) => {
   });
 };
 
-// export const handleCurrentlyEmployed = (currentlyEmployed) => { };
+// export const handlecurrentlyemployed = (currentlyemployed) => { };
 
 export const displayYearOfBirth = (fields) => {
   const { yearofbirthField } = fields;
@@ -141,7 +141,7 @@ export const handleYearOfBirthBlur = (fields) => {
   }
 };
 
-export const handleSubmitApplication = (component, fields) => {
+export const handleSubmitApplication = (component, fields, sendApplicationForm) => {
   const {
     codingexperience,
     currentlyemployed,
@@ -170,5 +170,40 @@ export const handleSubmitApplication = (component, fields) => {
 
   if (currentlyemployed.length === 0) {
     currentlyeployedError.innerHTML = 'You must precise if you are employed elsewhere or not!';
+  } else if (educationlevel.length === 0) {
+    educationlevelError.innerHTML = 'Please precise yourn education level';
+  } else if (!validateEmail(email)) {
+    emailError.innerHTML = 'Sorry! You cannot send an invalid email!';
+  } else if (!validateFname(fname)) {
+    fnameError.innerHTML = 'Sorry! A valid family name must not have a special characters, nor spaces';
+  } else if (codingexperience.length === 0) {
+    codingexperienceError.innerHTML = 'Please, select your coding experience';
+  } else if (yearofbirth.length === 0) {
+    yearofbirthError.innerHTML = 'Please, precise your age!';
+  } else {
+    currentlyeployedError.innerHTML = '';
+    educationlevelError.innerHTML = '';
+    emailError.innerHTML = '';
+    fnameError.innerHTML = '';
+    codingexperienceError.innerHTML = '';
+    yearofbirthError.innerHTML = '';
+    const newAppForm = {
+      fname,
+      midname,
+      lname,
+      gender,
+      nationality,
+      currentlyemployed,
+      educationlevel,
+      optionofstudy,
+      employedbefore,
+      jobposition,
+      codingexperience,
+      yearofbirth,
+      email,
+      phonenumber,
+      linkedinprofile,
+    };
+    sendApplicationForm(newAppForm);
   }
 };

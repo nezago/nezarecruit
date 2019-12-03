@@ -21,6 +21,7 @@ import {
   handleYearOfBirthBlur,
 } from '../../helper-functions/handlers';
 import { checkEmailFromBb } from '../../actions/retrieveDataFromDb';
+import { submitNewApplicationForm } from '../../actions/sendDataToDb';
 
 class SoftwareDevFormApply extends Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class SoftwareDevFormApply extends Component {
     };
     this.props = {
       checkEmailFromBb: PropTypes.func.isRequired,
+      submitNewApplicationForm: PropTypes.func.isRequired,
       dataFromDb: PropTypes.object.isRequired,
     };
   }
@@ -97,7 +99,7 @@ class SoftwareDevFormApply extends Component {
   }
 
   render() {
-    const { checkEmailFromBb } = this.props;
+    const { checkEmailFromBb, submitNewApplicationForm } = this.props;
     const { fields } = this.state;
     return (
       <main
@@ -220,7 +222,7 @@ class SoftwareDevFormApply extends Component {
                   <option value="">---select your year of birth---</option>
                 </select>
               </label>
-              <div>
+              <div className="text-danger text-center">
                 <span id="yearofbirthError" />
               </div>
 
@@ -259,7 +261,7 @@ class SoftwareDevFormApply extends Component {
                   <option value="">---select your education level---</option>
                 </select>
               </label>
-              <div>
+              <div className="text-center text-danger">
                 <span id="educationlevelError" />
               </div>
 
@@ -381,7 +383,7 @@ class SoftwareDevFormApply extends Component {
                   <option value="">---select your coding experience---</option>
                 </select>
               </label>
-              <div>
+              <div className="text-center text-danger">
                 <span id="codingExperienceError" />
               </div>
 
@@ -464,7 +466,7 @@ class SoftwareDevFormApply extends Component {
               <button
                 type="button"
                 className="col-md-12 btn btn-block btn-info btn-sm rounded-corners"
-                onClick={() => handleSubmitApplication(this, fields)}
+                onClick={() => handleSubmitApplication(this, fields, submitNewApplicationForm)}
               >
                 Send Application
               </button>
@@ -479,4 +481,7 @@ class SoftwareDevFormApply extends Component {
 const mapStateToProps = (state) => ({
   dataFromDb: state.myReducers,
 });
-export default connect(mapStateToProps, { checkEmailFromBb })(SoftwareDevFormApply);
+export default connect(
+  mapStateToProps,
+  { checkEmailFromBb, submitNewApplicationForm },
+)(SoftwareDevFormApply);
