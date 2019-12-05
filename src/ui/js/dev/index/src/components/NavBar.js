@@ -38,6 +38,7 @@ class NavBar extends Component {
               <nav>
                 <ul className="nav-ul">
                   <li><a href="/enter-nezado">Gate</a></li>
+                  <li><a href="/#">Home</a></li>
                 </ul>
               </nav>
             </Nav>
