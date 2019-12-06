@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { FaReply, FaReplyAll, FaReplyd } from 'react-icons/fa';
 
 class ManageApplicationsContainer extends Component {
   constructor(props) {
@@ -8,14 +9,32 @@ class ManageApplicationsContainer extends Component {
 
   render() {
     return (
-      <div className="mt-5">
-        <div className="aside-bar heigth-100 color-black width-20 ml-0 p-2 text-22">
-          <ul className="nav">
-            <li className="nav-item hand-cursor mt-5">All applications</li>
-            <li className="nav-item hand-cursor mt-5">UnReplied applications</li>
-            <li className="nav-item hand-cursor mt-5">Replied applications</li>
-          </ul>
-        </div>
+      <div className="aside-bar mt-5 p-2 text-white">
+
+        <ul className="nav flex-column">
+          <li className="nav-item hand-cursor mt-5">
+            <p className="text-50">
+              <FaReply />
+            </p>
+
+            <span> All</span>
+          </li>
+
+          <li className="nav-item hand-cursor mt-5">
+            <p className="text-50">
+              <FaReplyAll />
+            </p>
+            <span>UnReplied</span>
+          </li>
+
+          <li className="nav-item hand-cursor mt-5">
+            <p className="text-50">
+              <FaReplyd />
+            </p>
+            <span>Replied</span>
+          </li>
+
+        </ul>
       </div>
     );
   }

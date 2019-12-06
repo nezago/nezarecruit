@@ -167,7 +167,7 @@ nav a:hover {
   top: 0;
 }
 
-/*TBALES*/
+/*TABLES*/
 table,
 th,
 td {
@@ -190,4 +190,12 @@ header {
 .color-black {
   background: #000;
   color: #fff;
+}
+
+.aside-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background: rgba(24, 1, 54, 0.8);
 }
