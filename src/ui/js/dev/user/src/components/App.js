@@ -11,6 +11,7 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import React from 'react';
 import store from '../store';
 import NavBar from './NavBar';
+import AllApplicationsContainer from './containers/AllApplicationsContainer';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route>
             <NavBar />
             <div className="mt-5" />
+            <AllApplicationsContainer />
           </Route>
         </Router>
       </Provider>

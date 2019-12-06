@@ -48,10 +48,8 @@ class NavBar extends Component {
     const SUPERUSER_NAV_ITEMS = (
       <nav>
         <ul className="nav-ul">
-          <li><NavLink to="#">NezaGroup Members</NavLink></li>
-          <li><NavLink to="#">Publish a job</NavLink></li>
           <li><NavLink to="#">Manage applications</NavLink></li>
-          <li><NavLink to="#">Books</NavLink></li>
+          <li><NavLink to="#">Publish a job</NavLink></li>
         </ul>
       </nav>
     );
