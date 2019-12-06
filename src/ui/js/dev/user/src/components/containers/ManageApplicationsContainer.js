@@ -9,10 +9,10 @@ class ManageApplicationsContainer extends Component {
 
   render() {
     return (
-      <div className="aside-bar mt-5 p-2 text-white">
+      <div className="aside-bar mt-5 text-white">
 
-        <ul className="nav flex-column">
-          <li className="nav-item hand-cursor mt-5">
+        <ul className="nav flex-column ml-2">
+          <li className="nav-item hand-cursor mt-5 active-tab">
             <p className="text-50">
               <FaReply />
             </p>

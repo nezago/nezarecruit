@@ -48,7 +48,7 @@ class NavBar extends Component {
     const SUPERUSER_NAV_ITEMS = (
       <nav>
         <ul className="nav-ul">
-          <li><NavLink to="#">Manage applications</NavLink></li>
+          <li><NavLink to="/manage-all-applications">Manage applications</NavLink></li>
           <li><NavLink to="#">Publish a job</NavLink></li>
         </ul>
       </nav>
