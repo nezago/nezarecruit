@@ -1,8 +1,14 @@
 import nodemailer from 'nodemailer';
 import connect from './db/settings/connectToDb';
-import { ADD_NEW_APPLICATION, ADD_NEW_INITIAL_EMAIL_STATUS, CHECK_EMAIL_FROM_TABLE_APPLICATIONS } from './db/settings/SQLqueries';
+import {
+  ADD_NEW_APPLICATION,
+  ADD_NEW_INITIAL_EMAIL_STATUS,
+  CHECK_EMAIL_FROM_TABLE_APPLICATIONS,
+  GET_ALL_APPLICATIONS,
+} from './db/settings/SQLqueries';
 import { checkIfEmailExistFromTableUsers } from './users-model';
 
+/** ADDING A NEW APPLICATION */
 export const addApplicationForm = async (req, res, next) => {
   const {
     fname,
@@ -33,7 +39,7 @@ export const addApplicationForm = async (req, res, next) => {
       optionofstudy,
       employedbefore,
       jobposition,
-      parseInt(codingexperience),
+      codingexperience,
       currentlyemployed,
       parseInt(yearofbirth),
       email,
@@ -122,6 +128,8 @@ export const addApplicationForm = async (req, res, next) => {
       }
     });
 };
+
+/** CHECKING THE EXISTANCE OF THE EMAIL FROM THE DATABASE */
 export const checkEmailFromApplicationsAndUsers = (req, res, next) => {
   const { email } = req.body;
   connect().query(CHECK_EMAIL_FROM_TABLE_APPLICATIONS, [email], (err, results) => {
@@ -133,5 +141,16 @@ export const checkEmailFromApplicationsAndUsers = (req, res, next) => {
     } else {
       checkIfEmailExistFromTableUsers(req, res, next);
     }
+  });
+};
+
+/** GETTING ALL THE APPLICATIONS REGISTERED */
+export const getAllApplications = (req, res, next) => {
+  connect().query(GET_ALL_APPLICATIONS, (err, results) => {
+    if (err) {
+      res.status(500).send('Sorry! Something unexpected occured, please try again later!');
+    }
+    res.status(200).send(results.rows);
+    next();
   });
 };

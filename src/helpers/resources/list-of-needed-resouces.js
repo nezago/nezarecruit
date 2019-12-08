@@ -234,7 +234,7 @@ export const getEducationLevels = () => [
   'Currently studying',
   'PhD',
   'Master\'s',
-  'Or Other post graduate degrees',
+  'Other post graduate degrees',
   'Bachelor\'s (A0)',
   'Advanced diploama (A1)',
   'Secondary School (A2)',
