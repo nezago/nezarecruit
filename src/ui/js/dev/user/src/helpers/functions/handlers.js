@@ -1,4 +1,5 @@
 /* eslint-disable no-plusplus */
+import axios from 'axios';
 /** Date and times */
 export const getCurrentYear = () => new Date().getFullYear();
 export const getCurrentMonth = () => { };
@@ -7,12 +8,73 @@ export const getDateFromDateTime = (datetime) => datetime.split('T')[0];
 export const getTimeFromDateTime = (datetime) => (datetime.split('T')[1]).split('.')[0];
 
 /** handlers */
+export const handleAsideNavItemClicked = (event, necessaryFields) => {
+  const currClickedTabId = event.target.id;
+  const currClickedDiv = document.getElementById(currClickedTabId);
+  const {
+    allResultDiv,
+    unRepliedApplicationsDiv,
+    repliedApplicationsDiv,
+    allApplicationsTab,
+    unRepliedApplicationsTab,
+    repliedApplicationsTab,
+  } = necessaryFields;
+
+  if (currClickedTabId === 'allApplicationsTab') {
+    /** SHOWING ACTIVE TAB AND DESIRED DIV */
+    allResultDiv.classList.remove('hidden-div');
+    currClickedDiv.classList.add('active-tab');
+    currClickedDiv.classList.add('color-dark-purple');
+
+    /** HIDDING UNDESIRED DIVS */
+    unRepliedApplicationsDiv.classList.add('hidden-div');
+    repliedApplicationsDiv.classList.add('hidden-div');
+
+    /** DEACTIVATING UNACTIVE TABS */
+    unRepliedApplicationsTab.classList.remove('active-tab');
+    unRepliedApplicationsTab.classList.remove('color-dark-purple');
+    repliedApplicationsTab.classList.remove('active-tab');
+    repliedApplicationsTab.classList.remove('color-dark-purple');
+  } else if (currClickedTabId === 'unRepliedApplicationsTab') {
+    /** SHOWING ACTIVE TAB AND DESIRED DIV */
+    unRepliedApplicationsDiv.classList.remove('hidden-div');
+    currClickedDiv.classList.add('active-tab');
+    currClickedDiv.classList.add('color-dark-purple');
+
+    /** HIDDING UN DESIRED DIV */
+    allResultDiv.classList.add('hidden-div');
+    repliedApplicationsDiv.classList.add('hidden-div');
+
+    /** DEACTIVATING UNACTIVE TABS */
+    allApplicationsTab.classList.remove('active-tab');
+    allApplicationsTab.classList.remove('color-dark-purple');
+    repliedApplicationsTab.classList.remove('active-tab');
+    repliedApplicationsTab.classList.remove('color-dark-purple');
+  } else if (currClickedTabId === 'repliedApplicationsTab') {
+    /** SHOWING ACTIVE TAB AND DESIRED DIV */
+    repliedApplicationsDiv.classList.remove('hidden-div');
+    currClickedDiv.classList.add('active-tab');
+    currClickedDiv.classList.add('color-dark-purple');
+
+    /** HIDDING UNDESIRED DIVS */
+    allResultDiv.classList.add('hidden-div');
+    unRepliedApplicationsDiv.classList.add('hidden-div');
+
+    /** DEACTIVATING UNACTIVE TABS */
+    allApplicationsTab.classList.remove('active-tab');
+    unRepliedApplicationsTab.classList.remove('active-tab');
+    allApplicationsTab.classList.remove('color-dark-purple');
+    unRepliedApplicationsTab.classList.remove('color-dark-purple');
+  }
+};
 export const handleSingleApplicantClicled = (event, application, necessaryFields) => {
   const { allResultDiv, applicantDetails, backToListBtn } = necessaryFields;
   if (event.target.tagName !== 'BUTTON') {
     allResultDiv.classList.add('hidden-div');
     applicantDetails.classList.remove('hidden-div');
     backToListBtn.classList.remove('hidden-div');
+    axios.post('/applications/update-read-from-application-table',
+      { application_id: application.application_id });
     applicantDetails.innerHTML = (`
   <div class="color-grey-transparent">
     <div>

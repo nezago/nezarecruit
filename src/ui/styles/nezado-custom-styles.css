@@ -139,10 +139,18 @@ nav a:hover {
   border-bottom-right-radius: 15px;
 }
 
+/* SPECIAL FIELDS*/
 .field-error {
   color: rgb(255, 255, 255);
   background-color: rgb(124, 5, 5);
-  padding: 2px;
+  padding: 7px;
+  border-radius: 30px;
+  font-style: italic;
+}
+.field-success {
+  color: rgb(255, 255, 255);
+  background-color: rgb(13, 153, 36);
+  padding: 7px;
   border-radius: 30px;
   font-style: italic;
 }

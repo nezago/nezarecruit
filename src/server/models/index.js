@@ -1,5 +1,16 @@
-import { addNewUserToDb, checkIfEmailExistFromTableUsers, userLogin } from './users-model';
-import { addApplicationForm, checkEmailFromApplicationsAndUsers, getAllApplications } from './apply-models';
+import {
+  addNewUserToDb,
+  checkIfEmailExistFromTableUsers,
+  userLogin,
+} from './users-model';
+import {
+  addApplicationForm,
+  checkEmailFromApplicationsAndUsers,
+  getAllApplications,
+  updateReadInTableApplications,
+  updateRepliedInTableApplications,
+  getUnsentEmailAddress,
+} from './apply-models';
 
 export default {
   addNewUserToDb,
@@ -8,4 +19,7 @@ export default {
   addApplicationForm,
   checkEmailFromApplicationsAndUsers,
   getAllApplications,
+  updateReadInTableApplications,
+  getUnsentEmailAddress,
+  updateRepliedInTableApplications,
 };

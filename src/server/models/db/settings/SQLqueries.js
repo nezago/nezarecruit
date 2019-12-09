@@ -135,6 +135,16 @@ apply_for_software_dev_junior WHERE read=true
 /** GETTING ALL THE APPLICATIONS */
 export const GET_ALL_APPLICATIONS = `SELECT * FROM 
 apply_for_software_dev_junior ORDER BY application_id DESC`;
+
+/** UPDATING READ IN TABLE APPLICATIONS */
+export const UPDATE_READ_IN_TABLE_APPLICATION = `
+UPDATE apply_for_software_dev_junior SET read=true WHERE application_id=$1;
+`;
+
+/** UPDATING REPLIED IN TABLE APPLICATIONS */
+export const UPDATE_REPLIED_IN_TABLE_APPLICATION = `
+UPDATE apply_for_software_dev_junior SET replied=true WHERE email=$1;
+`;
 /** ======================================================================== */
 
 /** ========================================================================\
@@ -149,7 +159,8 @@ DROP TABLE IF EXISTS initial_email_status_for_application CASCADE;
     email_sent_status boolean DEFAULT true,
     error_occurred varchar(255),
     user_registered_at timestamp,
-    CONSTRAINT initial_email_for_application_status_fk FOREIGN KEY(email) REFERENCES apply_for_software_dev_junior(email));
+    CONSTRAINT initial_email_for_application_status_fk FOREIGN KEY(email) 
+    REFERENCES apply_for_software_dev_junior(email));
 `;
 
 /** SAVING NEW STATUS */
@@ -158,3 +169,7 @@ INSERT INTO initial_email_status_for_application(
     email,email_sent_status,error_occurred,user_registered_at
 ) VALUES ($1,$2,$3,NOW());
 `;
+
+/** GETTING ALL REGISTERED UNADDED INITIAL EMAIL */
+export const GET_UNSENT_INITIAL_EMAIL = `SELECT email FROM 
+initial_email_status_for_application ORDER BY status_id DESC;`;

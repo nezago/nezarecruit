@@ -5,6 +5,9 @@ import {
   ADD_NEW_INITIAL_EMAIL_STATUS,
   CHECK_EMAIL_FROM_TABLE_APPLICATIONS,
   GET_ALL_APPLICATIONS,
+  UPDATE_READ_IN_TABLE_APPLICATION,
+  GET_UNSENT_INITIAL_EMAIL,
+  UPDATE_REPLIED_IN_TABLE_APPLICATION,
 } from './db/settings/SQLqueries';
 import { checkIfEmailExistFromTableUsers } from './users-model';
 
@@ -152,5 +155,48 @@ export const getAllApplications = (req, res, next) => {
     }
     res.status(200).send(results.rows);
     next();
+  });
+};
+
+/** UPDATING READ FROM TABLE APPLICATIONS */
+export const updateReadInTableApplications = (req, res, next) => {
+  const { application_id } = req.body;
+  if (application_id) {
+    connect().query(UPDATE_READ_IN_TABLE_APPLICATION, [application_id],
+      (err, results) => {
+        if (err) {
+          res.status(500).send('Something wrong occurred, please try again!');
+        } else {
+          res.status(200).send(results);
+          next();
+        }
+      });
+  }
+};
+
+export const updateRepliedInTableApplications = (req, res, next) => {
+  const { email } = req.body;
+  if (email) {
+    connect().query(UPDATE_REPLIED_IN_TABLE_APPLICATION, [email],
+      (err, results) => {
+        if (err) {
+          res.status(500).send('Something wrong occurred, please try again!');
+        } else {
+          res.status(200).send(results);
+          next();
+        }
+      });
+  }
+};
+
+/** GETTING UNSENT EMAIL ADDRESS */
+export const getUnsentEmailAddress = (req, res, next) => {
+  connect().query(GET_UNSENT_INITIAL_EMAIL, (err, results) => {
+    if (err) {
+      res.status(500).send('Unknown error, try again!');
+    } else {
+      res.status(200).send(results.rows);
+      next();
+    }
   });
 };
