@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /** Date and times */
 export const getCurrentYear = () => new Date().getFullYear();
 export const getCurrentMonth = () => { };
@@ -16,7 +17,7 @@ export const handleSingleApplicantClicled = (event, application, necessaryFields
   <div class="color-grey-transparent">
     <div>
       <h1 class="text-center">
-        <span>${application.fname}</span>
+        <span fname-span>${application.fname}</span>
         <span>${application.middle_name}</span>
         <span>${application.lname}</span>
         <span>${getCurrentYear() - application.year_of_birth} years old</span>
@@ -46,7 +47,7 @@ export const handleSingleApplicantClicled = (event, application, necessaryFields
       </div>
       <div class="text-17 p-2 mt-2">
         <span>E-mail : </span>
-        <span class="float-right">${application.email}</span>
+        <span email-span class="float-right">${application.email}</span>
       </div>
       <div class="color-dark-purple text-17 p-2 mt-2">
         <span>Employed before? : </span>
@@ -99,7 +100,28 @@ export const handleCloseSingleResultClicked = (event) => {
 };
 
 export const handleEmailBtnClicked = (necessaryFields) => {
-  const { emailingDiv } = necessaryFields;
+  const { emailingDiv, recipientEmail, recipientFname } = necessaryFields;
   emailingDiv.classList.remove('hidden-div');
-  window.scrollBy(0, 700);
+  window.scrollBy(0, 900);
+  recipientEmail.value = document.querySelector('span[email-span]').innerText;
+  recipientFname.value = document.querySelector('span[fname-span]').innerText;
+};
+
+export const handleKeyPressWhileTypingEmailMessage = (event, necessaryFields) => {
+  const pressedKey = event.key;
+  let typedText;
+  if (pressedKey === '!'
+    || pressedKey === '$'
+    || pressedKey === '%'
+    || pressedKey === '>') {
+    const { emailMsg, emailMsgPreview } = necessaryFields;
+    typedText = emailMsg.value;
+    const typedTextArr = typedText.split('~');
+    for (let i = 0; i < typedTextArr.length; i++) {
+      if (typedTextArr[i].startsWith('^') && typedTextArr[i].endsWith('^')) {
+        typedTextArr[i].replace('^', '<h1>');
+      }
+      emailMsgPreview.innerHTML = typedTextArr;
+    }
+  }
 };

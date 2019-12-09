@@ -10,6 +10,7 @@ import {
   handleBackToListClicked,
   handleCloseSingleResultClicked,
   handleEmailBtnClicked,
+  handleKeyPressWhileTypingEmailMessage,
 } from '../../helpers/functions/handlers';
 
 class ManageApplicationsContainer extends Component {
@@ -34,6 +35,10 @@ class ManageApplicationsContainer extends Component {
       applicantDetails: document.getElementById('applicant-details'),
       backToListBtn: document.getElementById('back-to-list-btn'),
       emailingDiv: document.getElementById('emailing-div'),
+      recipientEmail: document.getElementById('recipient-email'),
+      recipientFname: document.getElementById('recipient-fname'),
+      emailMsg: document.getElementById('email-msg'),
+      emailMsgPreview: document.getElementById('email-msg-preview'),
     };
     let applicationsList;
     if (applicationsArr.length !== 0) {
@@ -83,6 +88,7 @@ class ManageApplicationsContainer extends Component {
 
     return (
       <div className="color-dark-purple h-100 position-absolute-top-left w-100 mt-5">
+        {/** LEFT-SIDE BAR */}
         <div className=" aside-bar position-absolute-top-left text-white h-100">
           <ul className="nav flex-column mr-auto">
             <li className="nav-item hand-cursor mt-5 active-tab color-dark-purple">
@@ -105,12 +111,16 @@ class ManageApplicationsContainer extends Component {
             </li>
           </ul>
         </div>
+
+        {/** SHOWING APPLICANTS LIST */}
         <div
           className="mt-5 heigth-80 overflow-auto width-80 color-grey-transparent p-2"
           id="all-results-div"
         >
           {applicationsList}
         </div>
+
+        {/** OPTIONS PORTION */}
         <div id="back-to-list-btn" className="position-fixed-top-right hidden-div">
           <button
             type="button"
@@ -127,14 +137,72 @@ class ManageApplicationsContainer extends Component {
             Send Email
           </button>
         </div>
+
+        {/** SHOWING ALL DETAILS */}
         <div
           className="mt-5 heigth-80 overflow-auto width-80 color-grey-transparent p-2 hidden-div"
           id="applicant-details"
         />
+
+        {/** SEND EMAIL PORTION */}
         <div
           id="emailing-div"
-          className="mt-5 heigth-80 overflow-auto width-80 color-grey-transparent p-2 hidden-div"
-        />
+          className="mt-5 heigth-80 overflow-auto width-80 color-dark-purple p-2 hidden-div mb-5"
+        >
+          <div>
+            <label htmlFor="recipient-email" className="form-group form-row">
+              <span className="col-md-2">Send Email to : </span>
+              <input
+                type="email"
+                name="recipient-email"
+                id="recipient-email"
+                placeholder="Email"
+                className="form-control form-control-sm rounded-corners col-md-10"
+                readOnly
+              />
+            </label>
+          </div>
+
+          <div>
+            <label htmlFor="recipient-fname" className="form-group form-row">
+              <span className="col-md-2">Family name : </span>
+              <input
+                type="text"
+                name="recipient-fname"
+                id="recipient-fname"
+                placeholder="fname"
+                className="form-control form-control-sm rounded-corners col-md-10"
+                readOnly
+              />
+            </label>
+          </div>
+
+          <div>
+            <label htmlFor="email-msg" className="form-group form-row">
+              <span className="col-md-2">Message : </span>
+              <textarea
+                name="email-msg"
+                id="email-msg"
+                cols="50"
+                rows="10"
+                placeholder="Type the nessage here ... "
+                className="form-control form-control-sm rounded-corners col-md-10"
+                onKeyPress={() => handleKeyPressWhileTypingEmailMessage(event, necessaryFields)}
+              />
+            </label>
+          </div>
+
+          <div>
+            {/*  eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label className="form-group form-row">
+              <span className="col-md-2">This is how the email will look like : </span>
+              <div
+                id="email-msg-preview"
+                className="form-control form-control-sm rounded-corners col-md-10 p-5"
+              />
+            </label>
+          </div>
+        </div>
       </div>
     );
   }
