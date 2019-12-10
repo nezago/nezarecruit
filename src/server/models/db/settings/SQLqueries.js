@@ -85,7 +85,7 @@ export const CREATE_TABLE_APPLY_FOR_SOFTWARE_DEV_JUNIOR = `DROP TABLE IF EXISTS
      linkedin_profile VARCHAR(255),
      applied_at timestamp,
      read boolean DEFAULT false,
-     replied boolean DEFAULT false,
+     replied boolean DEFAULT true,
      replied_at timestamp);`;
 
 export const ADD_NEW_APPLICATION = `INSERT INTO apply_for_software_dev_junior (
@@ -143,7 +143,7 @@ UPDATE apply_for_software_dev_junior SET read=true WHERE application_id=$1;
 
 /** UPDATING REPLIED IN TABLE APPLICATIONS */
 export const UPDATE_REPLIED_IN_TABLE_APPLICATION = `
-UPDATE apply_for_software_dev_junior SET replied=true WHERE email=$1;
+UPDATE apply_for_software_dev_junior SET replied=false WHERE email=$1;
 `;
 /** ======================================================================== */
 

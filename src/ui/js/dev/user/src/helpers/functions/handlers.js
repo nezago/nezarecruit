@@ -68,9 +68,17 @@ export const handleAsideNavItemClicked = (event, necessaryFields) => {
   }
 };
 export const handleSingleApplicantClicled = (event, application, necessaryFields) => {
-  const { allResultDiv, applicantDetails, backToListBtn } = necessaryFields;
+  const {
+    allResultDiv,
+    unRepliedApplicationsDiv,
+    repliedApplicationsDiv,
+    applicantDetails,
+    backToListBtn,
+  } = necessaryFields;
   if (event.target.tagName !== 'BUTTON') {
     allResultDiv.classList.add('hidden-div');
+    unRepliedApplicationsDiv.classList.add('hidden-div');
+    repliedApplicationsDiv.classList.add('hidden-div');
     applicantDetails.classList.remove('hidden-div');
     backToListBtn.classList.remove('hidden-div');
     axios.post('/applications/update-read-from-application-table',
@@ -154,6 +162,7 @@ export const handleBackToListClicked = (necessaryFields) => {
 export const handleCloseSingleResultClicked = (event) => {
   const allDivs = document.querySelectorAll('div');
   const currentId = event.target.id;
+  console.log(currentId);
   allDivs.forEach((currDiv) => {
     if (currDiv.id === currentId) {
       currDiv.classList.add('hidden-div');

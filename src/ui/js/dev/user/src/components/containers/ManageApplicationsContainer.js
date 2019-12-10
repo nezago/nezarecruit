@@ -18,11 +18,17 @@ import {
 class ManageApplicationsContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = { applicationsArr: [] };
+    this.state = {
+      applicationsArr: [],
+      unRepliedApplications: [],
+      repliedApplications: [],
+    };
   }
 
   componentDidMount() {
     let unsentEmail;
+    const unRepliedApplications = [];
+    const repliedApplications = [];
     const token = localStorage.getItem('oauth');
     axios.get('/applications/get-all-unsent-emails',
       { headers: { Authorization: `Bearer ${token}` } }).then((res) => {
@@ -33,14 +39,31 @@ class ManageApplicationsContainer extends Component {
       { headers: { Authorization: `Bearer ${token}` } }).then((res) => {
       const applicationsArr = res.data;
       this.setState({ applicationsArr });
+
+      /** iterating over all arrays to see if there are matching unsent emails */
       applicationsArr.forEach((currApp) => {
-        // if (currApp.email)
+        unsentEmail.forEach((currUnsent) => {
+          if (currUnsent.email === currApp.email) {
+            axios.post('/applications/update-replied-from-application-table',
+              { email: currUnsent.email });
+          }
+        });
+        if (currApp.replied) {
+          repliedApplications.push(currApp);
+        } else {
+          unRepliedApplications.push(currApp);
+        }
       });
+      this.setState({ unRepliedApplications, repliedApplications });
     });
   }
 
   render() {
-    const { applicationsArr } = this.state;
+    const {
+      applicationsArr,
+      unRepliedApplications,
+      repliedApplications,
+    } = this.state;
     const necessaryFields = {
       allResultDiv: document.getElementById('all-results-div'),
       unRepliedApplicationsDiv: document.getElementById('unreplied-applications-div'),
@@ -57,6 +80,10 @@ class ManageApplicationsContainer extends Component {
       repliedApplicationsTab: document.getElementById('repliedApplicationsTab'),
     };
     let applicationsList;
+    let unRepliedApplicationList;
+    let repliedApplicationList;
+
+    /** STRUCTURING ALL APPLICATIONS */
     if (applicationsArr.length !== 0) {
       applicationsList = applicationsArr.map((application) => (
         <div
@@ -101,6 +128,112 @@ class ManageApplicationsContainer extends Component {
               className="btn btn-outline-danger btn-sm rounded-corners hand-cursor"
               id={application.application_id}
               onClick={() => handleCloseSingleResultClicked(event, application, this)}
+            >
+              &times;
+            </button>
+          </span>
+        </div>
+      ));
+    }
+
+    /** STRUNCTURING UNREPLIED APPLICATIONS */
+    if (unRepliedApplications.length !== 0) {
+      unRepliedApplicationList = unRepliedApplications.map((unReplied) => (
+        <div
+          key={unReplied.application_id}
+          className="color-rigth-grey-transparent mt-2 p-2 rounded-corners hand-cursor"
+          id={`unreplied_${unReplied.application_id}`}
+          onClick={
+            () => handleSingleApplicantClicled(event, unReplied, necessaryFields)
+          }
+        >
+          <span className="fname-span text-22 text-bold mr-2">
+            {' '}
+            {unReplied.fname}
+          </span>
+          <span className="text-19 text-green mr-2 text-bold">
+            {getCurrentYear() - unReplied.year_of_birth}
+            {' '}
+            years old
+          </span>
+          <span className="text-19 text-white mr-2 text-bold">
+            {unReplied.education_level}
+          </span>
+
+          <span className="text-italic text-17 text-blue mr-2">
+            {unReplied.email}
+          </span>
+          <span className={classnames('text-19 mr-2 text-bold', {
+            'field-success': unReplied.replied, 'field-error': !unReplied.replied,
+          })}
+          >
+            {unReplied.replied ? 'Replied' : 'unReplied'}
+          </span>
+          <span className={classnames('text-19 mr-2 text-bold', {
+            'field-success': unReplied.read, 'field-error': !unReplied.read,
+          })}
+          >
+            {unReplied.read ? 'Read' : 'UnRead'}
+          </span>
+          <span className="float-right">
+            <button
+              type="button"
+              className="btn btn-outline-danger btn-sm rounded-corners hand-cursor"
+              id={`unreplied_${unReplied.application_id}`}
+              onClick={() => handleCloseSingleResultClicked(event, unReplied, this)}
+            >
+              &times;
+            </button>
+          </span>
+        </div>
+      ));
+    }
+
+    /** STRUCTURING REPLIED APPLICATIONS */
+    if (repliedApplications.length !== 0) {
+      repliedApplicationList = repliedApplications.map((repliedApps) => (
+        <div
+          key={repliedApps.application_id}
+          className="color-rigth-grey-transparent mt-2 p-2 rounded-corners hand-cursor"
+          id={`repliedApp_${repliedApps.application_id}`}
+          onClick={
+            () => handleSingleApplicantClicled(event, repliedApps, necessaryFields)
+          }
+        >
+          <span className="fname-span text-22 text-bold mr-2">
+            {' '}
+            {repliedApps.fname}
+          </span>
+          <span className="text-19 text-green mr-2 text-bold">
+            {getCurrentYear() - repliedApps.year_of_birth}
+            {' '}
+            years old
+          </span>
+          <span className="text-19 text-white mr-2 text-bold">
+            {repliedApps.education_level}
+          </span>
+
+          <span className="text-italic text-17 text-blue mr-2">
+            {repliedApps.email}
+          </span>
+          <span className={classnames('text-19 mr-2 text-bold', {
+            'field-success': repliedApps.replied, 'field-error': !repliedApps.replied,
+          })}
+          >
+            {repliedApps.replied ? 'Replied' : 'Unreplied'}
+          </span>
+          <span className={classnames('text-19 mr-2 text-bold', {
+            'field-success': repliedApps.read, 'field-error': !repliedApps.read,
+          })}
+          >
+            {repliedApps.read ? 'Read' : 'UnRead'}
+          </span>
+          <span className="float-right">
+            <button
+              type="button"
+              className="btn btn-outline-danger btn-sm rounded-corners hand-cursor"
+              id={`repliedApp_${repliedApps.application_id}`}
+              onClick={() => handleCloseSingleResultClicked(event, repliedApps, this)}
             >
               &times;
             </button>
@@ -176,14 +309,14 @@ class ManageApplicationsContainer extends Component {
           className="mt-5 heigth-80 overflow-auto width-80 color-grey-transparent p-2 hidden-div"
           id="unreplied-applications-div"
         >
-          <h1>Not replied applicatios will appear here ... </h1>
+          {unRepliedApplicationList}
         </div>
         {/** SHOWING REPLIED APPLICATIONS */}
         <div
           className="mt-5 heigth-80 overflow-auto width-80 color-grey-transparent p-2 hidden-div"
           id="replied-applications-div"
         >
-          <h1>Replied applications will appear here please wait...</h1>
+          {repliedApplicationList}
         </div>
 
         {/** OPTIONS PORTION */}
