@@ -1,5 +1,11 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-plusplus */
 import axios from 'axios';
+import {
+  getFontFamilies,
+  getFontSizes,
+} from '../../../../../../../helpers/resources/list-of-needed-resouces';
+import { validateEmail } from '../../../../../../../helpers/functions/validations';
 /** Date and times */
 export const getCurrentYear = () => new Date().getFullYear();
 export const getCurrentMonth = () => { };
@@ -162,7 +168,6 @@ export const handleBackToListClicked = (necessaryFields) => {
 export const handleCloseSingleResultClicked = (event) => {
   const allDivs = document.querySelectorAll('div');
   const currentId = event.target.id;
-  console.log(currentId);
   allDivs.forEach((currDiv) => {
     if (currDiv.id === currentId) {
       currDiv.classList.add('hidden-div');
@@ -194,5 +199,155 @@ export const handleKeyPressWhileTypingEmailMessage = (event, necessaryFields) =>
       }
       emailMsgPreview.innerHTML = typedTextArr;
     }
+  }
+};
+
+/** HANDLE EMAIL EDITING */
+export const handleTypingEmailInIframe = () => {
+  // eslint-disable-next-line no-undef
+  const editor = emailMsgIframe.document;
+  editor.designMode = 'on';
+
+  /** bold */
+  boldBtn.addEventListener('click', () => {
+    editor.execCommand('bold', false, null);
+  }, false);
+
+  /** italic */
+  italicBtn.addEventListener('click', () => {
+    editor.execCommand('Italic', false, null);
+  }, false);
+
+  /** underline */
+  underlineBtn.addEventListener('click', () => {
+    editor.execCommand('Underline', false, null);
+  }, false);
+
+  /** left justify */
+  justifyLeftBtn.addEventListener('click', () => {
+    editor.execCommand('justifyLeft', false, null);
+  }, false);
+
+  /** Center justify */
+  justifyCenterBtn.addEventListener('click', () => {
+    editor.execCommand('justifyCenter', false, null);
+  }, false);
+
+  /** Right justify */
+  justifyRightBtn.addEventListener('click', () => {
+    editor.execCommand('justifyRight', false, null);
+  }, false);
+
+  /** Full justify */
+  justifyFullBtn.addEventListener('click', () => {
+    editor.execCommand('justifyFull', false, null);
+  }, false);
+
+  /** superscript */
+  supBtn.addEventListener('click', () => {
+    editor.execCommand('Superscript', false, null);
+  }, false);
+
+  /** subscript */
+  subBtn.addEventListener('click', () => {
+    editor.execCommand('Subscript', false, null);
+  }, false);
+
+  /** strikethrough */
+  strikeBtn.addEventListener('click', () => {
+    editor.execCommand('Strikethrough', false, null);
+  }, false);
+
+  /** orderedlist */
+  orderedListBtn.addEventListener('click', () => {
+    editor.execCommand('InsertOrderedList', false, `newOL${Math.round(Math.random() * 100)}`);
+  }, false);
+
+  /** unorderedlist */
+  unorderedListBtn.addEventListener('click', () => {
+    editor.execCommand('InsertUnOrderedList', false, `newOL${Math.round(Math.random() * 100)}`);
+  }, false);
+
+  /** fontcolor */
+  fontcolorBtn.addEventListener('change', (event) => {
+    editor.execCommand('ForeColor', false, event.target.value);
+  }, false);
+
+  /** backgroundcolor */
+  highlightBtn.addEventListener('change', (event) => {
+    editor.execCommand('BackColor', false, event.target.value);
+  }, false);
+
+  /** fontfamily */
+  fontChanger.addEventListener('change', (event) => {
+    editor.execCommand('fontName', false, event.target.value);
+  }, false);
+
+  /** fontSizes */
+  fontSize.addEventListener('change', (event) => {
+    editor.execCommand('fontSize', false, parseInt(event.target.value));
+  }, false);
+
+  /** link */
+  linkBtn.addEventListener('click', () => {
+    const url = prompt('Enter your url please : ', 'http://');
+    editor.execCommand('CreateLink', false, url);
+  }, false);
+
+  /** unlink */
+  unlinkBtn.addEventListener('click', () => {
+    editor.execCommand('UnLink', false, null);
+  }, false);
+
+  /** undo */
+  undoBtn.addEventListener('click', () => {
+    editor.execCommand('undo', false, null);
+  }, false);
+
+  /** redo */
+  redoBtn.addEventListener('click', () => {
+    editor.execCommand('redo', false, null);
+  }, false);
+};
+
+export const displayFontFamilies = (fontChanger) => {
+  const selectOption = fontChanger;
+  getFontFamilies().forEach((currFont) => {
+    selectOption.add(new Option(currFont, currFont));
+  });
+  /** styling them */
+  const fonts = document.querySelectorAll('select#fontChanger > option');
+  fonts.forEach((currOption) => {
+    // eslint-disable-next-line no-param-reassign
+    currOption.style.fontFamily = currOption.value;
+  });
+};
+
+export const displayFontSizes = (fontSize) => {
+  const fontSizeField = fontSize;
+  getFontSizes().forEach((currFontSize) => {
+    fontSizeField.add(new Option(currFontSize, currFontSize));
+  });
+};
+
+export const handleSendEmailMsgBtnClicked = (necessaryFields) => {
+  const {
+    recipientEmail,
+    emailSubject,
+    emailMsgIframe,
+  } = necessaryFields;
+  const emailMsgHtml = emailMsgIframe.contentDocument || emailMsgIframe.contentWindow.document;
+  const emailAddr = recipientEmail.value;
+  const emailSubjec = emailSubject.value;
+  const emailMsg = "<html>" + emailMsgHtml.body.innerHTML + "</html>"
+  // const token = localStorage.getItem('oauth');
+  if (validateEmail(emailAddr) && emailSubjec.length !== 0 && emailMsg.length !== 0) {
+    console.log(emailMsg);
+    axios.post('/applications/send-e-mail',
+      { emailAddr, emailSubject: emailSubjec, emailMsg }).then((res) => {
+        console.log(res.data);
+      }).catch((err) => {
+        console.log(err.response.data);
+      });
   }
 };

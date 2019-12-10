@@ -267,3 +267,30 @@ export const getCodingExperience = () => [
   '4 - 5 years',
   'Over 5 years',
 ];
+
+export const getFontFamilies = () => [
+  'Times New Roman',
+  'Tahoma',
+  'monospace',
+  'cursive',
+  'Consolas',
+  'sans-serif',
+  'calibri',
+  'Serif',
+];
+
+export const getFontSizes = () => [
+  '8',
+  '10',
+  '12',
+  '14',
+  '16',
+  '18',
+  '20',
+  '22',
+  '24',
+  '26',
+  '28',
+  '30',
+  '32',
+];

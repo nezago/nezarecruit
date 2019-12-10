@@ -10,6 +10,7 @@ import {
   updateReadInTableApplications,
   updateRepliedInTableApplications,
   getUnsentEmailAddress,
+  sendEmail,
 } from './apply-models';
 
 export default {
@@ -22,4 +23,5 @@ export default {
   updateReadInTableApplications,
   getUnsentEmailAddress,
   updateRepliedInTableApplications,
+  sendEmail,
 };

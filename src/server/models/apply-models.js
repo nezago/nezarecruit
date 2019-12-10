@@ -57,6 +57,8 @@ export const addApplicationForm = async (req, res, next) => {
         /** THE FOLLOWING CODE DESCRIBING WHAT HAPPENS IF THE APPLICATION IS SAVED SUCCESSFULLY */
         /** PREPARING EMAIL THINGS */
         const htmlToSend = `
+        <body>
+        
           <p>Dear <strong>${fname}</strong>, thank you to apply for joining neza group 
           new era of top talented African Software Engineers movement. This is the 
           begining of your career, below are steps to follow.</p>
@@ -70,6 +72,8 @@ export const addApplicationForm = async (req, res, next) => {
           Neza Group Top Talent recruitment Team<br/>
           Mobile : +250722792371<br/>
           Gisenyi - Rwanda
+
+        </body>
           `;
 
         const transporter = nodemailer.createTransport({
@@ -130,6 +134,44 @@ export const addApplicationForm = async (req, res, next) => {
         });
       }
     });
+};
+
+/** SENDING EMAIL TO APPLICANTS */
+export const sendEmail = (req, res, next) => {
+  const {
+    emailAddr,
+    emailSubject,
+    emailMsg,
+  } = req.body;
+  console.log(req.body);
+  if (emailAddr && emailMsg) {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'recruit.neza@gmail.com',
+        pass: 'Nezagroup1.',
+      },
+      tls: { rejectUnauthorized: false },
+    });
+    const mailOptions = {
+      from: 'recruit.neza@gmail.com',
+      to: emailAddr,
+      subject: emailSubject,
+      html: emailMsg,
+    };
+    transporter.sendMail(mailOptions, (err, results) => {
+      if (err) {
+        // res.status(500).send(err);
+        console.log(err);
+      } else if (results) {
+        // res.status(200).send('Email sent successfully');
+        console.log(results);
+        next();
+      }
+    });
+  } else {
+    console.log('no email address or msg');
+  }
 };
 
 /** CHECKING THE EXISTANCE OF THE EMAIL FROM THE DATABASE */

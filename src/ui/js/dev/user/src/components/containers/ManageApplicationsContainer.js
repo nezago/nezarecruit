@@ -1,8 +1,17 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-restricted-globals */
 import React, { Component } from 'react';
-import { FaRegUser, FaUserMinus, FaUserCheck } from 'react-icons/fa';
+import {
+  FaRegUser,
+  FaUserMinus,
+  FaUserCheck,
+  FaAlignJustify,
+  FaAlignLeft,
+  FaAlignCenter,
+  FaAlignRight,
+} from 'react-icons/fa';
 import axios from 'axios';
 import classnames from 'classnames';
 import {
@@ -11,8 +20,11 @@ import {
   handleBackToListClicked,
   handleCloseSingleResultClicked,
   handleEmailBtnClicked,
-  handleKeyPressWhileTypingEmailMessage,
   handleAsideNavItemClicked,
+  handleTypingEmailInIframe,
+  displayFontFamilies,
+  displayFontSizes,
+  handleSendEmailMsgBtnClicked,
 } from '../../helpers/functions/handlers';
 
 class ManageApplicationsContainer extends Component {
@@ -56,6 +68,10 @@ class ManageApplicationsContainer extends Component {
       });
       this.setState({ unRepliedApplications, repliedApplications });
     });
+    /** DEALING WITH AN IFRAME TYPING  */
+    displayFontFamilies(document.getElementById('fontChanger'));
+    displayFontSizes(document.getElementById('fontSize'));
+    handleTypingEmailInIframe();
   }
 
   render() {
@@ -73,11 +89,13 @@ class ManageApplicationsContainer extends Component {
       emailingDiv: document.getElementById('emailing-div'),
       recipientEmail: document.getElementById('recipient-email'),
       recipientFname: document.getElementById('recipient-fname'),
-      emailMsg: document.getElementById('email-msg'),
-      emailMsgPreview: document.getElementById('email-msg-preview'),
+      emailSubject: document.getElementById('emailSubject'),
+      emailMsgIframe: document.getElementById('emailMsgIframe'),
       allApplicationsTab: document.getElementById('allApplicationsTab'),
       unRepliedApplicationsTab: document.getElementById('unRepliedApplicationsTab'),
       repliedApplicationsTab: document.getElementById('repliedApplicationsTab'),
+      fontChanger: document.getElementById('fontChanger'),
+
     };
     let applicationsList;
     let unRepliedApplicationList;
@@ -350,7 +368,6 @@ class ManageApplicationsContainer extends Component {
         >
           <div>
             <label htmlFor="recipient-email" className="form-group form-row">
-              <span className="col-md-2">Send Email to : </span>
               <input
                 type="email"
                 name="recipient-email"
@@ -358,13 +375,14 @@ class ManageApplicationsContainer extends Component {
                 placeholder="Email"
                 className="form-control form-control-sm rounded-corners col-md-10"
                 readOnly
+                hidden
               />
             </label>
           </div>
 
+
           <div>
             <label htmlFor="recipient-fname" className="form-group form-row">
-              <span className="col-md-2">Family name : </span>
               <input
                 type="text"
                 name="recipient-fname"
@@ -372,33 +390,78 @@ class ManageApplicationsContainer extends Component {
                 placeholder="fname"
                 className="form-control form-control-sm rounded-corners col-md-10"
                 readOnly
+                hidden
               />
             </label>
           </div>
 
           <div>
-            <label htmlFor="email-msg" className="form-group form-row">
-              <span className="col-md-2">Message : </span>
-              <textarea
-                name="email-msg"
-                id="email-msg"
-                cols="50"
-                rows="10"
-                placeholder="Type the nessage here ... "
+            <label htmlFor="emailSubject" className="form-group form-row">
+              <span className="col-md-2">Subject : </span>
+              <input
+                type="text"
+                name="emailSubject"
+                id="emailSubject"
+                placeholder="Eg.: Your application process status..."
                 className="form-control form-control-sm rounded-corners col-md-10"
-                onKeyPress={() => handleKeyPressWhileTypingEmailMessage(event, necessaryFields)}
               />
             </label>
           </div>
 
           <div>
-            {/*  eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label className="form-group form-row">
-              <span className="col-md-2">This is how the email will look like : </span>
+            <label htmlFor="emailMsgIframe" className="form-group form-row">
+              <span className="col-md-2">Message : </span>
               <div
-                id="email-msg-preview"
-                className="form-control form-control-sm rounded-corners col-md-10 p-5"
-              />
+                id="textEditor"
+                className="col-md-10"
+              >
+                <div id="theRibbon">
+                  <button type="button" id="boldBtn" title="Bold"><b>B</b></button>
+                  <button type="button" id="italicBtn" title="Italic"><em>I</em></button>
+                  <button type="button" id="underlineBtn" title="Underline"><u>U</u></button>
+                  <button type="button" id="justifyLeftBtn" title="Align left"><FaAlignLeft /></button>
+                  <button type="button" id="justifyCenterBtn" title="Align Center"><FaAlignCenter /></button>
+                  <button type="button" id="justifyRightBtn" title="Align Right"><FaAlignRight /></button>
+                  <button type="button" id="justifyFullBtn" title="Align Justify"><FaAlignJustify /></button>
+                  <button type="button" id="supBtn" title="Superscript">
+                    X
+                    <sup>2</sup>
+                  </button>
+                  <button type="button" id="subBtn" title="Subscript">
+                    X
+                    <sub>2</sub>
+                  </button>
+                  <button type="button" id="strikeBtn" title="Strikethrough"><s>abc</s></button>
+                  <button type="button" id="orderedListBtn" title="Numbered list">(i)</button>
+                  <button type="button" id="unorderedListBtn" title="Bulleted list">&bull;</button>
+                  <input type="color" id="fontcolorBtn" title="Change Font color" />
+                  <input type="color" id="highlightBtn" title="Highlight Text" />
+                  <select id="fontChanger" />
+                  <select id="fontSize" />
+                  <button type="button" id="linkBtn" title="Create a link">Link</button>
+                  <button type="button" id="unlinkBtn" title="Remove a link">UnLink</button>
+                  <button type="button" id="undoBtn" title="Undo the previous action">&larr;</button>
+                  <button type="button" id="redoBtn" title="Redo">&rarr;</button>
+                </div>
+                <div id="richTextArea">
+                  <iframe
+                    title="email-message-iframe"
+                    id="emailMsgIframe"
+                    name="emailMsgIframe"
+                    frameBorder="0"
+                  />
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => handleSendEmailMsgBtnClicked(necessaryFields)}
+                    className="btn btn-block btn-sm btn-success"
+                  >
+                    Send Message
+
+                  </button>
+                </div>
+              </div>
             </label>
           </div>
         </div>
