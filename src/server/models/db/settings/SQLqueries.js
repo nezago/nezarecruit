@@ -14,8 +14,8 @@ export const CREATE_TABLE_USERS = `
     date_of_birth DATE,
     email VARCHAR(50) UNIQUE,
     password VARCHAR(255),
-    user_registered_at timestamp,
-    user_edited_at timestamp,
+    user_registered_at TIMESTAMPTZ,
+    user_edited_at TIMESTAMPTZ,
     user_authorities VARCHAR(255));`;
 
 export const ADD_DEFAULT_USER = (hashedKey) => (`INSERT INTO users(
@@ -83,10 +83,10 @@ export const CREATE_TABLE_APPLY_FOR_SOFTWARE_DEV_JUNIOR = `DROP TABLE IF EXISTS
      email VARCHAR(50) UNIQUE,
      phone_number VARCHAR(20),
      linkedin_profile VARCHAR(255),
-     applied_at timestamp,
+     applied_at TIMESTAMPTZ,
      read boolean DEFAULT false,
      replied boolean DEFAULT true,
-     replied_at timestamp);`;
+     replied_at TIMESTAMPTZ);`;
 
 export const ADD_NEW_APPLICATION = `INSERT INTO apply_for_software_dev_junior (
       fname,
@@ -143,7 +143,7 @@ UPDATE apply_for_software_dev_junior SET read=true WHERE application_id=$1;
 
 /** UPDATING REPLIED IN TABLE APPLICATIONS */
 export const UPDATE_REPLIED_IN_TABLE_APPLICATION = `
-UPDATE apply_for_software_dev_junior SET replied=false WHERE email=$1;
+UPDATE apply_for_software_dev_junior SET replied=$1 WHERE email=$2;
 `;
 /** ======================================================================== */
 
@@ -158,7 +158,7 @@ DROP TABLE IF EXISTS initial_email_status_for_application CASCADE;
     email VARCHAR(50),
     email_sent_status boolean DEFAULT true,
     error_occurred varchar(255),
-    user_registered_at timestamp,
+    user_registered_at TIMESTAMPTZ,
     CONSTRAINT initial_email_for_application_status_fk FOREIGN KEY(email) 
     REFERENCES apply_for_software_dev_junior(email));
 `;
@@ -173,3 +173,34 @@ INSERT INTO initial_email_status_for_application(
 /** GETTING ALL REGISTERED UNADDED INITIAL EMAIL */
 export const GET_UNSENT_INITIAL_EMAIL = `SELECT email FROM 
 initial_email_status_for_application ORDER BY status_id DESC;`;
+
+/** ===================================================================== */
+
+/**
+ * =======================================================================
+ *
+ *
+ * TABLE ALL SENT EMAILS
+ *
+ *
+ */
+
+/** CREATE TABLE ALLSENTEMAILS */
+export const CREATE_TABLE_ALL_SENT_EMAILS = `
+DROP TABLE IF EXISTS all_sent_emails CASCADE; 
+    CREATE TABLE IF NOT EXISTS all_sent_emails (
+        sent_email_id SERIAL PRIMARY KEY,
+        email_address VARCHAR(255),
+        email_subject VARCHAR(255),
+        sender_email_address VARCHAR(255),
+        email_message TEXT,
+        sent_on TIMESTAMPTZ,
+        CONSTRAINT sent_email_fk FOREIGN KEY(email_address) 
+    REFERENCES apply_for_software_dev_junior(email));
+`;
+
+/** ADDING NEW EMAILS */
+export const ADD_NEW_SENT_EMAIL = `
+INSERT INTO all_sent_emails(
+    email_address, email_subject, sender_email_address, email_message, sent_on)
+    VALUES($1,$2,$3,$4,NOW())`;

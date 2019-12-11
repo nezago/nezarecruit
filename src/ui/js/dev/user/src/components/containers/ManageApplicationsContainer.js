@@ -11,6 +11,19 @@ import {
   FaAlignLeft,
   FaAlignCenter,
   FaAlignRight,
+  FaUndo,
+  FaRedo,
+  FaLink,
+  FaUnlink,
+  FaListUl,
+  FaListOl,
+  FaStrikethrough,
+  FaSuperscript,
+  FaSubscript,
+  FaBackspace,
+  FaCopy,
+  FaCut,
+  FaTypo3,
 } from 'react-icons/fa';
 import axios from 'axios';
 import classnames from 'classnames';
@@ -26,6 +39,7 @@ import {
   displayFontSizes,
   handleSendEmailMsgBtnClicked,
 } from '../../helpers/functions/handlers';
+import { getOauth } from '../../../../../../../helpers/resources/list-of-needed-resouces';
 
 class ManageApplicationsContainer extends Component {
   constructor(props) {
@@ -41,14 +55,14 @@ class ManageApplicationsContainer extends Component {
     let unsentEmail;
     const unRepliedApplications = [];
     const repliedApplications = [];
-    const token = localStorage.getItem('oauth');
+
     axios.get('/applications/get-all-unsent-emails',
-      { headers: { Authorization: `Bearer ${token}` } }).then((res) => {
+      { headers: getOauth() }).then((res) => {
       unsentEmail = res.data;
     });
 
     axios.get('/applications/get-all-applications',
-      { headers: { Authorization: `Bearer ${token}` } }).then((res) => {
+      { headers: getOauth() }).then((res) => {
       const applicationsArr = res.data;
       this.setState({ applicationsArr });
 
@@ -57,7 +71,7 @@ class ManageApplicationsContainer extends Component {
         unsentEmail.forEach((currUnsent) => {
           if (currUnsent.email === currApp.email) {
             axios.post('/applications/update-replied-from-application-table',
-              { email: currUnsent.email });
+              { email: currUnsent.email, status: false });
           }
         });
         if (currApp.replied) {
@@ -88,14 +102,19 @@ class ManageApplicationsContainer extends Component {
       backToListBtn: document.getElementById('back-to-list-btn'),
       emailingDiv: document.getElementById('emailing-div'),
       recipientEmail: document.getElementById('recipient-email'),
-      recipientFname: document.getElementById('recipient-fname'),
       emailSubject: document.getElementById('emailSubject'),
       emailMsgIframe: document.getElementById('emailMsgIframe'),
+      sendEmailResultDiv: document.getElementById('send-email-result-div'),
+      sendMsgBtn: document.getElementById('send-msg-btn'),
       allApplicationsTab: document.getElementById('allApplicationsTab'),
       unRepliedApplicationsTab: document.getElementById('unRepliedApplicationsTab'),
       repliedApplicationsTab: document.getElementById('repliedApplicationsTab'),
       fontChanger: document.getElementById('fontChanger'),
-
+      spanSpinnerGrow: document.querySelectorAll('span#spinner-grow'),
+      spanSpinnerBorder: document.querySelectorAll('span#spinner-border'),
+      spanSendMsg: document.getElementById('span-send-msg'),
+      sendEmailResultContainer: document.getElementById('send-email-result-container'),
+      sendEmailErrorDiv: document.getElementById('send-email-error-div'),
     };
     let applicationsList;
     let unRepliedApplicationList;
@@ -424,24 +443,26 @@ class ManageApplicationsContainer extends Component {
                   <button type="button" id="justifyRightBtn" title="Align Right"><FaAlignRight /></button>
                   <button type="button" id="justifyFullBtn" title="Align Justify"><FaAlignJustify /></button>
                   <button type="button" id="supBtn" title="Superscript">
-                    X
-                    <sup>2</sup>
+                    <FaSuperscript />
                   </button>
                   <button type="button" id="subBtn" title="Subscript">
-                    X
-                    <sub>2</sub>
+                    <FaSubscript />
                   </button>
-                  <button type="button" id="strikeBtn" title="Strikethrough"><s>abc</s></button>
-                  <button type="button" id="orderedListBtn" title="Numbered list">(i)</button>
-                  <button type="button" id="unorderedListBtn" title="Bulleted list">&bull;</button>
+                  <button type="button" id="strikeBtn" title="Strikethrough"><FaStrikethrough /></button>
+                  <button type="button" id="orderedListBtn" title="Numbered list"><FaListOl /></button>
+                  <button type="button" id="unorderedListBtn" title="Bulleted list"><FaListUl /></button>
                   <input type="color" id="fontcolorBtn" title="Change Font color" />
                   <input type="color" id="highlightBtn" title="Highlight Text" />
                   <select id="fontChanger" />
                   <select id="fontSize" />
-                  <button type="button" id="linkBtn" title="Create a link">Link</button>
-                  <button type="button" id="unlinkBtn" title="Remove a link">UnLink</button>
-                  <button type="button" id="undoBtn" title="Undo the previous action">&larr;</button>
-                  <button type="button" id="redoBtn" title="Redo">&rarr;</button>
+                  <button type="button" id="linkBtn" title="Create a link"><FaLink /></button>
+                  <button type="button" id="unlinkBtn" title="Remove a link"><FaUnlink /></button>
+                  <button type="button" id="undoBtn" title="Undo the previous action"><FaUndo /></button>
+                  <button type="button" id="redoBtn" title="Redo"><FaRedo /></button>
+                  <button type="button" id="backspaceBtn" title="Delete previous character"><FaBackspace /></button>
+                  <button type="button" id="copyBtn" title="Copy"><FaCopy /></button>
+                  <button type="button" id="cutBtn" title="Cut"><FaCut /></button>
+                  <button type="button" id="selectAllBtn" title="Select all"><FaTypo3 /></button>
                 </div>
                 <div id="richTextArea">
                   <iframe
@@ -456,14 +477,33 @@ class ManageApplicationsContainer extends Component {
                     type="button"
                     onClick={() => handleSendEmailMsgBtnClicked(necessaryFields)}
                     className="btn btn-block btn-sm btn-success"
+                    id="send-msg-btn"
                   >
-                    Send Message
-
+                    <span id="spinner-border" />
+                    <span id="span-send-msg">Click here to Send Message</span>
+                    <span id="spinner-grow" />
+                    <span id="spinner-grow" />
+                    <span id="spinner-grow" />
                   </button>
+                  <div
+                    id="send-email-error-div"
+                    className="text-danger text-center text-17"
+                  />
                 </div>
               </div>
             </label>
           </div>
+        </div>
+
+        {/** EMAIL RESULTS DIV */}
+        <div
+          id="send-email-result-div"
+          className="mt-5 heigth-80 overflow-auto width-80 color-grey-transparent p-2 hidden-div"
+        >
+          <div
+            className="padding-15 width-40 color-dark-purple text-17 text-center"
+            id="send-email-result-container"
+          />
         </div>
       </div>
     );

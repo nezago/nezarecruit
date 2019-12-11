@@ -1,9 +1,12 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 /* eslint-disable no-plusplus */
 import axios from 'axios';
 import {
   getFontFamilies,
   getFontSizes,
+  getOauth,
+  getUserInfo,
 } from '../../../../../../../helpers/resources/list-of-needed-resouces';
 import { validateEmail } from '../../../../../../../helpers/functions/validations';
 /** Date and times */
@@ -80,13 +83,28 @@ export const handleSingleApplicantClicled = (event, application, necessaryFields
     repliedApplicationsDiv,
     applicantDetails,
     backToListBtn,
+    emailingDiv,
+    sendEmailResultDiv,
   } = necessaryFields;
   if (event.target.tagName !== 'BUTTON') {
+    /**
+     * ********PREPARING WORKING EVIRONMENT***********
+     *
+     *
+     *
+     *  1.hiding some divs
+     *
+     *
+     * */
     allResultDiv.classList.add('hidden-div');
     unRepliedApplicationsDiv.classList.add('hidden-div');
     repliedApplicationsDiv.classList.add('hidden-div');
     applicantDetails.classList.remove('hidden-div');
     backToListBtn.classList.remove('hidden-div');
+    emailingDiv.classList.add('hidden-div');
+    sendEmailResultDiv.classList.add('hidden-div');
+
+
     axios.post('/applications/update-read-from-application-table',
       { application_id: application.application_id });
     applicantDetails.innerHTML = (`
@@ -157,12 +175,17 @@ export const handleSingleApplicantClicled = (event, application, necessaryFields
 
 export const handleBackToListClicked = (necessaryFields) => {
   const {
-    allResultDiv, applicantDetails, backToListBtn, emailingDiv,
+    allResultDiv,
+    applicantDetails,
+    backToListBtn,
+    emailingDiv,
+    sendEmailResultDiv,
   } = necessaryFields;
   allResultDiv.classList.remove('hidden-div');
   applicantDetails.classList.add('hidden-div');
   backToListBtn.classList.add('hidden-div');
   emailingDiv.classList.add('hidden-div');
+  sendEmailResultDiv.classList.add('hidden-div');
 };
 
 export const handleCloseSingleResultClicked = (event) => {
@@ -176,30 +199,48 @@ export const handleCloseSingleResultClicked = (event) => {
 };
 
 export const handleEmailBtnClicked = (necessaryFields) => {
-  const { emailingDiv, recipientEmail, recipientFname } = necessaryFields;
+  const {
+    emailingDiv,
+    recipientEmail,
+    emailSubject,
+    emailMsgIframe,
+    sendEmailResultDiv,
+    sendMsgBtn,
+    spanSpinnerGrow,
+    spanSpinnerBorder,
+    spanSendMsg,
+    sendEmailErrorDiv,
+  } = necessaryFields;
+  /** UNHIDDING EMAILING DIV */
   emailingDiv.classList.remove('hidden-div');
+
+  /** PREPARING WORKING ENVIRONMENT */
+  const iframeContent = emailMsgIframe.contentDocument || emailMsgIframe.contentWindow.document;
+  iframeContent.body.innerHTML = '';
+  emailSubject.value = '';
+  sendMsgBtn.classList.remove('btn-info');
+  sendMsgBtn.classList.remove('rounded-corners');
+  sendMsgBtn.classList.add('btn-success');
+  spanSendMsg.innerHTML = 'Click here to Send Message';
+  sendEmailResultDiv.classList.add('hidden-div');
+  sendEmailErrorDiv.classList.add('hidden-div');
+
+  spanSpinnerBorder.forEach((currSpan) => {
+    currSpan.classList.remove('spinner-border');
+    currSpan.classList.remove('spinner-border-sm');
+    currSpan.classList.remove('text-warning');
+    currSpan.classList.remove('mr-2');
+  });
+
+  spanSpinnerGrow.forEach((currSpan) => {
+    currSpan.classList.remove('spinner-grow');
+    currSpan.classList.remove('spinner-grow-sm');
+    currSpan.classList.remove('text-warning');
+    currSpan.classList.remove('mr-2');
+  });
+
   window.scrollBy(0, 900);
   recipientEmail.value = document.querySelector('span[email-span]').innerText;
-  recipientFname.value = document.querySelector('span[fname-span]').innerText;
-};
-
-export const handleKeyPressWhileTypingEmailMessage = (event, necessaryFields) => {
-  const pressedKey = event.key;
-  let typedText;
-  if (pressedKey === '!'
-    || pressedKey === '$'
-    || pressedKey === '%'
-    || pressedKey === '>') {
-    const { emailMsg, emailMsgPreview } = necessaryFields;
-    typedText = emailMsg.value;
-    const typedTextArr = typedText.split('~');
-    for (let i = 0; i < typedTextArr.length; i++) {
-      if (typedTextArr[i].startsWith('^') && typedTextArr[i].endsWith('^')) {
-        typedTextArr[i].replace('^', '<h1>');
-      }
-      emailMsgPreview.innerHTML = typedTextArr;
-    }
-  }
 };
 
 /** HANDLE EMAIL EDITING */
@@ -308,6 +349,25 @@ export const handleTypingEmailInIframe = () => {
   redoBtn.addEventListener('click', () => {
     editor.execCommand('redo', false, null);
   }, false);
+  /** backspace */
+  backspaceBtn.addEventListener('click', () => {
+    editor.execCommand('delete', false, null);
+  }, false);
+
+  /** copy */
+  copyBtn.addEventListener('click', () => {
+    editor.execCommand('copy', false, null);
+  }, false);
+
+  /** cut */
+  cutBtn.addEventListener('click', () => {
+    editor.execCommand('cut', false, null);
+  }, false);
+
+  /** selectAll */
+  selectAllBtn.addEventListener('click', () => {
+    editor.execCommand('selectAll', false, null);
+  }, false);
 };
 
 export const displayFontFamilies = (fontChanger) => {
@@ -335,19 +395,80 @@ export const handleSendEmailMsgBtnClicked = (necessaryFields) => {
     recipientEmail,
     emailSubject,
     emailMsgIframe,
+    emailingDiv,
+    sendEmailResultDiv,
+    sendMsgBtn,
+    spanSpinnerBorder,
+    spanSpinnerGrow,
+    spanSendMsg,
+    sendEmailResultContainer,
+    sendEmailErrorDiv,
   } = necessaryFields;
+
+
   const emailMsgHtml = emailMsgIframe.contentDocument || emailMsgIframe.contentWindow.document;
   const emailAddr = recipientEmail.value;
   const emailSubjec = emailSubject.value;
-  const emailMsg = "<html>" + emailMsgHtml.body.innerHTML + "</html>"
-  // const token = localStorage.getItem('oauth');
-  if (validateEmail(emailAddr) && emailSubjec.length !== 0 && emailMsg.length !== 0) {
-    console.log(emailMsg);
-    axios.post('/applications/send-e-mail',
-      { emailAddr, emailSubject: emailSubjec, emailMsg }).then((res) => {
-        console.log(res.data);
-      }).catch((err) => {
-        console.log(err.response.data);
+  const myEmailMsg = emailMsgHtml.body.innerHTML;
+  const emailMsg = `<div>${myEmailMsg}</div>`;
+  const senderEmailAddress = getUserInfo().email;
+
+  if (!validateEmail(emailAddr)) {
+    sendEmailErrorDiv.innerHTML = 'No email address found, please refresh the browser and try';
+  } else if (emailSubjec.length === 0) {
+    sendEmailErrorDiv.innerHTML = 'It is impossible to send an email with no subject!';
+  } else if (myEmailMsg.length === 0) {
+    sendEmailErrorDiv.innerHTML = 'Write something please, you cannot send an empty email message!';
+  } else {
+    /** ALL NEEDED VALIDATIONS ARE NOW DONE */
+
+    const isSendConfirmed = confirm(`
+    Are you sure, you want to send the email to ${emailAddr}? 
+    Check carefully if you have typed whatever you wanted and click yes.`);
+    if (isSendConfirmed) {
+      /** transforming btn send when is clicked */
+      sendMsgBtn.classList.remove('btn-success');
+      sendMsgBtn.classList.add('btn-info');
+      sendMsgBtn.classList.add('rounded-corners');
+      sendMsgBtn.classList.add('text-17');
+
+      spanSpinnerBorder.forEach((currSpan) => {
+        currSpan.classList.add('spinner-border');
+        currSpan.classList.add('spinner-border-sm');
+        currSpan.classList.add('text-warning');
+        currSpan.classList.add('mr-2');
       });
+
+      spanSpinnerGrow.forEach((currSpan) => {
+        currSpan.classList.add('spinner-grow');
+        currSpan.classList.add('spinner-grow-sm');
+        currSpan.classList.add('text-warning');
+        currSpan.classList.add('mr-2');
+      });
+
+      spanSendMsg.innerHTML = 'Sending your email';
+
+
+      const msgToSend = {
+        emailAddr,
+        emailSubject: emailSubjec,
+        senderEmailAddress,
+        emailMsg,
+      };
+
+      sendEmailErrorDiv.innerHTML = '';
+      axios.post('/applications/send-e-mail', msgToSend,
+        { headers: getOauth() }).then((res) => {
+        emailingDiv.classList.add('hidden-div');
+        sendEmailResultDiv.classList.remove('hidden-div');
+        sendEmailResultContainer.innerHTML = res.data.message;
+        axios.post('/applications/update-replied-from-application-table',
+          { email: emailAddr, status: true });
+      }).catch((err) => {
+        emailingDiv.classList.add('hidden-div');
+        sendEmailResultDiv.classList.remove('hidden-div');
+        sendEmailResultContainer.innerHTML = err.response.data.message;
+      });
+    }
   }
 };

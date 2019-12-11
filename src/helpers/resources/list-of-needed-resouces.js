@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 export const getNationlitites = () => [
   'Afghan',
   'Albanian',
@@ -294,3 +296,15 @@ export const getFontSizes = () => [
   '30',
   '32',
 ];
+
+export const getOauth = () => {
+  const token = localStorage.getItem('oauth');
+  return {
+    authorization: `Bearer ${token}`,
+  };
+};
+
+export const getUserInfo = () => {
+  const token = localStorage.getItem('oauth');
+  return jwt.decode(token);
+};

@@ -6,6 +6,7 @@ import {
   ADD_DEFAULT_USER,
   CREATE_TABLE_APPLY_FOR_SOFTWARE_DEV_JUNIOR,
   CREATE_TABLE_INITIAL_EMAIL_FOR_APPLICATION_STATUS,
+  CREATE_TABLE_ALL_SENT_EMAILS,
 } from '../settings/SQLqueries';
 
 dotenv.config();
@@ -25,6 +26,9 @@ const migrateTables = async (isDone) => {
 
   console.log('creating table initial email status ...');
   await connect().query(CREATE_TABLE_INITIAL_EMAIL_FOR_APPLICATION_STATUS);
+
+  console.log('creating table all sent emails ...');
+  await connect().query(CREATE_TABLE_ALL_SENT_EMAILS);
 
   if (isDone) { isDone(); }
   process.exit(0);
