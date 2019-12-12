@@ -85,6 +85,7 @@ export const handleSingleApplicantClicled = (event, application, necessaryFields
     backToListBtn,
     emailingDiv,
     sendEmailResultDiv,
+    emailBtnOption,
   } = necessaryFields;
   if (event.target.tagName !== 'BUTTON') {
     /**
@@ -101,6 +102,9 @@ export const handleSingleApplicantClicled = (event, application, necessaryFields
     repliedApplicationsDiv.classList.add('hidden-div');
     applicantDetails.classList.remove('hidden-div');
     backToListBtn.classList.remove('hidden-div');
+    emailBtnOption.classList.remove('btn-outline-danger');
+    emailBtnOption.classList.add('btn-primary');
+    emailBtnOption.innerText = 'Send email';
     emailingDiv.classList.add('hidden-div');
     sendEmailResultDiv.classList.add('hidden-div');
 
@@ -173,7 +177,56 @@ export const handleSingleApplicantClicled = (event, application, necessaryFields
   }
 };
 
-export const handleBackToListClicked = (necessaryFields) => {
+/** HANDLING SINGLE SENT EMAIL CLICKED */
+export const handleSingleSentEmailClicked = (event, singleSentEmail, necessaryFields) => {
+  const {
+    sentEmailDetails,
+    allResultDiv,
+    backToListDiv,
+  } = necessaryFields;
+  if (event.target.tagName !== 'BUTTON') {
+    /**
+     * ********PREPARING WORKING EVIRONMENT***********
+     *
+     *  1.hiding and unhiding some divs
+     *
+     * */
+    allResultDiv.classList.add('hidden-div');
+    sentEmailDetails.classList.remove('hidden-div');
+    backToListDiv.classList.remove('hidden-div');
+
+    sentEmailDetails.innerHTML = (`
+  <div class="color-dark-purple">
+    <div class="p-2 white-bordered-element-1">
+      <div class="text-17 p-2 mt-2">
+        <span>Applicant's email : </span>
+        <span class="float-right">${singleSentEmail.email_address}</span>
+      </div>
+      <div class="text-17 p-2 mt-2">
+        <span>The email sent on : </span>
+        <span class="float-right">${getDateFromDateTime(singleSentEmail.sent_on)} 
+        at ${getTimeFromDateTime(singleSentEmail.sent_on)}</span>
+      </div>
+
+      <div class="text-17 p-2 mt-2">
+        <span>The email sent by (recruiter's email) : </span>
+        <span class="float-right">${singleSentEmail.sender_email_address}</span>
+      </div>
+      <div class="text-17 p-2 mt-2">
+        <span>The email subject : </span>
+        <span class="float-right">${singleSentEmail.email_subject}</span>
+      </div>
+      <div class="text-17 p-2 mt-2">
+        <span>Message : </span>
+        <span class="float-right color-dark-purple p-5">${singleSentEmail.email_message}</span>
+      </div>
+    </div>
+  </div>
+  `);
+  }
+};
+
+export const handleBackToListClickedFromApplicantDetails = (necessaryFields) => {
   const {
     allResultDiv,
     applicantDetails,
@@ -188,6 +241,19 @@ export const handleBackToListClicked = (necessaryFields) => {
   sendEmailResultDiv.classList.add('hidden-div');
 };
 
+/** to go back from applicant details, to list of all applicants */
+export const handleBackToListClickedFromEmailDetails = (necessaryFields) => {
+  const {
+    allResultDiv,
+    sentEmailDetails,
+    backToListDiv,
+  } = necessaryFields;
+  allResultDiv.classList.remove('hidden-div');
+  sentEmailDetails.classList.add('hidden-div');
+  backToListDiv.classList.add('hidden-div');
+};
+
+/** to go back from sent email details, to list of all emails */
 export const handleCloseSingleResultClicked = (event) => {
   const allDivs = document.querySelectorAll('div');
   const currentId = event.target.id;
@@ -198,6 +264,7 @@ export const handleCloseSingleResultClicked = (event) => {
   });
 };
 
+/** when send email btn clicked, the btn in applicant details */
 export const handleEmailBtnClicked = (necessaryFields) => {
   const {
     emailingDiv,
@@ -210,6 +277,7 @@ export const handleEmailBtnClicked = (necessaryFields) => {
     spanSpinnerBorder,
     spanSendMsg,
     sendEmailErrorDiv,
+    emailBtnOption,
   } = necessaryFields;
   /** UNHIDDING EMAILING DIV */
   emailingDiv.classList.remove('hidden-div');
@@ -241,6 +309,10 @@ export const handleEmailBtnClicked = (necessaryFields) => {
 
   window.scrollBy(0, 900);
   recipientEmail.value = document.querySelector('span[email-span]').innerText;
+
+  emailBtnOption.classList.remove('btn-primary');
+  emailBtnOption.classList.add('btn-outline-danger');
+  emailBtnOption.innerText = 'Reset all fields';
 };
 
 /** HANDLE EMAIL EDITING */

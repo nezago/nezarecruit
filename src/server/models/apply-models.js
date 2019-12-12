@@ -78,7 +78,8 @@ export const addApplicationForm = async (req, res, next) => {
           hardwork to prove yorself that you are worth to join this movement.</p>
           
           <h3>Link</h3>
-          <p>Go to http://bit.ly/neza-go-to-learn to follow all you need to know inorder to join!</p>
+          <p>Go to <a href="http://bit.ly/neza-go-to-learn" target="_blank">Neza softwares curriculum</a> 
+          to follow all you need to know inorder to join!</p>
           <hr/>
           Neza Group Top Talent recruitment Team<br/>
           Mobile : +250722792371<br/>

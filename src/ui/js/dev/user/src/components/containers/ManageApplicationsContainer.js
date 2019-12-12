@@ -30,7 +30,7 @@ import classnames from 'classnames';
 import {
   getCurrentYear,
   handleSingleApplicantClicled,
-  handleBackToListClicked,
+  handleBackToListClickedFromApplicantDetails,
   handleCloseSingleResultClicked,
   handleEmailBtnClicked,
   handleAsideNavItemClicked,
@@ -100,6 +100,7 @@ class ManageApplicationsContainer extends Component {
       repliedApplicationsDiv: document.getElementById('replied-applications-div'),
       applicantDetails: document.getElementById('applicant-details'),
       backToListBtn: document.getElementById('back-to-list-btn'),
+      emailBtnOption: document.getElementById('email-btn-option'),
       emailingDiv: document.getElementById('emailing-div'),
       recipientEmail: document.getElementById('recipient-email'),
       emailSubject: document.getElementById('emailSubject'),
@@ -147,13 +148,13 @@ class ManageApplicationsContainer extends Component {
           <span className="text-italic text-17 text-blue mr-2">
             {application.email}
           </span>
-          <span className={classnames('text-19 mr-2 text-bold', {
+          <span className={classnames('text-10 mr-2 text-bold', {
             'field-success': application.replied, 'field-error': !application.replied,
           })}
           >
             {application.replied ? 'Replied' : 'unReplied'}
           </span>
-          <span className={classnames('text-19 mr-2 text-bold', {
+          <span className={classnames('text-10 mr-2 text-bold', {
             'field-success': application.read, 'field-error': !application.read,
           })}
           >
@@ -361,13 +362,14 @@ class ManageApplicationsContainer extends Component {
           <button
             type="button"
             className="btn btn-sm btn-info rounded-corners"
-            onClick={() => handleBackToListClicked(necessaryFields)}
+            onClick={() => handleBackToListClickedFromApplicantDetails(necessaryFields)}
           >
             Go back to list
           </button>
           <button
             className="btn btn-block btn-sm btn-primary rounded-corners"
             type="button"
+            id="email-btn-option"
             onClick={() => handleEmailBtnClicked(necessaryFields)}
           >
             Send Email
