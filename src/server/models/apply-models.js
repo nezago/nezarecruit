@@ -9,6 +9,8 @@ import {
   GET_UNSENT_INITIAL_EMAIL,
   UPDATE_REPLIED_IN_TABLE_APPLICATION,
   ADD_NEW_SENT_EMAIL,
+  GET_ALL_SENT_EMAILS,
+  DELETE_UNSENT_INITIAL_EMAIL_AFTER_REPLYING,
 } from './db/settings/SQLqueries';
 import { checkIfEmailExistFromTableUsers } from './users-model';
 import { validateEmail } from '../../helpers/functions/validations';
@@ -261,6 +263,9 @@ export const updateRepliedInTableApplications = (req, res, next) => {
         if (err) {
           res.status(500).send('Something wrong occurred, please try again!');
         } else {
+          if (status) {
+            connect().query(DELETE_UNSENT_INITIAL_EMAIL_AFTER_REPLYING, [email]);
+          }
           res.status(200).send(results);
           next();
         }
@@ -272,7 +277,19 @@ export const updateRepliedInTableApplications = (req, res, next) => {
 export const getUnsentEmailAddress = (req, res, next) => {
   connect().query(GET_UNSENT_INITIAL_EMAIL, (err, results) => {
     if (err) {
-      res.status(500).send('Unknown error, try again!');
+      res.status(500).send('<span class="text-danger">Unknown error, try again!</span>');
+    } else {
+      res.status(200).send(results.rows);
+      next();
+    }
+  });
+};
+
+/** GETTING ALL SENT EMAILS */
+export const getAllSentEmails = (req, res, next) => {
+  connect().query(GET_ALL_SENT_EMAILS, (err, results) => {
+    if (err) {
+      res.status(500).send('<span class="text-danger">Unknown error occured, please refresh the page!</span>');
     } else {
       res.status(200).send(results.rows);
       next();

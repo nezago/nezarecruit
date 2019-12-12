@@ -174,6 +174,11 @@ INSERT INTO initial_email_status_for_application(
 export const GET_UNSENT_INITIAL_EMAIL = `SELECT email FROM 
 initial_email_status_for_application ORDER BY status_id DESC;`;
 
+/** DELETING FROM UNSENT INITIAL EMAILS */
+export const DELETE_UNSENT_INITIAL_EMAIL_AFTER_REPLYING = `
+DELETE FROM initial_email_status_for_application WHERE email=$1;
+`;
+
 /** ===================================================================== */
 
 /**
@@ -204,3 +209,7 @@ export const ADD_NEW_SENT_EMAIL = `
 INSERT INTO all_sent_emails(
     email_address, email_subject, sender_email_address, email_message, sent_on)
     VALUES($1,$2,$3,$4,NOW())`;
+
+/** GETTING ALL SENT EMAILS */
+export const GET_ALL_SENT_EMAILS = `
+    SELECT * FROM all_sent_emails ORDER BY sent_email_id DESC;`;

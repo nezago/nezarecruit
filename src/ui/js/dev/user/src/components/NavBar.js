@@ -49,7 +49,7 @@ class NavBar extends Component {
       <nav>
         <ul className="nav-ul">
           <li><NavLink to="/manage-all-applications">Manage applications</NavLink></li>
-          <li><NavLink to="#">Publish a job</NavLink></li>
+          <li><NavLink to="/manage-all-applicants-e-mails">Manage applicants emails</NavLink></li>
         </ul>
       </nav>
     );

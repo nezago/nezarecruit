@@ -12,6 +12,7 @@ import React from 'react';
 import store from '../store';
 import NavBar from './NavBar';
 import ManageApplicationsContainer from './containers/ManageApplicationsContainer';
+import ManageApplicantEmailsContainer from './containers/ManageApplicantEmailsContainer';
 
 function App() {
   return (
@@ -21,7 +22,16 @@ function App() {
           <Route>
             <NavBar />
             <div className="mt-5" />
-            <Route exact path="/manage-all-applications" component={ManageApplicationsContainer} />
+            <Route
+              exact
+              path="/manage-all-applications"
+              component={ManageApplicationsContainer}
+            />
+            <Route
+              exact
+              path="/manage-all-applicants-e-mails"
+              component={ManageApplicantEmailsContainer}
+            />
           </Route>
         </Router>
       </Provider>

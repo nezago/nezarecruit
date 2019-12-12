@@ -11,6 +11,7 @@ import {
   updateRepliedInTableApplications,
   getUnsentEmailAddress,
   sendEmail,
+  getAllSentEmails,
 } from './apply-models';
 
 export default {
@@ -24,4 +25,5 @@ export default {
   getUnsentEmailAddress,
   updateRepliedInTableApplications,
   sendEmail,
+  getAllSentEmails,
 };

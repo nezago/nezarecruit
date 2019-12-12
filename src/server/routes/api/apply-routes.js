@@ -13,5 +13,6 @@ applyRouter.post('/update-read-from-application-table', models.updateReadInTable
 applyRouter.post('/update-replied-from-application-table', models.updateRepliedInTableApplications);
 applyRouter.get('/get-all-unsent-emails', authenticate, models.getUnsentEmailAddress);
 applyRouter.post('/send-e-mail', authenticate, models.sendEmail);
+applyRouter.get('/get-all-sent-e-mail', authenticate, models.getAllSentEmails);
 
 export default applyRouter;

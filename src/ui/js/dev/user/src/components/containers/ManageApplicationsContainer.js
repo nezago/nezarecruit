@@ -82,7 +82,7 @@ class ManageApplicationsContainer extends Component {
       });
       this.setState({ unRepliedApplications, repliedApplications });
     });
-    /** DEALING WITH AN IFRAME TYPING  */
+    /** DEALING WITH EMAIL TEXT EDITOR */
     displayFontFamilies(document.getElementById('fontChanger'));
     displayFontSizes(document.getElementById('fontSize'));
     handleTypingEmailInIframe();
