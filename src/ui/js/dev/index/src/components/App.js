@@ -16,7 +16,11 @@ function App() {
         <Router>
           <Route>
             <NavBar />
-            <SoftwareDevFormApply />
+            <Route
+              exact
+              path="/apply-for-junior-software-developer"
+              component={SoftwareDevFormApply}
+            />
           </Route>
         </Router>
       </Provider>
