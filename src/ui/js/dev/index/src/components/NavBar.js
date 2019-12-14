@@ -6,7 +6,9 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
+  Row
 } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 
 class NavBar extends Component {
   constructor(props) {
@@ -26,7 +28,7 @@ class NavBar extends Component {
 
     return (
       <div>
-        <Navbar dark expand="md" className="bg-custom sticky-element width-98">
+        <Navbar dark expand="md" className="bg-custom sticky-element">
           <NavbarBrand href="/">NezaRecruit</NavbarBrand>
           <NavbarToggler onClick={this.handleToggler} />
           <Collapse
@@ -36,7 +38,12 @@ class NavBar extends Component {
           >
             <Nav className="form-inline ml-auto" navbar>
               <nav>
-                <ul className="nav-ul">
+                <ul>
+                  <li>
+                    <NavLink to="/apply-for-junior-software-developer">
+                      Apply for Junior software developer
+                      </NavLink>
+                  </li>
                   <li><a href="/enter-nezado">Gate</a></li>
                 </ul>
               </nav>
