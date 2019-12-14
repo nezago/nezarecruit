@@ -48,6 +48,7 @@ class NavBar extends Component {
     const SUPERUSER_NAV_ITEMS = (
       <nav>
         <ul className="nav-ul">
+          <li><NavLink to="/manage-homepage">Manage Homepage</NavLink></li>
           <li><NavLink to="/manage-all-applications">Manage applications</NavLink></li>
           <li><NavLink to="/manage-all-applicants-e-mails">Manage applicants emails</NavLink></li>
         </ul>

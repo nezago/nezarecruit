@@ -11,8 +11,9 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import React from 'react';
 import store from '../store';
 import NavBar from './NavBar';
-import ManageApplicationsContainer from './containers/ManageApplicationsContainer';
-import ManageApplicantEmailsContainer from './containers/ManageApplicantEmailsContainer';
+import ManageApplicationsLayout from './layouts/ManageApplicationsLayout';
+import ManageApplicantEmailsLayout from './layouts/ManageApplicantEmailsLayout';
+import ManageHomepageLayout from './layouts/ManageHomepageLayout';
 
 function App() {
   return (
@@ -25,12 +26,17 @@ function App() {
             <Route
               exact
               path="/manage-all-applications"
-              component={ManageApplicationsContainer}
+              component={ManageApplicationsLayout}
             />
             <Route
               exact
               path="/manage-all-applicants-e-mails"
-              component={ManageApplicantEmailsContainer}
+              component={ManageApplicantEmailsLayout}
+            />
+            <Route
+              exact
+              path="/manage-homepage"
+              component={ManageHomepageLayout}
             />
           </Route>
         </Router>
