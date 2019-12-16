@@ -398,7 +398,7 @@ export const handleTypingEmailInIframe = () => {
 
   /** fontSizes */
   fontSize.addEventListener('change', (event) => {
-    editor.execCommand('fontSize', false, parseInt(event.target.value));
+    editor.execCommand('fontSize', false, event.target.value);
   }, false);
 
   /** link */
@@ -531,16 +531,16 @@ export const handleSendEmailMsgBtnClicked = (necessaryFields) => {
       sendEmailErrorDiv.innerHTML = '';
       axios.post('/applications/send-e-mail', msgToSend,
         { headers: getOauth() }).then((res) => {
-        emailingDiv.classList.add('hidden-div');
-        sendEmailResultDiv.classList.remove('hidden-div');
-        sendEmailResultContainer.innerHTML = res.data.message;
-        axios.post('/applications/update-replied-from-application-table',
-          { email: emailAddr, status: true });
-      }).catch((err) => {
-        emailingDiv.classList.add('hidden-div');
-        sendEmailResultDiv.classList.remove('hidden-div');
-        sendEmailResultContainer.innerHTML = err.response.data.message;
-      });
+          emailingDiv.classList.add('hidden-div');
+          sendEmailResultDiv.classList.remove('hidden-div');
+          sendEmailResultContainer.innerHTML = res.data.message;
+          axios.post('/applications/update-replied-from-application-table',
+            { email: emailAddr, status: true });
+        }).catch((err) => {
+          emailingDiv.classList.add('hidden-div');
+          sendEmailResultDiv.classList.remove('hidden-div');
+          sendEmailResultContainer.innerHTML = err.response.data.message;
+        });
     }
   }
 };

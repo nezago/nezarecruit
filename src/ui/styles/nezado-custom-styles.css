@@ -6,11 +6,19 @@ body {
   background-position: center;
 }
 
+.navbar-container{
+  background: url('/img/backgrounds/background-image-2.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
 /* NAVBAR */
 nav {
   display: inline-block;
   text-align: right;
 }
+
 nav ul {
   list-style-type: none;
 }
@@ -20,13 +28,16 @@ nav li {
 nav a {
   font-size: 1.4em;
   color: rgb(190, 200, 188);
-  padding-bottom: 3px;
+  padding-bottom: 1px;
   text-decoration: none;
   margin-right: 12px;
 }
 nav a:hover {
   color: aliceblue;
   text-decoration: none;
+}
+.active{
+  /* Here I will put codes of the active navbar option will look like */
 }
 .sticky-element {
   position: fixed;
@@ -39,6 +50,22 @@ nav a:hover {
 .bg-custom {
   background-color: rgba(75, 3, 75, 0.555);
 }
+
+.bg-unscrolled{
+  height: 400px;
+}
+.navbar-options{
+  height: 100%;
+}
+.brand-logo-lg{
+  width: 300px;
+  height:200px;
+}
+.brand-logo-sm{
+  width: 60px;
+  height:30px;
+}
+
 
 /*WIDTHS*/
 .width-100 {

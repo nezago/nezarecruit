@@ -11,7 +11,7 @@ import store from '../store';
 
 function App() {
   return (
-    <div>
+    <div className="index-background">
       <Provider store={store}>
         <Router>
           <Route>
