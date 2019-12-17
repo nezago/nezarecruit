@@ -68,15 +68,36 @@ class NavBar extends Component {
           >
             <Nav className="form-inline mt-auto ml-auto" navbar>
               <nav>
+
                 <ul>
                   <li>
-                    <NavLink
-                      navlink-to-components="true"
-                      to="/apply-for-junior-software-developer"
-                      onClick={() => handleOptionClicked(necessaryFields)}
-                    >
-                      Apply for Junior software developer
-                    </NavLink>
+                    <div className="dropdown">
+                      <button
+                        type="button"
+                        className="btn btn-primary dropdown-toggle"
+                        data-toggle="dropdown"
+                        id="jobsDropdownBtn"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        Jobs
+                      </button>
+                      <div
+                        className="dropdown-menu"
+                        aria-labelledby="jobsDropdownBtn"
+                      >
+                        <NavLink
+                          className="dropdown-item"
+                          navlink-to-components="true"
+                          to="/apply-for-junior-software-developer"
+                          onClick={() => handleOptionClicked(necessaryFields)}
+                        >
+                          Software developer at Neza
+
+                        </NavLink>
+                      </div>
+                    </div>
+
                   </li>
                   <li><a href="/enter-nezado">Gate</a></li>
                 </ul>

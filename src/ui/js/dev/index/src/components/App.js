@@ -1,5 +1,6 @@
 import React from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
+import 'bootstrap/dist/js/bootstrap.min';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../../../styles/nezado-custom-styles.css';
 import 'react-datepicker/dist/react-datepicker.min.css';
