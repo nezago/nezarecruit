@@ -213,3 +213,37 @@ INSERT INTO all_sent_emails(
 /** GETTING ALL SENT EMAILS */
 export const GET_ALL_SENT_EMAILS = `
     SELECT * FROM all_sent_emails ORDER BY sent_email_id DESC;`;
+
+
+/** =========================================================================================
+ *
+ *
+ *
+ * TABLE MANAGE HOMEPAGE
+ *
+ *
+ * ==============================================================================================
+ */
+
+/** CREATING TABLE MANAGE HOMPAGE */
+export const CREATE_TABLE_MANAGE_HOMEPAGE = `
+DROP TABLE IF EXISTS manage_homepage CASCADE; 
+    CREATE TABLE IF NOT EXISTS manage_homepage (
+        manage_id SERIAL PRIMARY KEY,
+        what_nezarecruit TEXT,
+        why_nezarecruit TEXT,
+        manage_creator_email VARCHAR(255),
+        manage_created_on TIMESTAMPTZ); 
+`;
+
+/** ADDING NEW MANAGE */
+export const ADD_NEW_MANAGE = `
+INSERT INTO manage_homepage (
+    what_nezarecruit,why_nezarecruit,manage_creator_email,manage_created_on
+) VALUES($1,$2,$3,NOW());
+`;
+
+/** GETTING ALL MANAGES */
+export const GET_ALL_MANAGES = `
+SELECT * FROM manage_homepage ORDER BY manage_id DESC;
+`;

@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import NavBar from './NavBar';
 import SoftwareDevFormApply from './forms/SoftwareDevFormApply';
 import store from '../store';
+import HomepageContainer from './containers/HomepageContainer';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Router>
           <Route>
             <NavBar />
+            <HomepageContainer />
             <Route
               exact
               path="/apply-for-junior-software-developer"

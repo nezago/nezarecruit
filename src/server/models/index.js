@@ -14,6 +14,11 @@ import {
   getAllSentEmails,
 } from './apply-models';
 
+import {
+  addNewManageHomepage,
+  getAllManages,
+} from './manage-homepage-model';
+
 export default {
   addNewUserToDb,
   checkIfEmailExistFromTableUsers,
@@ -26,4 +31,6 @@ export default {
   updateRepliedInTableApplications,
   sendEmail,
   getAllSentEmails,
+  addNewManageHomepage,
+  getAllManages,
 };

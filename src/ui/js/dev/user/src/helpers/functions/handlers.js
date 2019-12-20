@@ -283,7 +283,8 @@ export const handleEmailBtnClicked = (necessaryFields) => {
   emailingDiv.classList.remove('hidden-div');
 
   /** PREPARING WORKING ENVIRONMENT */
-  const iframeContent = emailMsgIframe.contentDocument || emailMsgIframe.contentWindow.document;
+  const iframeContent = emailMsgIframe.contentDocument
+    || emailMsgIframe.contentWindow.document;
   iframeContent.body.innerHTML = '';
   emailSubject.value = '';
   sendMsgBtn.classList.remove('btn-info');
