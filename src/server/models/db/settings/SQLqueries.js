@@ -230,7 +230,9 @@ export const CREATE_TABLE_MANAGE_HOMEPAGE = `
 DROP TABLE IF EXISTS manage_homepage CASCADE; 
     CREATE TABLE IF NOT EXISTS manage_homepage (
         manage_id SERIAL PRIMARY KEY,
+        what_nezarecruit_title VARCHAR(255),
         what_nezarecruit TEXT,
+        why_nezarecruit_title VARCHAR(255),
         why_nezarecruit TEXT,
         manage_creator_email VARCHAR(255),
         manage_created_on TIMESTAMPTZ); 
@@ -239,11 +241,16 @@ DROP TABLE IF EXISTS manage_homepage CASCADE;
 /** ADDING NEW MANAGE */
 export const ADD_NEW_MANAGE = `
 INSERT INTO manage_homepage (
-    what_nezarecruit,why_nezarecruit,manage_creator_email,manage_created_on
-) VALUES($1,$2,$3,NOW());
+    what_nezarecruit_title,
+    what_nezarecruit,
+    why_nezarecruit_title,
+    why_nezarecruit,
+    manage_creator_email,
+    manage_created_on
+) VALUES($1,$2,$3,$4,$5,NOW());
 `;
 
 /** GETTING ALL MANAGES */
 export const GET_ALL_MANAGES = `
-SELECT * FROM manage_homepage ORDER BY manage_id DESC;
+SELECT * FROM manage_homepage ORDER BY manage_id DESC LIMIT 1;
 `;

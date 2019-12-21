@@ -11,6 +11,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  transition: 1s;
 }
 
 /* NAVBAR */
@@ -52,14 +53,14 @@ nav a:hover {
 }
 
 .bg-unscrolled{
-  height: 200px;
+  height: 100px;
 }
 .navbar-options{
   height: 100%;
 }
 .brand-logo-lg{
-  width: 300px;
-  height:200px;
+  width: 200px;
+  height:100px;
 }
 .brand-logo-sm{
   width: 60px;
@@ -70,6 +71,59 @@ nav a:hover {
 .homepage-container{
   margin-top: 200px;
 }
+.homepage-book{
+  width: 550px;
+  height: 400px;
+  padding-left: 5%;
+  background: rgba(75, 3, 75, 1);
+  color: rgba(255,255,255,1);
+  position: absolute;
+  top: 70%;
+  left: 60%;
+  transform: translate(-50%,-50%);
+  perspective: 1000px;
+}
+.homepage-book-cover{
+  width: 480px;
+  height: 100%;
+  position: absolute;
+  left: 40px;
+  background-color: rgb(14, 3, 75);
+  transform: rotateY(-20deg);
+  transform-style: preserve-3d;
+  transform-origin: left;
+  transition: all .5s ease-in;
+}
+.homepage-book:hover .homepage-book-cover{
+  transform: rotateY(-180deg);
+}
+figure{
+  margin: 0;
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+figure.homepage-book-cover-front{
+background:url('/img/logo/nezaLogo.png');
+background-size: cover;
+background-position: center;
+}
+figure.homepage-book-cover-back{
+  background-color: rgb(52, 3, 71);
+  transform: rotateY(180deg);
+}
+.homepage-book-cover-back-text{
+}
+
+
+
+
+
+
+
+
 
 /*WIDTHS*/
 .width-100 {
@@ -352,4 +406,18 @@ input[type="color"] {
   outline: none;
   background-color: transparent;
   cursor: pointer;
+}
+
+
+/* Footbar*/
+.foot-bar{
+  background-color: #000;
+  color: #fff;
+  width: 100%;
+  height: 50px;
+  position: fixed;
+  z-index: 1;
+  right: 0;
+  left: 0;
+  bottom: 0;
 }

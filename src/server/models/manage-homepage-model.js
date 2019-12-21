@@ -6,7 +6,9 @@ import { ADD_NEW_MANAGE, GET_ALL_MANAGES } from './db/settings/SQLqueries';
 export const addNewManageHomepage = (req, res, next) => {
   const {
     isRequestValid,
+    whatNezaTitle,
     whatNezarecruitContent,
+    whyNezaTitle,
     whyNezarecruitContent,
     manageCreatorEmail,
   } = req.body;
@@ -22,7 +24,13 @@ export const addNewManageHomepage = (req, res, next) => {
     </span>`);
   } else {
     connect().query(ADD_NEW_MANAGE,
-      [whatNezarecruitContent, whyNezarecruitContent, manageCreatorEmail], (err, results) => {
+      [
+        whatNezaTitle,
+        whatNezarecruitContent,
+        whyNezaTitle,
+        whyNezarecruitContent,
+        manageCreatorEmail,
+      ], (err, results) => {
         if (err) {
           res.status(500).send(`
           <span class="text-danger">

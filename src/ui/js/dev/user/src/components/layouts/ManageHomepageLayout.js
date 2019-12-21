@@ -48,6 +48,8 @@ export class ManageHomepageLayout extends Component {
       spinnerBorder: document.getElementById('spinner-border'),
       spanSendMsg: document.getElementById('span-send-msg'),
       spinnerGrow: document.querySelectorAll('span#spinner-grow'),
+      whyNezarecruitTitle: document.getElementById('why_nezarecruit_title'),
+      whatNezarecruitTitle: document.getElementById('what_nezarecruit_title'),
     };
     this.setState({ necessaryFields });
     displayFontFamiliesInManageHomepage(document.getElementById('fontChanger'));
@@ -74,9 +76,13 @@ export class ManageHomepageLayout extends Component {
                 className="col-md-12"
               >
                 <div className="text-center text-22">
-                  <span>
-                    What is NezaRecruit?
-                  </span>
+                  <input
+                    type="text"
+                    name="what_nezarecruit_title"
+                    placeholder="What is NezaRecruit? (Enter The title)"
+                    className="form-control form-control-sm rounded-corners"
+                    id="what_nezarecruit_title"
+                  />
                 </div>
                 <div id="theRibbon">
                   <button type="button" id="boldBtn" title="Bold"><FaBold /></button>
@@ -120,9 +126,13 @@ export class ManageHomepageLayout extends Component {
                 {/** WRITE A WHY HERE */}
 
                 <div className="text-center text-22 mt-3">
-                  <span>
-                    Why does NezaRecruit matters to you?
-                  </span>
+                  <input
+                    type="text"
+                    name="why_nezarecruit_title"
+                    placeholder="Why do we think NezaRecruit is worth? (Enter The title)"
+                    className="form-control form-control-sm rounded-corners"
+                    id="why_nezarecruit_title"
+                  />
                 </div>
 
                 <div id="theRibbon">

@@ -18,7 +18,11 @@ function App() {
         <Router>
           <Route>
             <NavBar />
-            <HomepageContainer />
+            <Route
+              exact
+              path="/"
+              component={HomepageContainer}
+            />
             <Route
               exact
               path="/apply-for-junior-software-developer"

@@ -703,7 +703,9 @@ export const handleTypingWhyNezarecuritInIframe = () => {
 
 export const handleSaveAmanage = (necessaryFields) => {
   const {
+    whyNezarecruitTitle,
     whyNezarecruitIframe,
+    whatNezarecruitTitle,
     emailMsgIframe,
     saveManageErrorDiv,
     saveManageResultDiv,
@@ -728,7 +730,9 @@ export const handleSaveAmanage = (necessaryFields) => {
   const whatNezaHtml = whatNezarecruitDoc.body.innerHTML;
   const whyNezaHtml = whyNezaRecruitDoc.body.innerHTML;
 
+  const whatNezaTitle = `<h3>${whatNezarecruitTitle.value}</h3>`;
   const whatNezaHtmlToSend = `<div>${whatNezaHtml}</div>`;
+  const whyNezaTitle = `<h3>${whyNezarecruitTitle.value}</h3>`;
   const whyNezaHtmlToSend = `<div>${whyNezaHtml}</div>`;
 
   if (whatNezaHtml.length === 0 && whyNezaHtml.length === 0) {
@@ -743,7 +747,9 @@ export const handleSaveAmanage = (necessaryFields) => {
       isRequestValid = true;
       const dataToSend = {
         isRequestValid,
+        whatNezaTitle,
         whatNezarecruitContent: whatNezaHtmlToSend,
+        whyNezaTitle,
         whyNezarecruitContent: whyNezaHtmlToSend,
         manageCreatorEmail: currUserEmail,
       };
