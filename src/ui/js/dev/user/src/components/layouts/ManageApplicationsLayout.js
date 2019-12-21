@@ -58,30 +58,30 @@ class ManageApplicationsLayout extends Component {
 
     axios.get('/applications/get-all-unsent-emails',
       { headers: getOauth() }).then((res) => {
-      unsentEmail = res.data;
-    });
+        unsentEmail = res.data;
+      });
 
     axios.get('/applications/get-all-applications',
       { headers: getOauth() }).then((res) => {
-      const applicationsArr = res.data;
-      this.setState({ applicationsArr });
+        const applicationsArr = res.data;
+        this.setState({ applicationsArr });
 
-      /** iterating over all arrays to see if there are matching unsent emails */
-      applicationsArr.forEach((currApp) => {
-        unsentEmail.forEach((currUnsent) => {
-          if (currUnsent.email === currApp.email) {
-            axios.post('/applications/update-replied-from-application-table',
-              { email: currUnsent.email, status: false });
+        /** iterating over all arrays to see if there are matching unsent emails */
+        applicationsArr.forEach((currApp) => {
+          unsentEmail.forEach((currUnsent) => {
+            if (currUnsent.email === currApp.email) {
+              axios.post('/applications/update-replied-from-application-table',
+                { email: currUnsent.email, status: false });
+            }
+          });
+          if (currApp.replied) {
+            repliedApplications.push(currApp);
+          } else {
+            unRepliedApplications.push(currApp);
           }
         });
-        if (currApp.replied) {
-          repliedApplications.push(currApp);
-        } else {
-          unRepliedApplications.push(currApp);
-        }
+        this.setState({ unRepliedApplications, repliedApplications });
       });
-      this.setState({ unRepliedApplications, repliedApplications });
-    });
     /** DEALING WITH EMAIL TEXT EDITOR */
     displayFontFamilies(document.getElementById('fontChanger'));
     displayFontSizes(document.getElementById('fontSize'));

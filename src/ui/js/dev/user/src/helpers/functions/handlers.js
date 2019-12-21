@@ -168,7 +168,7 @@ export const handleSingleApplicantClicled = (event, application, necessaryFields
       </div>
       <div class="color-dark-purple text-17 p-2 mt-2">
         <span>Applied on : </span>
-        <span class="float-right">${getDateFromDateTime(application.applied_at)} 
+        <span class="float-right">${getDateFromDateTime(application.applied_at)}
         at ${getTimeFromDateTime(application.applied_at)}</span>
       </div>
     </div>
@@ -204,7 +204,7 @@ export const handleSingleSentEmailClicked = (event, singleSentEmail, necessaryFi
       </div>
       <div class="text-17 p-2 mt-2">
         <span>The email sent on : </span>
-        <span class="float-right">${getDateFromDateTime(singleSentEmail.sent_on)} 
+        <span class="float-right">${getDateFromDateTime(singleSentEmail.sent_on)}
         at ${getTimeFromDateTime(singleSentEmail.sent_on)}</span>
       </div>
 
@@ -496,7 +496,7 @@ export const handleSendEmailMsgBtnClicked = (necessaryFields) => {
     /** ALL NEEDED VALIDATIONS ARE NOW DONE */
 
     const isSendConfirmed = confirm(`
-    Are you sure, you want to send the email to ${emailAddr}? 
+    Are you sure, you want to send the email to ${emailAddr}?
     Check carefully if you have typed whatever you wanted and click yes.`);
     if (isSendConfirmed) {
       /** transforming btn send when is clicked */
@@ -541,6 +541,219 @@ export const handleSendEmailMsgBtnClicked = (necessaryFields) => {
           emailingDiv.classList.add('hidden-div');
           sendEmailResultDiv.classList.remove('hidden-div');
           sendEmailResultContainer.innerHTML = err.response.data.message;
+        });
+    }
+  }
+};
+
+/** ============================================================================
+ *
+ * HANDLE MANAGE HOMEPAGE
+ *
+ */
+export const displayFontSizesInManageHomepage = (fontSizeField) => {
+  getFontSizes().forEach((currFontSize) => {
+    fontSizeField.add(new Option(currFontSize, currFontSize));
+  });
+};
+export const displayFontSize2InManageHomepage = (fontSizeField2) => {
+  getFontSizes().forEach((currFontSize) => {
+    fontSizeField2.add(new Option(currFontSize, currFontSize));
+  });
+};
+
+export const displayFontFamiliesInManageHomepage = (fontFamilyFields) => {
+  getFontFamilies().forEach((currFont) => {
+    fontFamilyFields.add(new Option(currFont, currFont));
+  });
+};
+export const displayFontFamilie2InManageHomepage = (fontFamilyField2) => {
+  getFontFamilies().forEach((currFont) => {
+    fontFamilyField2.add(new Option(currFont, currFont));
+  });
+};
+
+
+/** HANDLE WHY NEZARECRUIT EDITING */
+export const handleTypingWhyNezarecuritInIframe = () => {
+  // eslint-disable-next-line no-undef
+  const editor2 = whyNezarecruitIframe.document;
+  editor2.designMode = 'on';
+
+  /** bold */
+  boldBtn2.addEventListener('click', () => {
+    editor2.execCommand('bold', false, null);
+  }, false);
+
+  /** italic */
+  italicBtn2.addEventListener('click', () => {
+    editor2.execCommand('Italic', false, null);
+  }, false);
+
+  /** underline */
+  underlineBtn2.addEventListener('click', () => {
+    editor2.execCommand('Underline', false, null);
+  }, false);
+
+  /** left justify */
+  justifyLeftBtn2.addEventListener('click', () => {
+    editor2.execCommand('justifyLeft', false, null);
+  }, false);
+
+  /** Center justify */
+  justifyCenterBtn2.addEventListener('click', () => {
+    editor2.execCommand('justifyCenter', false, null);
+  }, false);
+
+  /** Right justify */
+  justifyRightBtn2.addEventListener('click', () => {
+    editor2.execCommand('justifyRight', false, null);
+  }, false);
+
+  /** Full justify */
+  justifyFullBtn2.addEventListener('click', () => {
+    editor2.execCommand('justifyFull', false, null);
+  }, false);
+
+  /** superscript */
+  supBtn2.addEventListener('click', () => {
+    editor2.execCommand('Superscript', false, null);
+  }, false);
+
+  /** subscript */
+  subBtn2.addEventListener('click', () => {
+    editor2.execCommand('Subscript', false, null);
+  }, false);
+
+  /** strikethrough */
+  strikeBtn2.addEventListener('click', () => {
+    editor2.execCommand('Strikethrough', false, null);
+  }, false);
+
+  /** orderedlist */
+  orderedListBtn2.addEventListener('click', () => {
+    editor2.execCommand('InsertOrderedList', false, `newOL${Math.round(Math.random() * 100)}`);
+  }, false);
+
+  /** unorderedlist */
+  unorderedListBtn2.addEventListener('click', () => {
+    editor2.execCommand('InsertUnOrderedList', false, `newOL${Math.round(Math.random() * 100)}`);
+  }, false);
+
+  /** fontcolor */
+  fontcolorBtn2.addEventListener('change', (event) => {
+    editor2.execCommand('ForeColor', false, event.target.value);
+  }, false);
+
+  /** backgroundcolor */
+  highlightBtn2.addEventListener('change', (event) => {
+    editor2.execCommand('BackColor', false, event.target.value);
+  }, false);
+
+  /** fontfamily */
+  fontChanger2.addEventListener('change', (event) => {
+    editor2.execCommand('fontName', false, event.target.value);
+  }, false);
+
+  /** fontSizes */
+  fontSize2.addEventListener('change', (event) => {
+    editor2.execCommand('fontSize', false, event.target.value);
+  }, false);
+
+  /** link */
+  linkBtn2.addEventListener('click', () => {
+    const url = prompt('Enter your url please : ', 'http://');
+    editor2.execCommand('CreateLink', false, url);
+  }, false);
+
+  /** unlink */
+  unlinkBtn2.addEventListener('click', () => {
+    editor2.execCommand('UnLink', false, null);
+  }, false);
+
+  /** undo */
+  undoBtn2.addEventListener('click', () => {
+    editor2.execCommand('undo', false, null);
+  }, false);
+
+  /** redo */
+  redoBtn2.addEventListener('click', () => {
+    editor2.execCommand('redo', false, null);
+  }, false);
+  /** backspace */
+  backspaceBtn2.addEventListener('click', () => {
+    editor2.execCommand('delete', false, null);
+  }, false);
+
+  /** copy */
+  copyBtn2.addEventListener('click', () => {
+    editor2.execCommand('copy', false, null);
+  }, false);
+
+  /** cut */
+  cutBtn2.addEventListener('click', () => {
+    editor2.execCommand('cut', false, null);
+  }, false);
+
+  /** selectAll */
+  selectAllBtn2.addEventListener('click', () => {
+    editor2.execCommand('selectAll', false, null);
+  }, false);
+};
+
+export const handleSaveAmanage = (necessaryFields) => {
+  const {
+    whyNezarecruitIframe,
+    emailMsgIframe,
+    saveManageErrorDiv,
+    saveManageResultDiv,
+    saveManageResultContainer,
+    spinnerBorder,
+    spanSendMsg,
+    spinnerGrow,
+  } = necessaryFields;
+
+  let currUserEmail;
+  let isRequestValid = false;
+  if (getUserInfo() !== null) {
+    currUserEmail = getUserInfo().email;
+  } else {
+    currUserEmail = '';
+  }
+  const whatNezarecruitDoc = whyNezarecruitIframe.contentDocument
+    || whyNezarecruitIframe.contentWindow.document;
+  const whyNezaRecruitDoc = emailMsgIframe.contentDocument
+    || emailMsgIframe.contentWindow.document;
+
+  const whatNezaHtml = whatNezarecruitDoc.body.innerHTML;
+  const whyNezaHtml = whyNezaRecruitDoc.body.innerHTML;
+
+  const whatNezaHtmlToSend = `<div>${whatNezaHtml}</div>`;
+  const whyNezaHtmlToSend = `<div>${whyNezaHtml}</div>`;
+
+  if (whatNezaHtml.length === 0 && whyNezaHtml.length === 0) {
+    saveManageErrorDiv.innerHTML = '<span>Add either a what or why neza recruit</span>';
+  } else {
+    saveManageErrorDiv.innerHTML = '';
+    if (!validateEmail(currUserEmail)) {
+      saveManageErrorDiv.innerHTML = `<span>We have trouble getting your email,
+      Login first and try again!</span > `;
+    } else {
+      saveManageErrorDiv.innerHTML = '';
+      isRequestValid = true;
+      const dataToSend = {
+        isRequestValid,
+        whatNezarecruitContent: whatNezaHtmlToSend,
+        whyNezarecruitContent: whyNezaHtmlToSend,
+        manageCreatorEmail: currUserEmail,
+      };
+      axios.post('/manage-homepage/add-new-manage-homepage',
+        dataToSend, { headers: getOauth() }).then((res) => {
+          saveManageResultDiv.classList.remove('hidden-div');
+          saveManageResultContainer.innerHTML = `<span>${res.data}</span>`;
+        }).catch((err) => {
+          saveManageResultDiv.classList.remove('hidden-div');
+          saveManageResultContainer.innerHTML = `<span>${err.response.data}</span>`;
         });
     }
   }
