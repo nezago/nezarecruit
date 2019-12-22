@@ -14,6 +14,7 @@ import NavBar from './NavBar';
 import ManageApplicationsLayout from './layouts/ManageApplicationsLayout';
 import ManageApplicantEmailsLayout from './layouts/ManageApplicantEmailsLayout';
 import ManageHomepageLayout from './layouts/ManageHomepageLayout';
+import CreateJobLayout from './layouts/CreateJobLayout';
 
 function App() {
   return (
@@ -37,6 +38,11 @@ function App() {
               exact
               path="/manage-homepage"
               component={ManageHomepageLayout}
+            />
+            <Route
+              exact
+              path="/create-a-job"
+              component={CreateJobLayout}
             />
           </Route>
         </Router>
