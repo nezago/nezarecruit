@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
@@ -27,7 +28,14 @@ import {
   FaCopy,
   FaCut,
   FaTypo3,
+  FaPlusCircle,
 } from 'react-icons/fa';
+import {
+  handleTypingEmailInIframe,
+  displayFontFamilies,
+  displayFontSizes,
+  handleJobRequirementsAdded,
+} from '../../helpers/functions/handlers';
 
 class CreateJobLayout extends Component {
   constructor(props) {
@@ -37,12 +45,25 @@ class CreateJobLayout extends Component {
     };
   }
 
+  componentDidMount() {
+    displayFontSizes(document.getElementById('fontSize'));
+    displayFontFamilies(document.getElementById('fontChanger'));
+    handleTypingEmailInIframe();
+    const necessaryFields = {
+      jobRequirementInputField: document.getElementById('jobrequirementsinput'),
+      jobRequirementDisplayDiv: document.getElementById('added-jobrequirements'),
+      jobRequirementError: document.getElementById('jobrequirementsError'),
+    };
+    this.setState({ necessaryFields });
+  }
+
   handlejobdeadline = (date) => {
     this.setState({ jobdeadline: date });
   };
 
   render() {
     const { jobdeadline } = this.state;
+
     return (
       <Container>
 
@@ -105,6 +126,7 @@ class CreateJobLayout extends Component {
                 </div>
               </div>
 
+
               <div className="form-group form-row">
                 <label
                   htmlFor="companyemail"
@@ -124,9 +146,11 @@ class CreateJobLayout extends Component {
                 <span id="companyemailError" />
               </div>
 
+
+              {/** JOB DESCRIPTION PORTION */}
               <div className="form-group form-row mb-5">
                 <label
-                  htmlFor="password"
+                  htmlFor="emailMsgIframe"
                   className="col-md-4 hand-cursor"
                 >
                   Job Descriptions :
@@ -180,37 +204,62 @@ class CreateJobLayout extends Component {
                   </div>
                 </div>
               </div>
+              {/** END OF JOB DESCRIPTION PORTION */}
+
 
               <div className="form-group form-row">
                 <label
-                  htmlFor="confirmpassword"
+                  htmlFor="jobrequirementsinput"
                   className="col-md-4 hand-cursor"
                 >
-                  Confirm Password :
+                  Add a job requirements :
                 </label>
                 <input
-                  type="password"
-                  name="confirmpassword"
-                  id="confirmpassword"
-                  placeholder="eg.: myconfirmpassword"
-                  className="col-md-8 form-control-sm form-control rounded-corners"
+                  type="text"
+                  name="jobrequirementsinput"
+                  id="jobrequirementsinput"
+                  placeholder="eg.: Experience of 1 year"
+                  className="col-md-7 form-control-sm form-control rounded-corners"
                 />
+                <button
+                  type="button"
+                  className="btn btn-block btn-info btn-sm rounded-circle col-md-1"
+                  onClick={() => handleJobRequirementsAdded(this.state.necessaryFields)}
+                >
+                  <FaPlusCircle />
+                </button>
               </div>
               <div className="text-center text-danger">
-                <span id="confirmpasswordError" />
+                <span id="jobrequirementsError" />
               </div>
+              <div className="col-md-12" id="added-jobrequirements" />
               <div>
                 <button
                   type="button"
-                  className="col-md-12 btn btn-block btn-info btn-sm rounded-corners"
+                  className="btn btn-block btn-info btn-sm rounded-corners"
                 >
-                  Submit
+                  Add an application form
+                </button>
+              </div>
+              <div className="hidden-div form-group form-row">
+                <button
+                  type="button"
+                  className="btn btn-outline-info btn-sm btn-block col-md-6"
+                >
+                  Do you have an application form from anywhere else? Click here to add the url!
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-outline-info btn-sm btn-block col-md-6"
+                >
+                  Create your custom application form here!
                 </button>
               </div>
             </div>
           </div>
         </Row>
       </Container>
+
     );
   }
 }

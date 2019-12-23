@@ -764,3 +764,26 @@ export const handleSaveAmanage = (necessaryFields) => {
     }
   }
 };
+
+
+/** CREATING JOB FUNCTIONS */
+export const handleJobRequirementsAdded = (necessaryFields) => {
+  const {
+    jobRequirementInputField,
+    jobRequirementDisplayDiv,
+    jobRequirementError,
+  } = necessaryFields;
+
+  const addedJobReq = jobRequirementInputField.value;
+  if (addedJobReq.length === 0) {
+    jobRequirementError.innerHTML = 'You must write some job requirement!';
+  } else {
+    jobRequirementError.innerHTML = '';
+    const addeddJobSpan = document.createElement('span');
+    const breakingElt = document.createElement('br');
+    addeddJobSpan.innerHTML = `=> ${addedJobReq}`;
+    jobRequirementDisplayDiv.appendChild(addeddJobSpan);
+    jobRequirementDisplayDiv.appendChild(breakingElt);
+    jobRequirementInputField.value = '';
+  }
+};
