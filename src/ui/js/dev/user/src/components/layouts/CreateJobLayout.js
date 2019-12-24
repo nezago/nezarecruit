@@ -241,19 +241,48 @@ class CreateJobLayout extends Component {
                   Add an application form
                 </button>
               </div>
-              <div className="hidden-div form-group form-row">
+
+              {/** APPLICATION FORM DECISION PORTION */}
+              <div className="mt-5 form-group form-row">
                 <button
                   type="button"
-                  className="btn btn-outline-info btn-sm btn-block col-md-6"
+                  className="btn btn-outline-info btn-sm btn-block col-md-6 rounded-corners"
                 >
-                  Do you have an application form from anywhere else? Click here to add the url!
+                  Do you have an application form from anywhere else?
                 </button>
                 <button
                   type="button"
-                  className="btn btn-outline-info btn-sm btn-block col-md-6"
+                  className="btn btn-outline-info btn-sm btn-block col-md-6 rounded-corners"
                 >
                   Create your custom application form here!
                 </button>
+              </div>
+
+              { /** THIRD PARTY APPLICATION FORM URL */}
+              <div
+                className="mt-5"
+                id="thirdparty-application-url"
+              >
+                <label htmlFor="thirdPartyApplicationFormUrl" className="form-group form-row">
+                  <span
+                    className="col-md-4 hand-cursor"
+                  >
+                    Enter your third party application url here:
+                  </span>
+                  <input
+                    type="text"
+                    name="thirdPartyApplicationFormUrl"
+                    id="thirdPartyApplicationFormUrl"
+                    placeholder="eg.: https://recruit.neza.com/jobs/14345"
+                    className="col-md-8 form-control form-control-sm rounded-corners"
+                  />
+                </label>
+              </div>
+
+              { /** CREATING HIS OWN APPLICATION FORM */}
+              <div id="custom-application-form">
+                <h3>Create your custom application form here</h3>
+
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-plusplus */
 import axios from 'axios';
+import { FaHandPointRight } from 'react-icons/fa';
 import {
   getFontFamilies,
   getFontSizes,
@@ -9,6 +10,7 @@ import {
   getUserInfo,
 } from '../../../../../../../helpers/resources/list-of-needed-resouces';
 import { validateEmail } from '../../../../../../../helpers/functions/validations';
+
 /** Date and times */
 export const getCurrentYear = () => new Date().getFullYear();
 export const getCurrentMonth = () => { };
@@ -781,7 +783,7 @@ export const handleJobRequirementsAdded = (necessaryFields) => {
     jobRequirementError.innerHTML = '';
     const addeddJobSpan = document.createElement('span');
     const breakingElt = document.createElement('br');
-    addeddJobSpan.innerHTML = `=> ${addedJobReq}`;
+    addeddJobSpan.innerHTML = `&#10004;   ${addedJobReq}`;
     jobRequirementDisplayDiv.appendChild(addeddJobSpan);
     jobRequirementDisplayDiv.appendChild(breakingElt);
     jobRequirementInputField.value = '';
