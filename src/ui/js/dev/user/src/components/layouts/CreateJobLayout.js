@@ -29,6 +29,7 @@ import {
   FaCut,
   FaTypo3,
   FaPlusCircle,
+  FaPlus,
 } from 'react-icons/fa';
 import {
   handleTypingEmailInIframe,
@@ -281,14 +282,53 @@ class CreateJobLayout extends Component {
 
               { /** CREATING HIS OWN APPLICATION FORM */}
               <div id="custom-application-form">
-                <h3>Create your custom application form here</h3>
+                <h3 className="text-center text-info">Create your custom application form here</h3>
+                <div id="field-maker">
+                  <label className="form-group form-row" htmlFor="fieldname">
+                    <input
+                      type="text"
+                      name="fieldname"
+                      id="fieldname"
+                      placeholder="Field name (eg.: First name)"
+                      className="form-control form-control-sm rounded-corners col-md-5"
+                    />
 
+                    <select
+                      name="fieldtype"
+                      id="fieldtype"
+                      className="form-control form-control-sm rounded-corners col-md-5"
+                    >
+                      <option value="">---Select the field type---</option>
+                      <option value="short-text">Short text (like names)</option>
+                      <option value="long-text">Long text (like Explanation)</option>
+                      <option value="multiple-choices">Multiple choice (one answer is valid)</option>
+                      <option value="check-boxes">Checkboxes (many Qs are valid)</option>
+                      <option value="dropdown-list">Dropdown list</option>
+                      <option value="date">Date (eg.: 01/01/1999)</option>
+                      <option value="time">Time (eg.: 8:02 am)</option>
+                    </select>
+
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-outline-info rounded-corners col-md-2"
+                      id="save-field-btn"
+                    >
+                      <FaPlus />
+                    </button>
+                  </label>
+
+                  {/** if a selected field box is radio button, select, or check boxes */}
+                  <label
+                    id="custom-application-form-select-checkbox-radio"
+                    className="form-group form-row"
+                  />
+
+                </div>
               </div>
             </div>
           </div>
         </Row>
       </Container>
-
     );
   }
 }
