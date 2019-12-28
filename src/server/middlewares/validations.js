@@ -75,3 +75,43 @@ export const validateApplicationForm = (req, res, next) => {
     next();
   }
 };
+
+/**
+ * ========================================================================================
+ * ==============================VALIDATE JOBS=============================================
+ * ========================================================================================
+ */
+export const validateJob = (req, res, next) => {
+  const {
+    jobtitle,
+    companyname,
+    companyemail,
+    jobcreatoremail,
+    jobdeadline,
+    isJobValid,
+  } = req.body;
+  if (jobtitle.length === 0) {
+    res.status(400).send(`<span class="text-danger">
+    You must precise your job title</span
+    `);
+  } else if (companyname.length === 0) {
+    res.status(400).send(`<span class="text-danger">
+    Enter your company name</span>`);
+  } else if (!validateEmail(companyemail)) {
+    res.status(400).send(`<span class="text-danger">
+    Enter your company email</span>`);
+  } else if (!validateEmail(jobcreatoremail)) {
+    res.status(400).send(`<span class="text-danger">
+    Enter your email</span>`);
+  } else if (jobdeadline.length === 0) {
+    res.status(400).send(`<span class="text-danger">
+    Enter your job deadline</span>`);
+  } else if (!isJobValid) {
+    res.status(400).send(`<span class="text-danger>
+    Your job post is invalid because you didn't enter job description
+    and a custom email to send to the applicant, so please fill the form carefully
+    and resend your job</span>`);
+  } else {
+    next();
+  }
+};

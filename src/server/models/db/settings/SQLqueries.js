@@ -254,3 +254,47 @@ INSERT INTO manage_homepage (
 export const GET_ALL_MANAGES = `
 SELECT * FROM manage_homepage ORDER BY manage_id DESC LIMIT 1;
 `;
+
+/** =====================================================================================
+ * ======================================================================================
+ * ===========================TABLE CRETE CREATE JOB=====================================
+ * ======================================================================================
+ * ======================================================================================
+ */
+
+/** CREATE TABLE JOB_LIST */
+export const CREATE_TABLE_JOB_LIST = `
+DROP TABLE IF EXISTS job_list CASCADE; 
+CREATE TABLE IF NOT EXISTS job_list (
+        job_id SERIAL PRIMARY KEY,
+        job_title VARCHAR(255),
+        company_name VARCHAR(255),
+        company_email VARCHAR(255),
+        job_creator_email VARCHAR(255),
+        job_deadline DATE,
+        job_description TEXT,
+        custom_email_msg_to_applicants TEXT,
+        job_requirements TEXT,
+        application_form_url VARCHAR(255),
+        job_created_on TIMESTAMPTZ); 
+`;
+
+export const ADDDING_NEW_JOB = `
+INSERT INTO job_list(
+    job_title,
+    company_name,
+    company_email,
+    job_creator_email,
+    job_deadline,
+    job_description,
+    custom_email_msg_to_applicants,
+    job_requirements,
+    application_form_url,
+    job_created_on
+) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,NOW());
+`;
+
+/** GETTING ALL JOBS */
+export const GET_ALL_JOBS = `
+SELECT * FROM job_list ORDER BY job_id DESC;
+`;

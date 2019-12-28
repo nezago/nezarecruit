@@ -1,8 +1,8 @@
+/* eslint-disable indent */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 /* eslint-disable no-plusplus */
 import axios from 'axios';
-import { FaHandPointRight } from 'react-icons/fa';
 import {
   getFontFamilies,
   getFontSizes,
@@ -712,9 +712,6 @@ export const handleSaveAmanage = (necessaryFields) => {
     saveManageErrorDiv,
     saveManageResultDiv,
     saveManageResultContainer,
-    spinnerBorder,
-    spanSendMsg,
-    spinnerGrow,
   } = necessaryFields;
 
   let currUserEmail;
@@ -787,5 +784,21 @@ export const handleJobRequirementsAdded = (necessaryFields) => {
     jobRequirementDisplayDiv.appendChild(addeddJobSpan);
     jobRequirementDisplayDiv.appendChild(breakingElt);
     jobRequirementInputField.value = '';
+  }
+};
+
+/** HANDLING CREATING JOB DECISION BUTTON */
+export const handleAppFormUrlOrCustom = (event, necessaryFields) => {
+  const {
+    applicationFormUrlDiv,
+    customApplicationFormDiv,
+  } = necessaryFields;
+  const clickedBtn = event.target.id;
+  if (clickedBtn === 'application-form-url-btn') {
+    applicationFormUrlDiv.classList.remove('hidden-div');
+    customApplicationFormDiv.classList.add('hidden-div');
+  } else if (clickedBtn === 'custom-application-form-btn') {
+    applicationFormUrlDiv.classList.add('hidden-div');
+    customApplicationFormDiv.classList.remove('hidden-div');
   }
 };

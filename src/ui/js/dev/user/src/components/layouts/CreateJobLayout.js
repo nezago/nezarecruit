@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -29,13 +30,16 @@ import {
   FaCut,
   FaTypo3,
   FaPlusCircle,
-  FaPlus,
 } from 'react-icons/fa';
 import {
   handleTypingEmailInIframe,
   displayFontFamilies,
   displayFontSizes,
   handleJobRequirementsAdded,
+  handleAppFormUrlOrCustom,
+  displayFontFamilie2InManageHomepage,
+  displayFontSize2InManageHomepage,
+  handleTypingWhyNezarecuritInIframe,
 } from '../../helpers/functions/handlers';
 
 class CreateJobLayout extends Component {
@@ -49,11 +53,18 @@ class CreateJobLayout extends Component {
   componentDidMount() {
     displayFontSizes(document.getElementById('fontSize'));
     displayFontFamilies(document.getElementById('fontChanger'));
+    displayFontFamilie2InManageHomepage(document.getElementById('fontChanger2'));
+    displayFontSize2InManageHomepage(document.getElementById('fontSize2'));
     handleTypingEmailInIframe();
+    handleTypingWhyNezarecuritInIframe();
     const necessaryFields = {
       jobRequirementInputField: document.getElementById('jobrequirementsinput'),
-      jobRequirementDisplayDiv: document.getElementById('added-jobrequirements'),
+      jobRequirementDisplayDiv: document.getElementById('jobRequirementDisplayDiv'),
       jobRequirementError: document.getElementById('jobrequirementsError'),
+      applicationFormUrlBtn: document.getElementById('application-form-url-btn'),
+      applicationFormUrlDiv: document.getElementById('application-form-url-div'),
+      customApplicationFormBtn: document.getElementById('custom-application-form-btn'),
+      customApplicationFormDiv: document.getElementById('custom-application-form'),
     };
     this.setState({ necessaryFields });
   }
@@ -207,8 +218,60 @@ class CreateJobLayout extends Component {
               </div>
               {/** END OF JOB DESCRIPTION PORTION */}
 
+              {/** custom email portion */}
+              <div className="form-group form-row mb-5">
+                <label
+                  htmlFor="emailMsgIframe"
+                  className="col-md-4 hand-cursor"
+                >
+                  Add a custom email to send an applicant :
+                </label>
+                <label htmlFor="customEmailPortion" className="col-md-8">
+                  <div id="theRibbon">
+                    <button type="button" id="boldBtn2" title="Bold"><FaBold /></button>
+                    <button type="button" id="italicBtn2" title="Italic"><FaItalic /></button>
+                    <button type="button" id="underlineBtn2" title="Underline"><FaUnderline /></button>
+                    <button type="button" id="justifyLeftBtn2" title="Align left"><FaAlignLeft /></button>
+                    <button type="button" id="justifyCenterBtn2" title="Align Center"><FaAlignCenter /></button>
+                    <button type="button" id="justifyRightBtn2" title="Align Right"><FaAlignRight /></button>
+                    <button type="button" id="justifyFullBtn2" title="Align Justify"><FaAlignJustify /></button>
+                    <button type="button" id="supBtn2" title="Superscript">
+                      <FaSuperscript />
+                    </button>
+                    <button type="button" id="subBtn2" title="Subscript">
+                      <FaSubscript />
+                    </button>
+                    <button type="button" id="strikeBtn2" title="Strikethrough"><FaStrikethrough /></button>
+                    <button type="button" id="orderedListBtn2" title="Numbered list"><FaListOl /></button>
+                    <button type="button" id="unorderedListBtn2" title="Bulleted list"><FaListUl /></button>
+                    <input type="color" id="fontcolorBtn2" title="Change Font color" />
+                    <input type="color" id="highlightBtn2" title="Highlight Text" />
+                    <select id="fontChanger2" />
+                    <select id="fontSize2" />
+                    <button type="button" id="linkBtn2" title="Create a link"><FaLink /></button>
+                    <button type="button" id="unlinkBtn2" title="Remove a link"><FaUnlink /></button>
+                    <button type="button" id="undoBtn2" title="Undo the previous action"><FaUndo /></button>
+                    <button type="button" id="redoBtn2" title="Redo"><FaRedo /></button>
+                    <button type="button" id="backspaceBtn2" title="Delete previous character"><FaBackspace /></button>
+                    <button type="button" id="copyBtn2" title="Copy"><FaCopy /></button>
+                    <button type="button" id="cutBtn2" title="Cut"><FaCut /></button>
+                    <button type="button" id="selectAllBtn2" title="Select all"><FaTypo3 /></button>
+                  </div>
+                  <div id="richTextArea2">
+                    <iframe
+                      title="why-nezarecruit-iframe"
+                      id="whyNezarecruitIframe"
+                      name="whyNezarecruitIframe"
+                      frameBorder="0"
+                    />
+                  </div>
+                </label>
+              </div>
 
-              <div className="form-group form-row">
+              {/** end of custom email portion */}
+
+
+              <div className="form-group form-row mt-5">
                 <label
                   htmlFor="jobrequirementsinput"
                   className="col-md-4 hand-cursor"
@@ -230,30 +293,27 @@ class CreateJobLayout extends Component {
                   <FaPlusCircle />
                 </button>
               </div>
+              <div id="jobRequirementDisplayDiv" />
               <div className="text-center text-danger">
                 <span id="jobrequirementsError" />
               </div>
-              <div className="col-md-12" id="added-jobrequirements" />
-              <div>
-                <button
-                  type="button"
-                  className="btn btn-block btn-info btn-sm rounded-corners"
-                >
-                  Add an application form
-                </button>
-              </div>
+
 
               {/** APPLICATION FORM DECISION PORTION */}
-              <div className="mt-5 form-group form-row">
+              <div id="applicationFormURLorCREATEbtns" className="mt-5 form-group form-row">
                 <button
                   type="button"
+                  id="application-form-url-btn"
                   className="btn btn-outline-info btn-sm btn-block col-md-6 rounded-corners"
+                  onClick={() => handleAppFormUrlOrCustom(event, this.state.necessaryFields)}
                 >
-                  Do you have an application form from anywhere else?
+                  Enter the URL to application-form
                 </button>
                 <button
                   type="button"
+                  id="custom-application-form-btn"
                   className="btn btn-outline-info btn-sm btn-block col-md-6 rounded-corners"
+                  onClick={() => handleAppFormUrlOrCustom(event, this.state.necessaryFields)}
                 >
                   Create your custom application form here!
                 </button>
@@ -262,13 +322,13 @@ class CreateJobLayout extends Component {
               { /** THIRD PARTY APPLICATION FORM URL */}
               <div
                 className="mt-5"
-                id="thirdparty-application-url"
+                id="application-form-url-div"
               >
                 <label htmlFor="thirdPartyApplicationFormUrl" className="form-group form-row">
                   <span
                     className="col-md-4 hand-cursor"
                   >
-                    Enter your third party application url here:
+                    Enter your application-form url here:
                   </span>
                   <input
                     type="text"
@@ -281,9 +341,12 @@ class CreateJobLayout extends Component {
               </div>
 
               { /** CREATING HIS OWN APPLICATION FORM */}
-              <div id="custom-application-form">
-                <h3 className="text-center text-info">Create your custom application form here</h3>
-                <div id="field-maker">
+              <div id="custom-application-form" className="hidden-div">
+                <h5 className="text-center text-danger">
+                  Sorry! We are working on this, soon it will be available,
+                    So, please contact the nezarecruit administrators, to get a url!
+                </h5>
+                {/* <div id="field-maker">
                   <label className="form-group form-row" htmlFor="fieldname">
                     <input
                       type="text"
@@ -301,7 +364,8 @@ class CreateJobLayout extends Component {
                       <option value="">---Select the field type---</option>
                       <option value="short-text">Short text (like names)</option>
                       <option value="long-text">Long text (like Explanation)</option>
-                      <option value="multiple-choices">Multiple choice (one answer is valid)</option>
+                      <option value="multiple-choices">
+                      Multiple choice (one answer is valid)</option>
                       <option value="check-boxes">Checkboxes (many Qs are valid)</option>
                       <option value="dropdown-list">Dropdown list</option>
                       <option value="date">Date (eg.: 01/01/1999)</option>
@@ -317,13 +381,14 @@ class CreateJobLayout extends Component {
                     </button>
                   </label>
 
-                  {/** if a selected field box is radio button, select, or check boxes */}
-                  <label
-                    id="custom-application-form-select-checkbox-radio"
-                    className="form-group form-row"
-                  />
 
-                </div>
+                </div> */}
+
+              </div>
+              <div>
+                <button type="button" className="btn btn-block btn-sm btn-primary">
+                  Submit Job
+                </button>
               </div>
             </div>
           </div>

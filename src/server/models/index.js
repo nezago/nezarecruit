@@ -12,12 +12,18 @@ import {
   getUnsentEmailAddress,
   sendEmail,
   getAllSentEmails,
+
 } from './apply-models';
 
 import {
   addNewManageHomepage,
   getAllManages,
 } from './manage-homepage-model';
+
+import {
+  addNewJob,
+  getAllJobs,
+} from './job-models';
 
 export default {
   addNewUserToDb,
@@ -33,4 +39,6 @@ export default {
   getAllSentEmails,
   addNewManageHomepage,
   getAllManages,
+  addNewJob,
+  getAllJobs,
 };
