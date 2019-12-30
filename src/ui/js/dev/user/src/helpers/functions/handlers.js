@@ -1,8 +1,9 @@
-/* eslint-disable indent */
+
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 /* eslint-disable no-plusplus */
 import axios from 'axios';
+import validator from 'validator';
 import {
   getFontFamilies,
   getFontSizes,
@@ -534,16 +535,16 @@ export const handleSendEmailMsgBtnClicked = (necessaryFields) => {
       sendEmailErrorDiv.innerHTML = '';
       axios.post('/applications/send-e-mail', msgToSend,
         { headers: getOauth() }).then((res) => {
-          emailingDiv.classList.add('hidden-div');
-          sendEmailResultDiv.classList.remove('hidden-div');
-          sendEmailResultContainer.innerHTML = res.data.message;
-          axios.post('/applications/update-replied-from-application-table',
-            { email: emailAddr, status: true });
-        }).catch((err) => {
-          emailingDiv.classList.add('hidden-div');
-          sendEmailResultDiv.classList.remove('hidden-div');
-          sendEmailResultContainer.innerHTML = err.response.data.message;
-        });
+        emailingDiv.classList.add('hidden-div');
+        sendEmailResultDiv.classList.remove('hidden-div');
+        sendEmailResultContainer.innerHTML = res.data.message;
+        axios.post('/applications/update-replied-from-application-table',
+          { email: emailAddr, status: true });
+      }).catch((err) => {
+        emailingDiv.classList.add('hidden-div');
+        sendEmailResultDiv.classList.remove('hidden-div');
+        sendEmailResultContainer.innerHTML = err.response.data.message;
+      });
     }
   }
 };
@@ -754,12 +755,12 @@ export const handleSaveAmanage = (necessaryFields) => {
       };
       axios.post('/manage-homepage/add-new-manage-homepage',
         dataToSend, { headers: getOauth() }).then((res) => {
-          saveManageResultDiv.classList.remove('hidden-div');
-          saveManageResultContainer.innerHTML = `<span>${res.data}</span>`;
-        }).catch((err) => {
-          saveManageResultDiv.classList.remove('hidden-div');
-          saveManageResultContainer.innerHTML = `<span>${err.response.data}</span>`;
-        });
+        saveManageResultDiv.classList.remove('hidden-div');
+        saveManageResultContainer.innerHTML = `<span>${res.data}</span>`;
+      }).catch((err) => {
+        saveManageResultDiv.classList.remove('hidden-div');
+        saveManageResultContainer.innerHTML = `<span>${err.response.data}</span>`;
+      });
     }
   }
 };
@@ -801,4 +802,23 @@ export const handleAppFormUrlOrCustom = (event, necessaryFields) => {
     applicationFormUrlDiv.classList.add('hidden-div');
     customApplicationFormDiv.classList.remove('hidden-div');
   }
+};
+
+/** HANDLING COMPANY EMAIL TYPING */
+export const handleCompanyEmailTyping = (necessaryFields) => {
+  const {
+    companyemailfield,
+    companyemailfieldError,
+  } = necessaryFields;
+  const companyemail = companyemailfield.value;
+  if (validator.isEmail(companyemail)) {
+    companyemailfieldError.innerHTML = 'Validated email';
+  } else {
+    companyemailfieldError.innerHTML = 'Invalid email';
+  }
+};
+
+/** HANDLING JOB SAVE JOB BTN CLICKED */
+export const handleSaveJobBtnClicked = (necessaryFields) => {
+  console.log(necessaryFields);
 };

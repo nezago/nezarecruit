@@ -40,6 +40,8 @@ import {
   displayFontFamilie2InManageHomepage,
   displayFontSize2InManageHomepage,
   handleTypingWhyNezarecuritInIframe,
+  handleSaveJobBtnClicked,
+  handleCompanyEmailTyping,
 } from '../../helpers/functions/handlers';
 
 class CreateJobLayout extends Component {
@@ -58,6 +60,11 @@ class CreateJobLayout extends Component {
     handleTypingEmailInIframe();
     handleTypingWhyNezarecuritInIframe();
     const necessaryFields = {
+      jobtitle: document.getElementById('jobtitle'),
+      companyname: document.getElementById('companyname'),
+      jobdeadline: document.getElementById('jobdeadline'),
+      companyemailfield: document.getElementById('companyemailfield'),
+      companyemailfieldError: document.getElementById('companyemailfieldError'),
       jobRequirementInputField: document.getElementById('jobrequirementsinput'),
       jobRequirementDisplayDiv: document.getElementById('jobRequirementDisplayDiv'),
       jobRequirementError: document.getElementById('jobrequirementsError'),
@@ -85,7 +92,7 @@ class CreateJobLayout extends Component {
         >
           <div className="col-md-10 application-form">
             <div>
-              <h3 className="text-center text-success">Create your job offer here:</h3>
+              <h3 className="text-center text-success">Fill the job details here:</h3>
 
               <div className="form-group form-row">
                 <label
@@ -141,21 +148,22 @@ class CreateJobLayout extends Component {
 
               <div className="form-group form-row">
                 <label
-                  htmlFor="companyemail"
+                  htmlFor="companyemailfield"
                   className="col-md-4 hand-cursor"
                 >
                   Your company&apos;s email :
                 </label>
                 <input
-                  type="companyemail"
-                  name="companyemail"
-                  id="companyemail"
+                  type="companyemailfield"
+                  name="companyemailfield"
+                  id="companyemailfield"
                   placeholder="eg.: recruit.neza@neza.com"
                   className="col-md-8 form-control-sm form-control rounded-corners"
+                  onChange={() => handleCompanyEmailTyping(this.state.necessaryFields)}
                 />
               </div>
               <div className="text-center text-danger">
-                <span id="companyemailError" />
+                <span id="companyemailfieldError" />
               </div>
 
 
@@ -386,7 +394,11 @@ class CreateJobLayout extends Component {
 
               </div>
               <div>
-                <button type="button" className="btn btn-block btn-sm btn-primary">
+                <button
+                  type="button"
+                  className="btn btn-block btn-sm btn-primary"
+                  onClick={() => handleSaveJobBtnClicked(this.state.necessaryFields)}
+                >
                   Submit Job
                 </button>
               </div>
