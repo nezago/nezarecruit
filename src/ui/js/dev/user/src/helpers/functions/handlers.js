@@ -1,4 +1,3 @@
-
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 /* eslint-disable no-plusplus */
@@ -444,6 +443,11 @@ export const handleTypingEmailInIframe = () => {
   selectAllBtn.addEventListener('click', () => {
     editor.execCommand('selectAll', false, null);
   }, false);
+
+// /** insert an image */
+//   attachPictBtn.addEventListener('click', () => {
+//     editor.execCommand('insertImage', false, null);
+//   }, false);
 };
 
 export const displayFontFamilies = (fontChanger) => {
@@ -812,13 +816,155 @@ export const handleCompanyEmailTyping = (necessaryFields) => {
   } = necessaryFields;
   const companyemail = companyemailfield.value;
   if (validator.isEmail(companyemail)) {
-    companyemailfieldError.innerHTML = 'Validated email';
+    companyemailfieldError.innerHTML = '';
   } else {
-    companyemailfieldError.innerHTML = 'Invalid email';
+    companyemailfieldError.innerHTML = 'Invalid email, you cannot save the job details with it!';
   }
 };
 
 /** HANDLING JOB SAVE JOB BTN CLICKED */
 export const handleSaveJobBtnClicked = (necessaryFields) => {
-  console.log(necessaryFields);
+  const {
+    jobtitlefield,
+    jobtitleError,
+    companynamefield,
+    companynameError,
+    jobdeadlinefield,
+    jobdeadlineError,
+    companyemailfield,
+    companyemailfieldError,
+    jobdescriptioniframe,
+    customemailtosendtouseriframe,
+    jobRequirementDisplayDiv,
+    jobRequirementError,
+    applicationFormUrlInputField,
+    saveJobdetailsResultDiv,
+    saveJobdetailsResultContainer,
+    jobDetailsEditorDiv,
+    spinnerBorder,
+    spinnerGrow,
+    spanSaveJob,
+  } = necessaryFields;
+
+  const jobtitle = jobtitlefield.value;
+  const jobdescriptioniDoc = jobdescriptioniframe.contentDocument
+    || jobdescriptioniframe.contentWindow.document;
+  const customemailtosendtouserDoc = customemailtosendtouseriframe.contentDocument
+    || customemailtosendtouseriframe.contentWindow.document;
+
+  const jobdescriptionHtml = jobdescriptioniDoc.body.innerHTML;
+  const customemailmsgtoapplicantHtml = customemailtosendtouserDoc.body.innerHTML;
+
+  const companyname = companynamefield.value;
+  const jobdeadline = jobdeadlinefield.value;
+  const companyemail = companyemailfield.value;
+  const jobrequirements = jobRequirementDisplayDiv.innerHTML;
+  const applicationformurl = applicationFormUrlInputField.value;
+  let isJobValid = false;
+
+  if (jobtitle.length === 0) {
+    jobtitleError.innerHTML = 'Enter the job title please!';
+  } else if (jobdescriptionHtml.length === 0 || customemailmsgtoapplicantHtml.length === 0) {
+    jobtitleError.innerHTML = '';
+    isJobValid = false;
+    jobRequirementError.innerHTML = `You cannot save a job which doesn't have a job description or an initial email
+    to send to the applicants`;
+  } else if (companyname.length === 0) {
+    jobRequirementError.innerHTML = '';
+    companynameError.innerHTML = 'Please enter your company name';
+  } else if (jobdeadline.length === 0) {
+    companynameError.innerHTML = '';
+    jobdeadlineError.innerHTML = 'Select a deadline date or type it';
+  } else if (!validator.isEmail(companyemail)) {
+    jobdeadlineError.innerHTML = '';
+    companyemailfieldError.innerHTML = 'Please enter a valid company-email';
+  } else {
+    isJobValid = true;
+    const jobdescription = `<div>${jobdescriptionHtml}</div>`;
+    const customemailmsgtoapplicant = `<div>${customemailmsgtoapplicantHtml}</div>`;
+    const jobcreatoremail = getUserInfo().email;
+
+    companyemailfieldError.innerHTML = '';
+
+    const datatosend = {
+      jobtitle,
+      jobdescription,
+      customemailmsgtoapplicant,
+      companyname,
+      companyemail,
+      jobcreatoremail,
+      jobdeadline,
+      jobrequirements,
+      applicationformurl,
+      isJobValid,
+    };
+
+    /** SHOWING ANNIMATION WHILE WAITING FOR THE RESULT TO COME */
+    spinnerGrow.forEach((currSpinner) => {
+      currSpinner.classList.add('spinner-grow');
+      currSpinner.classList.add('spinner-grow-sm');
+      currSpinner.classList.add('text-warning');
+    });
+    spinnerBorder.classList.add('spinner-border');
+    spinnerBorder.classList.add('spinner-border-sm');
+    spinnerBorder.classList.add('text-warning');
+    spanSaveJob.innerHTML = '<span class="text-17">Processing</span';
+
+    axios.post('/jobs/add-new-job', datatosend, { headers: getOauth() }).then((res) => {
+      saveJobdetailsResultDiv.classList.remove('hidden-div');
+      saveJobdetailsResultContainer.innerHTML = res.data;
+      jobDetailsEditorDiv.classList.add('hidden-div');
+    }).catch((err) => {
+      saveJobdetailsResultDiv.classList.remove('hidden-div');
+      saveJobdetailsResultContainer.innerHTML = err.response.data;
+      jobDetailsEditorDiv.classList.add('hidden-div');
+    });
+  }
+};
+
+export const handleJobDetailsEditorsInitialize = (necessaryFields) => {
+  const {
+    jobtitlefield,
+    companynamefield,
+    companyemailfield,
+    jobdescriptioniframe,
+    customemailtosendtouseriframe,
+    jobRequirementInputField,
+    jobRequirementDisplayDiv,
+    applicationFormUrlInputField,
+    jobDetailsEditorDiv,
+    saveJobdetailsResultDiv,
+    spinnerBorder,
+    spinnerGrow,
+    spanSaveJob,
+  } = necessaryFields;
+
+  /** SHOWING ANNIMATION WHILE WAITING FOR THE RESULT TO COME */
+  spinnerBorder.classList.remove('spinner-border');
+  spinnerBorder.classList.remove('spinner-border-sm');
+  spinnerBorder.classList.remove('text-warning');
+  spinnerGrow.forEach((currSpinner) => {
+    currSpinner.classList.remove('spinner-grow');
+    currSpinner.classList.remove('spinner-grow-sm');
+    currSpinner.classList.remove('text-warning');
+  });
+  spanSaveJob.innerHTML = '<span class="text-17">Save job details</span';
+
+
+  jobDetailsEditorDiv.classList.remove('hidden-div');
+  saveJobdetailsResultDiv.classList.add('hidden-div');
+
+  const jobdescriptioniDoc = jobdescriptioniframe.contentDocument
+    || jobdescriptioniframe.contentWindow.document;
+  const customemailtosendtouserDoc = customemailtosendtouseriframe.contentDocument
+    || customemailtosendtouseriframe.contentWindow.document;
+
+  jobdescriptioniDoc.body.innerHTML = '';
+  customemailtosendtouserDoc.body.innerHTML = '';
+  jobtitlefield.value = '';
+  companynamefield.value = '';
+  companyemailfield.value = '';
+  jobRequirementInputField.value = '';
+  jobRequirementDisplayDiv.innerHTML = '';
+  applicationFormUrlInputField.value = '';
 };

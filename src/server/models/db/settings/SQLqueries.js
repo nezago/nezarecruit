@@ -199,9 +199,7 @@ DROP TABLE IF EXISTS all_sent_emails CASCADE;
         email_subject VARCHAR(255),
         sender_email_address VARCHAR(255),
         email_message TEXT,
-        sent_on TIMESTAMPTZ,
-        CONSTRAINT sent_email_fk FOREIGN KEY(email_address) 
-    REFERENCES apply_for_software_dev_junior(email));
+        sent_on TIMESTAMPTZ);
 `;
 
 /** ADDING NEW EMAILS */

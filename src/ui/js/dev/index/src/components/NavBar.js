@@ -8,6 +8,7 @@ import {
   Nav,
 } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 import { handleOptionClicked, handleToggler } from '../helpers/functions/handlers';
 
 class NavBar extends Component {
@@ -20,6 +21,11 @@ class NavBar extends Component {
   }
 
   componentDidMount() {
+    axios.get('/jobs/get-all-jobs').then((res) => {
+      this.setState({ postedJobs: res.data });
+    }).catch((err) => {
+      this.setState({ errorDuringJobRetrieval: err.response.data });
+    });
     const necessaryFields = {
       navbarContainer: document.getElementById('navbar-container'),
       brandLogo: document.getElementById('brand-logo'),
@@ -39,7 +45,32 @@ class NavBar extends Component {
   }
 
   render() {
-    const { isTogglerOpen, necessaryFields } = this.state;
+    const {
+      isTogglerOpen, necessaryFields, postedJobs, errorDuringJobRetrieval,
+    } = this.state;
+    let jobsTitles;
+    if (postedJobs) {
+      jobsTitles = postedJobs.map((job) => (
+        <div key={job.job_id}>
+          <div
+            className="dropdown-menu"
+            aria-labelledby="jobsDropdownBtn"
+          >
+            <NavLink
+              className="dropdown-item"
+              navlink-to-components="true"
+              to="/apply-for-junior-software-developer"
+              onClick={() => handleOptionClicked(necessaryFields)}
+            >
+              {job.job_title}
+
+            </NavLink>
+          </div>
+        </div>
+      ));
+    } else if (errorDuringJobRetrieval) {
+      console.log(errorDuringJobRetrieval);
+    }
     return (
       <div>
         <Navbar
@@ -82,20 +113,7 @@ class NavBar extends Component {
                       >
                         Jobs
                       </button>
-                      <div
-                        className="dropdown-menu"
-                        aria-labelledby="jobsDropdownBtn"
-                      >
-                        <NavLink
-                          className="dropdown-item"
-                          navlink-to-components="true"
-                          to="/apply-for-junior-software-developer"
-                          onClick={() => handleOptionClicked(necessaryFields)}
-                        >
-                          Software developer at Neza
-
-                        </NavLink>
-                      </div>
+                      {jobsTitles}
                     </div>
 
                   </li>

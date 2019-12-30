@@ -17,7 +17,7 @@ import { validateEmail } from '../../helpers/functions/validations';
 
 /** SAVING EMAILS IN DATABASE */
 export const saveEmailInDB = (emailAddr, emailSubj, senderEmailAddress, emailMsg) => {
-  if (validateEmail(emailAddr) && emailSubj) {
+  if (emailAddr.length !== 0 && emailSubj) {
     connect().query(ADD_NEW_SENT_EMAIL,
       [emailAddr, emailSubj, senderEmailAddress, emailMsg]);
   }

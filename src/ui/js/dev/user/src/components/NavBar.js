@@ -51,7 +51,7 @@ class NavBar extends Component {
           <li><NavLink to="/create-a-job">Create a job</NavLink></li>
           <li><NavLink to="/manage-homepage">Manage Homepage</NavLink></li>
           <li><NavLink to="/manage-all-applications">Manage applications</NavLink></li>
-          <li><NavLink to="/manage-all-applicants-e-mails">Manage applicants emails</NavLink></li>
+          <li><NavLink to="/manage-all-applicants-e-mails">All sent emails</NavLink></li>
         </ul>
       </nav>
     );

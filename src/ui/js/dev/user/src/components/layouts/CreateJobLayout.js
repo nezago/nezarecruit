@@ -42,6 +42,7 @@ import {
   handleTypingWhyNezarecuritInIframe,
   handleSaveJobBtnClicked,
   handleCompanyEmailTyping,
+  handleJobDetailsEditorsInitialize,
 } from '../../helpers/functions/handlers';
 
 class CreateJobLayout extends Component {
@@ -60,20 +61,34 @@ class CreateJobLayout extends Component {
     handleTypingEmailInIframe();
     handleTypingWhyNezarecuritInIframe();
     const necessaryFields = {
-      jobtitle: document.getElementById('jobtitle'),
-      companyname: document.getElementById('companyname'),
-      jobdeadline: document.getElementById('jobdeadline'),
+      jobtitlefield: document.getElementById('jobtitle'),
+      jobtitleError: document.getElementById('jobtitleError'),
+      companynamefield: document.getElementById('companyname'),
+      companynameError: document.getElementById('companynameError'),
+      jobdeadlinefield: document.getElementById('jobdeadline'),
+      jobdeadlineError: document.getElementById('jobdeadlineError'),
       companyemailfield: document.getElementById('companyemailfield'),
       companyemailfieldError: document.getElementById('companyemailfieldError'),
+      jobdescriptioniframe: document.getElementById('emailMsgIframe'),
+      customemailtosendtouseriframe: document.getElementById('whyNezarecruitIframe'),
       jobRequirementInputField: document.getElementById('jobrequirementsinput'),
       jobRequirementDisplayDiv: document.getElementById('jobRequirementDisplayDiv'),
       jobRequirementError: document.getElementById('jobrequirementsError'),
       applicationFormUrlBtn: document.getElementById('application-form-url-btn'),
       applicationFormUrlDiv: document.getElementById('application-form-url-div'),
+      applicationFormUrlInputField: document.getElementById('applicationFormUrlInputField'),
       customApplicationFormBtn: document.getElementById('custom-application-form-btn'),
       customApplicationFormDiv: document.getElementById('custom-application-form'),
+      jobDetailsEditorDiv: document.getElementById('job-details-editor-div'),
+      saveJobdetailsResultDiv: document.getElementById('save-jobdetails-result-div'),
+      saveJobdetailsResultContainer: document.getElementById('save-jobdetails-result-div-container'),
+      spinnerBorder: document.getElementById('spinner-border'),
+      spinnerGrow: document.querySelectorAll('span#spinner-grow'),
+      spanSaveJob: document.getElementById('span-save-job'),
+
     };
     this.setState({ necessaryFields });
+    handleJobDetailsEditorsInitialize(necessaryFields);
   }
 
   handlejobdeadline = (date) => {
@@ -90,7 +105,7 @@ class CreateJobLayout extends Component {
           id="applicationFormDiv"
           className="shadows mb-5 mt-5 width-98 text-white black-bordered-element black-transparent-element rounded-corners padding-15"
         >
-          <div className="col-md-10 application-form">
+          <div id="job-details-editor-div" className="col-md-10 application-form">
             <div>
               <h3 className="text-center text-success">Fill the job details here:</h3>
 
@@ -127,6 +142,9 @@ class CreateJobLayout extends Component {
                   className="col-md-8 form-control-sm form-control rounded-corners"
                 />
               </div>
+              <div className="text-center text-danger">
+                <span id="companynameError" />
+              </div>
               <div className="form-group form-row">
                 <label
                   htmlFor="jobdeadline"
@@ -143,6 +161,9 @@ class CreateJobLayout extends Component {
                     className="form-control form-control-sm"
                   />
                 </div>
+              </div>
+              <div className="text-center text-danger">
+                <span id="jobdeadlineError" />
               </div>
 
 
@@ -210,6 +231,8 @@ class CreateJobLayout extends Component {
                           <button type="button" id="copyBtn" title="Copy"><FaCopy /></button>
                           <button type="button" id="cutBtn" title="Cut"><FaCut /></button>
                           <button type="button" id="selectAllBtn" title="Select all"><FaTypo3 /></button>
+                          {/* <button type="button" id="attachPictBtn" title="Attach
+                           a picture"><FaDigitalTachograph /></button> */}
                         </div>
                         <div id="richTextArea">
                           <iframe
@@ -341,7 +364,7 @@ class CreateJobLayout extends Component {
                   <input
                     type="text"
                     name="thirdPartyApplicationFormUrl"
-                    id="thirdPartyApplicationFormUrl"
+                    id="applicationFormUrlInputField"
                     placeholder="eg.: https://recruit.neza.com/jobs/14345"
                     className="col-md-8 form-control form-control-sm rounded-corners"
                   />
@@ -394,12 +417,47 @@ class CreateJobLayout extends Component {
 
               </div>
               <div>
+
                 <button
                   type="button"
                   className="btn btn-block btn-sm btn-primary"
+                  id="send-msg-btn"
                   onClick={() => handleSaveJobBtnClicked(this.state.necessaryFields)}
                 >
-                  Submit Job
+                  <span id="spinner-border" />
+                  <span id="span-save-job" className="text-17">Save job details</span>
+                  <span id="spinner-grow" />
+                  <span id="spinner-grow" />
+                  <span id="spinner-grow" />
+                </button>
+              </div>
+            </div>
+          </div>
+          {/** EMAIL RESULTS DIV */}
+          <div
+            id="save-jobdetails-result-div"
+            className="mt-5 heigth-80 overflow-auto width-80 color-grey-transparent p-2 hidden-div"
+          >
+            <div
+              className="padding-15 width-40 color-dark-purple text-17 text-center"
+              id="save-jobdetails-result-div-container"
+            />
+            <div className="form-group form-row">
+              <div className="col-md-6">
+                <button
+                  onClick={() => handleJobDetailsEditorsInitialize(this.state.necessaryFields)}
+                  type="button"
+                  className="btn btn-primary rounded-corners"
+                >
+                  Do you want to post another job?
+                </button>
+              </div>
+              <div className="col-md-6">
+                <button
+                  type="button"
+                  className="btn btn-danger rounded-corners"
+                >
+                  Go back to your profile
                 </button>
               </div>
             </div>

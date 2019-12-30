@@ -62,8 +62,7 @@ export const addNewJob = (req, res, next) => {
 
         const mailOptions = {
           from: 'recruit.neza@gmail.com',
-          to: companyemail,
-          jobcreatoremail,
+          to: `${companyemail},${jobcreatoremail}`,
           subject: 'Job creation feedback at nezarecruit',
           html: htmlToSend,
         };
@@ -109,10 +108,11 @@ export const addNewJob = (req, res, next) => {
                 }
               });
           } else if (info) {
-            const emailAddr = `Email1=${jobcreatoremail}, Email2=${companyemail}`;
+            const emailAddr = `{jobcreatoremailaddress:${jobcreatoremail}, companyemailaddress: ${companyemail}}`;
             const emailSubj = `Job Created by ${jobcreatoremail}`;
             const senderEmailAddr = 'recruit.neza@gmail.com';
-            connect().query(saveEmailInDB(emailAddr, emailSubj, senderEmailAddr, htmlToSend));
+            saveEmailInDB(emailAddr, emailSubj, senderEmailAddr,
+              htmlToSend);// saving the sent email into the db
             res.status(200).send(
               `
                   <span class="text-success">
