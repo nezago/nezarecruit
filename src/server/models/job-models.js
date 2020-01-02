@@ -8,6 +8,7 @@ import {
   ADD_NEW_APPLICATION_FORM_URL,
   GETT_ALL_APPLICATION_FORM_URLS,
   CHECK_IF_APPLICATION_FORM_URL_EXISTS,
+  ADDDING_NEW_JOB,
 } from './db/settings/SQLqueries';
 import { saveEmailInDB } from './apply-models';
 
@@ -77,14 +78,13 @@ export const checkIfApplicationFormUrlIsRegistered = (req, res, next) => {
         if (result.rows[0].exists) {
           res.status(200).send({
             isChecked: true,
-            info: `<span class="text-danger">The url: ${applicationformurl} is already registered</span>`,
+            info: `<span class="text-blue"><em><strong>${applicationformurl}</strong></em> registered</span>`,
             resultsFromDb: result.rows[0].exists,
           });
         } else if (!result.rows[0].exists) {
           res.status(200).send({
             isChecked: true,
-            info: `<span class="text-success">Make sure that the ${applicationformurl} url is valid
-            and hit save button</span>`,
+            info: `<span class="text-green">${applicationformurl} is not registered</span>`,
             resultsFromDb: result.rows[0].exists,
           });
         }
@@ -106,9 +106,11 @@ export const addNewJob = (req, res, next) => {
     customemailmsgtoapplicant,
     jobrequirements,
     applicationformurl,
+    isUrlRegistered,
   } = req.body;
+
   connect().query(
-    ADDDING_NEW_JOB_TMP,
+    isUrlRegistered ? ADDDING_NEW_JOB : ADDDING_NEW_JOB_TMP,
     [jobtitle, companyname, companyemail, jobcreatoremail, jobdeadline,
       jobdescription, customemailmsgtoapplicant, jobrequirements, applicationformurl],
     (err, results) => {

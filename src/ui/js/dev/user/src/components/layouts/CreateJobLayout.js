@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/control-has-associated-label */
@@ -43,6 +44,7 @@ import {
   handleSaveJobBtnClicked,
   handleCompanyEmailTyping,
   handleJobDetailsEditorsInitialize,
+  handleApplicationFormUrlTyping,
 } from '../../helpers/functions/handlers';
 
 class CreateJobLayout extends Component {
@@ -50,6 +52,7 @@ class CreateJobLayout extends Component {
     super(props);
     this.state = {
       jobdeadline: new Date(),
+      isUrlRegistered: false,
     };
   }
 
@@ -76,7 +79,6 @@ class CreateJobLayout extends Component {
       jobRequirementError: document.getElementById('jobrequirementsError'),
       applicationFormUrlBtn: document.getElementById('application-form-url-btn'),
       applicationFormUrlDiv: document.getElementById('application-form-url-div'),
-      applicationFormUrlInputField: document.getElementById('applicationFormUrlInputField'),
       customApplicationFormBtn: document.getElementById('custom-application-form-btn'),
       customApplicationFormDiv: document.getElementById('custom-application-form'),
       jobDetailsEditorDiv: document.getElementById('job-details-editor-div'),
@@ -85,7 +87,10 @@ class CreateJobLayout extends Component {
       spinnerBorder: document.getElementById('spinner-border'),
       spinnerGrow: document.querySelectorAll('span#spinner-grow'),
       spanSaveJob: document.getElementById('span-save-job'),
-
+      urlCheckingDiv: document.getElementById('url-checking-div'),
+      urlCheckingResultSpan: document.getElementById('url-checking-result-span'),
+      urlTextInputField: document.getElementById('url-text-input-field'),
+      urlCheckSpinnerHolderSpan: document.getElementById('url-check-spinner-holder-span'),
     };
     this.setState({ necessaryFields });
     handleJobDetailsEditorsInitialize(necessaryFields);
@@ -364,11 +369,21 @@ class CreateJobLayout extends Component {
                   <input
                     type="text"
                     name="thirdPartyApplicationFormUrl"
-                    id="applicationFormUrlInputField"
+                    id="url-text-input-field"
                     placeholder="eg.: https://recruit.neza.com/jobs/14345"
                     className="col-md-8 form-control form-control-sm rounded-corners"
+                    onChange={() => handleApplicationFormUrlTyping(this)}
                   />
                 </label>
+                {/** checking in database, if the url he/she is looking for is saved in db */}
+                <div id="url-checking-div" className="width-40 text-center hidden-div">
+                  <span
+                    id="url-check-spinner-holder-span"
+                    className="spinner-border text-warning"
+                  />
+                  <br />
+                  <div className="text-overflow-auto text-wrap" id="url-checking-result-span" />
+                </div>
               </div>
 
               { /** CREATING HIS OWN APPLICATION FORM */}
@@ -422,7 +437,7 @@ class CreateJobLayout extends Component {
                   type="button"
                   className="btn btn-block btn-sm btn-primary"
                   id="send-msg-btn"
-                  onClick={() => handleSaveJobBtnClicked(this.state.necessaryFields)}
+                  onClick={() => handleSaveJobBtnClicked(this)}
                 >
                   <span id="spinner-border" />
                   <span id="span-save-job" className="text-17">Save job details</span>

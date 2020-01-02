@@ -59,7 +59,7 @@ class NavBar extends Component {
             <NavLink
               className="dropdown-item"
               navlink-to-components="true"
-              to={`/${job.job_title}`}
+              to={`${job.application_form_url}`}
               onClick={() => handleOptionClicked(necessaryFields)}
             >
               {job.job_title}

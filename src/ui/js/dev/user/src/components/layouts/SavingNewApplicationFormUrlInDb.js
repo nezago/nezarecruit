@@ -23,6 +23,7 @@ class SavingNewApplicationFormUrlInDb extends Component {
       urlFormEditor: document.getElementById('url-form-editor'),
       urlFormSaveResultsContainerDiv: document.getElementById('url-form-save-results-div-container'),
       urlResultsFromDb: document.getElementById('url-form-results-from-db'),
+      urlCheckSpinnerHolderSpan: document.getElementById('url-check-spinner-holder-span'),
     };
     this.setState({ necessaryFields });
     // handleApplicationFormUrlEditorInitialize(this);
@@ -48,9 +49,12 @@ class SavingNewApplicationFormUrlInDb extends Component {
             Save
             </button>
             <div id="url-checking-div" className="width-40 text-center hidden-div">
-              <span className="spinner-border text-warning" />
+              <span
+                id="url-check-spinner-holder-span"
+                className="spinner-border text-warning"
+              />
               <br />
-              <div className="text-overflow-auto text-wrap" id="url-checking-result-span" />
+              <span className="text-overflow-auto text-wrap" id="url-checking-result-span" />
             </div>
           </div>
         </div>

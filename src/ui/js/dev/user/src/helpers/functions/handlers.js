@@ -830,7 +830,7 @@ export const handleCompanyEmailTyping = (necessaryFields) => {
 };
 
 /** HANDLING JOB SAVE JOB BTN CLICKED */
-export const handleSaveJobBtnClicked = (necessaryFields) => {
+export const handleSaveJobBtnClicked = (component) => {
   const {
     jobtitlefield,
     jobtitleError,
@@ -844,14 +844,16 @@ export const handleSaveJobBtnClicked = (necessaryFields) => {
     customemailtosendtouseriframe,
     jobRequirementDisplayDiv,
     jobRequirementError,
-    applicationFormUrlInputField,
+    urlTextInputField,
     saveJobdetailsResultDiv,
     saveJobdetailsResultContainer,
     jobDetailsEditorDiv,
     spinnerBorder,
     spinnerGrow,
     spanSaveJob,
-  } = necessaryFields;
+  } = component.state.necessaryFields;
+
+  const { isUrlRegistered } = component.state;
 
   const jobtitle = jobtitlefield.value;
   const jobdescriptioniDoc = jobdescriptioniframe.contentDocument
@@ -866,7 +868,7 @@ export const handleSaveJobBtnClicked = (necessaryFields) => {
   const jobdeadline = jobdeadlinefield.value;
   const companyemail = companyemailfield.value;
   const jobrequirements = jobRequirementDisplayDiv.innerHTML;
-  const applicationformurl = applicationFormUrlInputField.value;
+  const applicationformurl = urlTextInputField.value;
   let isJobValid = false;
 
   if (jobtitle.length === 0) {
@@ -874,8 +876,8 @@ export const handleSaveJobBtnClicked = (necessaryFields) => {
   } else if (jobdescriptionHtml.length === 0 || customemailmsgtoapplicantHtml.length === 0) {
     jobtitleError.innerHTML = '';
     isJobValid = false;
-    jobRequirementError.innerHTML = `You cannot save a job which doesn't have a job description or an initial email
-    to send to the applicants`;
+    jobRequirementError.innerHTML = `You cannot save a job which doesn't have a job description or an
+     initial email to send to the applicants`;
   } else if (companyname.length === 0) {
     jobRequirementError.innerHTML = '';
     companynameError.innerHTML = 'Please enter your company name';
@@ -904,6 +906,7 @@ export const handleSaveJobBtnClicked = (necessaryFields) => {
       jobrequirements,
       applicationformurl,
       isJobValid,
+      isUrlRegistered,
     };
 
     /** SHOWING ANNIMATION WHILE WAITING FOR THE RESULT TO COME */
@@ -917,7 +920,8 @@ export const handleSaveJobBtnClicked = (necessaryFields) => {
     spinnerBorder.classList.add('text-warning');
     spanSaveJob.innerHTML = '<span class="text-17">Processing</span>';
 
-    axios.post('/jobs/add-new-job', datatosend, { headers: getOauth() }).then((res) => {
+    axios.post(isUrlRegistered ? '/jobs/add-new-job' : '/jobs/add-new-job-tmp',
+      datatosend, { headers: getOauth() }).then((res) => {
       saveJobdetailsResultDiv.classList.remove('hidden-div');
       saveJobdetailsResultContainer.innerHTML = res.data;
       jobDetailsEditorDiv.classList.add('hidden-div');
@@ -927,10 +931,6 @@ export const handleSaveJobBtnClicked = (necessaryFields) => {
       jobDetailsEditorDiv.classList.add('hidden-div');
     });
   }
-};
-/** handle application form url */
-export const handleFormUrlTyping = (component) => {
-  const { } = component.state.necessaryFields;
 };
 
 /** initializing job details editor */
@@ -943,7 +943,7 @@ export const handleJobDetailsEditorsInitialize = (necessaryFields) => {
     customemailtosendtouseriframe,
     jobRequirementInputField,
     jobRequirementDisplayDiv,
-    applicationFormUrlInputField,
+    urlTextInputField,
     jobDetailsEditorDiv,
     saveJobdetailsResultDiv,
     spinnerBorder,
@@ -962,7 +962,6 @@ export const handleJobDetailsEditorsInitialize = (necessaryFields) => {
   });
   spanSaveJob.innerHTML = '<span class="text-17">Save job details</span';
 
-
   jobDetailsEditorDiv.classList.remove('hidden-div');
   saveJobdetailsResultDiv.classList.add('hidden-div');
 
@@ -978,7 +977,7 @@ export const handleJobDetailsEditorsInitialize = (necessaryFields) => {
   companyemailfield.value = '';
   jobRequirementInputField.value = '';
   jobRequirementDisplayDiv.innerHTML = '';
-  applicationFormUrlInputField.value = '';
+  urlTextInputField.value = '';
 };
 
 /**
@@ -993,13 +992,16 @@ export const handleApplicationFormUrlTyping = (component) => {
     urlTextInputField,
     urlCheckingDiv,
     urlCheckingResultSpan,
+    urlCheckSpinnerHolderSpan,
   } = component.state.necessaryFields;
   const applicationformurl = urlTextInputField.value;
   if (applicationformurl.length !== 0) {
     urlCheckingDiv.classList.remove('hidden-div');
+    urlCheckSpinnerHolderSpan.classList.remove('hidden-div');
     axios.post('/jobs/check-if-application-url-is-registered', { applicationformurl },
       { headers: getOauth() }).then((res) => {
       const result = res.data;
+      urlCheckSpinnerHolderSpan.classList.add('hidden-div');
       urlCheckingResultSpan.innerHTML = result.info;
       if (result.isChecked) {
         if (result.resultsFromDb) {
@@ -1009,6 +1011,7 @@ export const handleApplicationFormUrlTyping = (component) => {
         }
       }
     }).catch((err) => {
+      urlCheckSpinnerHolderSpan.classList.add('hidden-div');
       urlCheckingResultSpan.innerHTML = err.response.data;
     });
   } else {
@@ -1017,6 +1020,7 @@ export const handleApplicationFormUrlTyping = (component) => {
   }
 };
 
+/** saveApplicationUrl */
 export const handleSaveApplicationFormUrlBtnClicked = (component) => {
   const {
     urlTextInputField,
@@ -1025,12 +1029,15 @@ export const handleSaveApplicationFormUrlBtnClicked = (component) => {
     urlCheckingDiv,
     urlCheckingResultSpan,
     urlResultsFromDb,
+    urlCheckSpinnerHolderSpan,
   } = component.state.necessaryFields;
   const { isUrlRegistered } = component.state;
   const applicationformurl = urlTextInputField.value;
 
   if (applicationformurl.length !== 0) {
+    urlCheckSpinnerHolderSpan.classList.remove('hidden-div');
     if (isUrlRegistered) {
+      urlCheckSpinnerHolderSpan.classList.add('hidden-div');
       urlCheckingResultSpan.innerHTML = `<span class="text-danger">
       The url you want to save is already registered, please don't use it again</span>`;
     } else {
@@ -1043,9 +1050,11 @@ export const handleSaveApplicationFormUrlBtnClicked = (component) => {
           urlCheckingDiv.classList.add('hidden-div');
           urlResultsFromDb.innerHTML = result.info;
         } else {
+          urlCheckSpinnerHolderSpan.classList.add('hidden-div');
           urlCheckingResultSpan.innerHTML = result.info;
         }
       }).catch((err) => {
+        urlCheckSpinnerHolderSpan.classList.add('hidden-div');
         urlCheckingResultSpan.innerHTML = err.response.data.info;
       });
     }
