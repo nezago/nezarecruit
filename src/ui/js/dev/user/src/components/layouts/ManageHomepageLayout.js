@@ -33,7 +33,7 @@ import {
   handleSaveAmanage,
 } from '../../helpers/functions/handlers';
 
-export class ManageHomepageLayout extends Component {
+class ManageHomepageLayout extends Component {
   constructor(props) {
     super(props);
     this.state = {};

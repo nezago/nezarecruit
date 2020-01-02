@@ -47,11 +47,36 @@ class NavBar extends Component {
     }
     const SUPERUSER_NAV_ITEMS = (
       <nav>
-        <ul className="nav-ul">
-          <li><NavLink to="/create-a-job">Create a job</NavLink></li>
-          <li><NavLink to="/manage-homepage">Manage Homepage</NavLink></li>
-          <li><NavLink to="/manage-all-applications">Manage applications</NavLink></li>
-          <li><NavLink to="/manage-all-applicants-e-mails">All sent emails</NavLink></li>
+        <ul>
+          <li>
+            <div className="dropdown">
+              <button
+                type="button"
+                className="btn dropdown-toggle btn btn-sm btn-outline-primary mr-5"
+                data-toggle="dropdown"
+                id="jobsDropdownBtn"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                        Manage Jobs
+              </button>
+              <div
+                className="dropdown-menu"
+                aria-labelledby="jobsDropdownBtn"
+              >
+                <NavLink to="/create-a-job">Create a job</NavLink>
+                <NavLink to="/manage-unhandled-jobs">Unhandled jobs</NavLink>
+                <NavLink to="/save-new-application-form-url">Save application form url</NavLink>
+              </div>
+            </div>
+
+          </li>
+          <li />
+          <li />
+          <li><NavLink className="btn btn-sm btn-outline-primary" to="/manage-homepage">Manage Homepage</NavLink></li>
+          <li><NavLink className="btn btn-sm btn-outline-primary" to="/manage-all-applications">Manage applications</NavLink></li>
+          <li><NavLink className="btn btn-sm btn-outline-primary" to="/manage-all-applicants-e-mails">All sent emails</NavLink></li>
+
         </ul>
       </nav>
     );
@@ -69,7 +94,7 @@ class NavBar extends Component {
               <Row>
                 <div className="col-md-12 text-center">
                   {userAuthorities === 'SUPERUSER' ? SUPERUSER_NAV_ITEMS : ''}
-                  <NavLink to="#">{userFname}</NavLink>
+                  <NavLink className="btn btn-sm btn-outline-primary" to="/user-profile">{userFname}</NavLink>
                   <button
                     className="btn btn-sm btn-outline-danger rounded-corners"
                     type="button"

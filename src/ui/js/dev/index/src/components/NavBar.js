@@ -59,7 +59,7 @@ class NavBar extends Component {
             <NavLink
               className="dropdown-item"
               navlink-to-components="true"
-              to="/apply-for-junior-software-developer"
+              to={`/${job.job_title}`}
               onClick={() => handleOptionClicked(necessaryFields)}
             >
               {job.job_title}
@@ -97,7 +97,7 @@ class NavBar extends Component {
             className="navbar-options"
 
           >
-            <Nav className="form-inline mt-auto ml-auto" navbar>
+            <Nav className="form-inline mt-auto mr-auto" navbar>
               <nav>
 
                 <ul>
@@ -117,6 +117,12 @@ class NavBar extends Component {
                     </div>
 
                   </li>
+                </ul>
+              </nav>
+            </Nav>
+            <Nav className="form-inline mt-auto ml-auto" navbar>
+              <nav>
+                <ul>
                   <li><a href="/enter-nezado">Gate</a></li>
                 </ul>
               </nav>

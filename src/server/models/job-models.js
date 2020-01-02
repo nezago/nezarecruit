@@ -1,9 +1,72 @@
-/* eslint-disable indent */
+
 import nodemailer from 'nodemailer';
 import connect from './db/settings/connectToDb';
-import { ADDDING_NEW_JOB, ADD_NEW_INITIAL_EMAIL_STATUS, GET_ALL_JOBS } from './db/settings/SQLqueries';
+import {
+  ADDDING_NEW_JOB_TMP,
+  ADD_NEW_INITIAL_EMAIL_STATUS,
+  GET_ALL_JOBS_TMP,
+  ADD_NEW_APPLICATION_FORM_URL,
+  GETT_ALL_APPLICATION_FORM_URLS,
+  CHECK_IF_APPLICATION_FORM_URL_EXISTS,
+} from './db/settings/SQLqueries';
 import { saveEmailInDB } from './apply-models';
 
+
+/** APPLICATION FORMS */
+export const addNewApplicationFormUrl = (req, res, next) => {
+  const {
+    applicationformurl,
+  } = req.body;
+
+  if (applicationformurl.length !== 0) {
+    connect().query(ADD_NEW_APPLICATION_FORM_URL, [applicationformurl], (err, results) => {
+      if (err) {
+        res.status(500).send(`
+        <span class="text-danger">Failed to save ${applicationformurl} in our database</span>
+        `);
+      } else if (results.rowCount === 1) {
+        res.status(201).send(`
+        
+        <span class="text-success">${applicationformurl} is saved successfully in our database, now you can add it
+        on the job details</span>`);
+        next();
+      }
+    });
+  }
+};
+
+export const getAllApplicationFormUrls = (req, res, next) => {
+  connect().query(GETT_ALL_APPLICATION_FORM_URLS, (err, results) => {
+    if (err) {
+      res.status(500).send({
+        isRetrieved: false,
+        results: `
+      <span class="text-danger">Sorry, retrieving all saved application-form-urls failed,
+       please refresh the page and try again</span>
+      `,
+      });
+    } else if (results) {
+      res.status(200).send({ isRetrieved: true, results: results.rows });
+      next();
+    }
+  });
+};
+
+export const checkIfApplicationFormUrlIsRegistered = (req, res, next) => {
+  const { applicationformurl } = req.body;
+  if (applicationformurl.length !== 0) {
+    connect().query(CHECK_IF_APPLICATION_FORM_URL_EXISTS, [applicationformurl], (err, result) => {
+      if (err) {
+        res.status(500).send({ isChecked: false, info: '' });
+      } else if (result.rows[0].exists) {
+        res.status(200).send({ isChecked: true, info: result.rows[0].exists });
+        next();
+      }
+    });
+  }
+};
+
+/** JOBS */
 export const addNewJob = (req, res, next) => {
   const {
     jobtitle,
@@ -17,7 +80,7 @@ export const addNewJob = (req, res, next) => {
     applicationformurl,
   } = req.body;
   connect().query(
-    ADDDING_NEW_JOB,
+    ADDDING_NEW_JOB_TMP,
     [jobtitle, companyname, companyemail, jobcreatoremail, jobdeadline,
       jobdescription, customemailmsgtoapplicant, jobrequirements, applicationformurl],
     (err, results) => {
@@ -108,7 +171,7 @@ export const addNewJob = (req, res, next) => {
                 }
               });
           } else if (info) {
-            const emailAddr = `{jobcreatoremailaddress:${jobcreatoremail}, companyemailaddress: ${companyemail}}`;
+            const emailAddr = `[${jobcreatoremail}, ${companyemail}]`;
             const emailSubj = `Job Created by ${jobcreatoremail}`;
             const senderEmailAddr = 'recruit.neza@gmail.com';
             saveEmailInDB(emailAddr, emailSubj, senderEmailAddr,
@@ -129,7 +192,7 @@ export const addNewJob = (req, res, next) => {
 };
 
 export const getAllJobs = (req, res, next) => {
-  connect().query(GET_ALL_JOBS, (err, results) => {
+  connect().query(GET_ALL_JOBS_TMP, (err, results) => {
     if (err) {
       res.status(500).send(`<span class="text-danger">
       Sorry! Something strange occured, try again!</spna>`);

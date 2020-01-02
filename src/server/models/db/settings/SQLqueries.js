@@ -255,6 +255,50 @@ SELECT * FROM manage_homepage ORDER BY manage_id DESC LIMIT 1;
 
 /** =====================================================================================
  * ======================================================================================
+ * ===========================TABLE CRETE CREATE JOB TMP=================================
+ * ======================================================================================
+ * ======================================================================================
+ */
+
+/** CREATE TABLE JOB_LIST */
+export const CREATE_TABLE_JOB_LIST_TMP = `
+DROP TABLE IF EXISTS job_list_tmp CASCADE; 
+CREATE TABLE IF NOT EXISTS job_list_tmp (
+        job_id SERIAL PRIMARY KEY,
+        job_title VARCHAR(255),
+        company_name VARCHAR(255),
+        company_email VARCHAR(255),
+        job_creator_email VARCHAR(255),
+        job_deadline DATE,
+        job_description TEXT,
+        custom_email_msg_to_applicants TEXT,
+        job_requirements TEXT,
+        application_form_url VARCHAR(255),
+        job_created_on TIMESTAMPTZ); 
+`;
+
+export const ADDDING_NEW_JOB_TMP = `
+INSERT INTO job_list_tmp(
+    job_title,
+    company_name,
+    company_email,
+    job_creator_email,
+    job_deadline,
+    job_description,
+    custom_email_msg_to_applicants,
+    job_requirements,
+    application_form_url,
+    job_created_on
+) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,NOW());
+`;
+
+/** GETTING ALL JOBS */
+export const GET_ALL_JOBS_TMP = `
+SELECT * FROM job_list_tmp ORDER BY job_id DESC;
+`;
+
+/** =====================================================================================
+ * ======================================================================================
  * ===========================TABLE CRETE CREATE JOB=====================================
  * ======================================================================================
  * ======================================================================================
@@ -295,4 +339,34 @@ INSERT INTO job_list(
 /** GETTING ALL JOBS */
 export const GET_ALL_JOBS = `
 SELECT * FROM job_list ORDER BY job_id DESC;
+`;
+
+/**
+ * =========================================================================================
+ * =========================================================================================
+ * ===========================TABLE APPLICATION_FORM_URLS===================================
+ * =========================================================================================
+ * =========================================================================================
+ */
+export const CREATE_TABLE_APPLICATION_FORM_URLS = `
+DROP TABLE IF EXISTS application_form_urls CASCADE; 
+CREATE TABLE IF NOT EXISTS application_form_urls(
+    url_id SERIAL PRIMARY KEY,
+    application_form_url VARCHAR(255),
+    url_created_on TIMESTAMPTZ);
+`;
+
+/** ADDING NEW APPLICATION FORM URL */
+export const ADD_NEW_APPLICATION_FORM_URL = `
+INSERT INTO application_form_urls(application_form_url,url_created_on)VALUES($1,NOW());
+`;
+
+/** GETTING ALL APPLICATION URLS */
+export const GETT_ALL_APPLICATION_FORM_URLS = `
+SELECT * FROM application_form_urls ORDER BY url_id DESC;
+`;
+
+/** CHECKING IF AN APPLICATION_FORM_URL EXISTS */
+export const CHECK_IF_APPLICATION_FORM_URL_EXISTS = `
+SELECT EXISTS(SELECT 1 FROM application_form_urls WHERE application_form_url = $1);
 `;

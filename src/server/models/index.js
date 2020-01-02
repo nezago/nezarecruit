@@ -21,6 +21,9 @@ import {
 } from './manage-homepage-model';
 
 import {
+  addNewApplicationFormUrl,
+  getAllApplicationFormUrls,
+  checkIfApplicationFormUrlIsRegistered,
   addNewJob,
   getAllJobs,
 } from './job-models';
@@ -39,6 +42,9 @@ export default {
   getAllSentEmails,
   addNewManageHomepage,
   getAllManages,
+  addNewApplicationFormUrl,
+  getAllApplicationFormUrls,
+  checkIfApplicationFormUrlIsRegistered,
   addNewJob,
   getAllJobs,
 };

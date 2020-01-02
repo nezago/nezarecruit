@@ -10,7 +10,6 @@ import SoftwareDevFormApply from './forms/SoftwareDevFormApply';
 import store from '../store';
 import HomepageContainer from './containers/HomepageContainer';
 
-
 function App() {
   return (
     <div className="index-background">

@@ -40,8 +40,6 @@
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
-    "style-loader": "^1.0.0",
-    "webpack": "^4.41.1",
-    "webpack-cli": "^3.3.9"
+    "style-loader": "^1.0.0"
   }
 }

@@ -37,9 +37,7 @@ nav a:hover {
   color: aliceblue;
   text-decoration: none;
 }
-.active{
-  /* Here I will put codes of the active navbar option will look like */
-}
+
 .sticky-element {
   position: fixed;
   z-index: 1;
@@ -315,6 +313,10 @@ figure.homepage-book-cover-back{
   background: #000;
   color: #fff;
 }
+.color-white {
+  background: #fff;
+  color: #000;
+}
 
 .color-dark-purple {
   background-color: rgb(8, 2, 15);
@@ -345,6 +347,9 @@ figure.homepage-book-cover-back{
   right: 0;
 }
 
+.centered-div{
+  margin: 10% auto;
+}
 /* SHOWING THE MANAGE APPLICATIONS PROFILE*/
 .aside-bar {
   background: rgba(145, 128, 168, 0.8);

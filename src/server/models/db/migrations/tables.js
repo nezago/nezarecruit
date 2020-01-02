@@ -9,6 +9,7 @@ import {
   CREATE_TABLE_ALL_SENT_EMAILS,
   CREATE_TABLE_MANAGE_HOMEPAGE,
   CREATE_TABLE_JOB_LIST,
+  CREATE_TABLE_JOB_LIST_TMP,
 } from '../settings/SQLqueries';
 
 dotenv.config();
@@ -34,6 +35,9 @@ const migrateTables = async (isDone) => {
 
   console.log('creating table manage homepage ...');
   await connect().query(CREATE_TABLE_MANAGE_HOMEPAGE);
+
+  console.log('creating table job_list ...');
+  await connect().query(CREATE_TABLE_JOB_LIST_TMP);
 
   console.log('creating table job_list ...');
   await connect().query(CREATE_TABLE_JOB_LIST);

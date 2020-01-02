@@ -1,4 +1,5 @@
 /** IMPORTING STYLES */
+import 'bootstrap/dist/js/bootstrap.min';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../../../styles/nezado-custom-styles.css';
 import 'react-datepicker/dist/react-datepicker.min.css';
@@ -15,6 +16,9 @@ import ManageApplicationsLayout from './layouts/ManageApplicationsLayout';
 import ManageApplicantEmailsLayout from './layouts/ManageApplicantEmailsLayout';
 import ManageHomepageLayout from './layouts/ManageHomepageLayout';
 import CreateJobLayout from './layouts/CreateJobLayout';
+import LoggedInUserProfileLayout from './layouts/LoggedInUserProfileLayout';
+import ManageUnhandledJobs from './layouts/ManageUnhandledJobs';
+import SavingNewApplicationFormUrlInDb from './layouts/SavingNewApplicationFormUrlInDb';
 
 function App() {
   return (
@@ -43,6 +47,21 @@ function App() {
               exact
               path="/create-a-job"
               component={CreateJobLayout}
+            />
+            <Route
+              exact
+              path="/manage-unhandled-jobs"
+              component={ManageUnhandledJobs}
+            />
+            <Route
+              exact
+              path="/user-profile"
+              component={LoggedInUserProfileLayout}
+            />
+            <Route
+              exact
+              path="/save-new-application-form-url"
+              component={SavingNewApplicationFormUrlInDb}
             />
           </Route>
         </Router>
