@@ -770,7 +770,14 @@ export const handleSaveAmanage = (necessaryFields) => {
 };
 
 
-/** CREATING JOB FUNCTIONS */
+/**
+ * =====================================================================================
+ * =====================================================================================
+ * ======================FUNCTIONS TO HANDLE CreateJoLayout=============================
+ * =====================================================================================
+ * =====================================================================================
+ * */
+
 export const handleJobRequirementsAdded = (necessaryFields) => {
   const {
     jobRequirementInputField,
@@ -908,7 +915,7 @@ export const handleSaveJobBtnClicked = (necessaryFields) => {
     spinnerBorder.classList.add('spinner-border');
     spinnerBorder.classList.add('spinner-border-sm');
     spinnerBorder.classList.add('text-warning');
-    spanSaveJob.innerHTML = '<span class="text-17">Processing</span';
+    spanSaveJob.innerHTML = '<span class="text-17">Processing</span>';
 
     axios.post('/jobs/add-new-job', datatosend, { headers: getOauth() }).then((res) => {
       saveJobdetailsResultDiv.classList.remove('hidden-div');
@@ -921,7 +928,12 @@ export const handleSaveJobBtnClicked = (necessaryFields) => {
     });
   }
 };
+/** handle application form url */
+export const handleFormUrlTyping = (component) => {
+  const { } = component.state.necessaryFields;
+};
 
+/** initializing job details editor */
 export const handleJobDetailsEditorsInitialize = (necessaryFields) => {
   const {
     jobtitlefield,
@@ -967,4 +979,94 @@ export const handleJobDetailsEditorsInitialize = (necessaryFields) => {
   jobRequirementInputField.value = '';
   jobRequirementDisplayDiv.innerHTML = '';
   applicationFormUrlInputField.value = '';
+};
+
+/**
+ * ==============================================================================
+ * ==============================================================================
+ * ===============FUNCTIONS TO HANDLE SavingNewApplicationFormUrlInDb============
+ * ==============================================================================
+ * ==============================================================================
+ * */
+export const handleApplicationFormUrlTyping = (component) => {
+  const {
+    urlTextInputField,
+    urlCheckingDiv,
+    urlCheckingResultSpan,
+  } = component.state.necessaryFields;
+  const applicationformurl = urlTextInputField.value;
+  if (applicationformurl.length !== 0) {
+    urlCheckingDiv.classList.remove('hidden-div');
+    axios.post('/jobs/check-if-application-url-is-registered', { applicationformurl },
+      { headers: getOauth() }).then((res) => {
+      const result = res.data;
+      urlCheckingResultSpan.innerHTML = result.info;
+      if (result.isChecked) {
+        if (result.resultsFromDb) {
+          component.setState({ isUrlRegistered: true });
+        } else {
+          component.setState({ isUrlRegistered: false });
+        }
+      }
+    }).catch((err) => {
+      urlCheckingResultSpan.innerHTML = err.response.data;
+    });
+  } else {
+    urlCheckingResultSpan.innerHTML = '';
+    urlCheckingDiv.classList.add('hidden-div');
+  }
+};
+
+export const handleSaveApplicationFormUrlBtnClicked = (component) => {
+  const {
+    urlTextInputField,
+    urlFormEditor,
+    urlFormSaveResultsContainerDiv,
+    urlCheckingDiv,
+    urlCheckingResultSpan,
+    urlResultsFromDb,
+  } = component.state.necessaryFields;
+  const { isUrlRegistered } = component.state;
+  const applicationformurl = urlTextInputField.value;
+
+  if (applicationformurl.length !== 0) {
+    if (isUrlRegistered) {
+      urlCheckingResultSpan.innerHTML = `<span class="text-danger">
+      The url you want to save is already registered, please don't use it again</span>`;
+    } else {
+      axios.post('/jobs/add-new-application-form-url',
+        { applicationformurl }, { headers: getOauth() }).then((res) => {
+        const result = res.data;
+        if (result.isSavedSuccess) {
+          urlFormEditor.classList.add('hidden-div');
+          urlFormSaveResultsContainerDiv.classList.remove('hidden-div');
+          urlCheckingDiv.classList.add('hidden-div');
+          urlResultsFromDb.innerHTML = result.info;
+        } else {
+          urlCheckingResultSpan.innerHTML = result.info;
+        }
+      }).catch((err) => {
+        urlCheckingResultSpan.innerHTML = err.response.data.info;
+      });
+    }
+  } else {
+    urlTextInputField.classList.add('field-error');
+  }
+};
+
+export const handleApplicationFormUrlEditorInitialize = (component) => {
+  const {
+    urlFormEditor,
+    urlTextInputField,
+    urlCheckingDiv,
+    urlCheckingResultSpan,
+    urlFormSaveResultsContainerDiv,
+    urlResultsFromDb,
+  } = component.state.necessaryFields;
+  urlFormEditor.classList.remove('hidden-div');
+  urlTextInputField.value = '';
+  urlCheckingDiv.classList.add('hidden-div');
+  urlCheckingResultSpan.innerHTML = '';
+  urlFormSaveResultsContainerDiv.classList.add('hidden-div');
+  urlResultsFromDb.innerHTML = '';
 };

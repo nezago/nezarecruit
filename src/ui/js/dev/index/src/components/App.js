@@ -24,7 +24,7 @@ function App() {
             />
             <Route
               exact
-              path="/apply-for-junior-software-developer"
+              path="/apply-for-software-developer"
               component={SoftwareDevFormApply}
             />
           </Route>

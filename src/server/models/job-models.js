@@ -18,20 +18,32 @@ export const addNewApplicationFormUrl = (req, res, next) => {
     applicationformurl,
   } = req.body;
 
-  if (applicationformurl.length !== 0) {
+  if (applicationformurl && applicationformurl.length !== 0) {
     connect().query(ADD_NEW_APPLICATION_FORM_URL, [applicationformurl], (err, results) => {
       if (err) {
-        res.status(500).send(`
-        <span class="text-danger">Failed to save ${applicationformurl} in our database</span>
-        `);
+        res.status(500).send({
+          isSavedSuccess: false,
+          info: `<span class="text-danger">
+        Failed to save ${applicationformurl} in our database
+        </span>
+        `,
+        });
       } else if (results.rowCount === 1) {
-        res.status(201).send(`
-        
-        <span class="text-success">${applicationformurl} is saved successfully in our database, now you can add it
-        on the job details</span>`);
+        res.status(201).send({
+          isSavedSuccess: true,
+          info: `<span class="text-success">
+          ${applicationformurl} is saved successfully in our database, now you can add it on the job details</span>`,
+        });
         next();
       }
     });
+  } else {
+    res.status(500).send(
+      {
+        isSavedSuccess: false,
+        info: '<span class="text-danger">It seems the url is empty</span>',
+      },
+    );
   }
 };
 
@@ -57,9 +69,25 @@ export const checkIfApplicationFormUrlIsRegistered = (req, res, next) => {
   if (applicationformurl.length !== 0) {
     connect().query(CHECK_IF_APPLICATION_FORM_URL_EXISTS, [applicationformurl], (err, result) => {
       if (err) {
-        res.status(500).send({ isChecked: false, info: '' });
-      } else if (result.rows[0].exists) {
-        res.status(200).send({ isChecked: true, info: result.rows[0].exists });
+        res.status(500).send({
+          isChecked: false,
+          info: '<span class="text-danger">Checking failed</span>',
+        });
+      } else if (result) {
+        if (result.rows[0].exists) {
+          res.status(200).send({
+            isChecked: true,
+            info: `<span class="text-danger">The url: ${applicationformurl} is already registered</span>`,
+            resultsFromDb: result.rows[0].exists,
+          });
+        } else if (!result.rows[0].exists) {
+          res.status(200).send({
+            isChecked: true,
+            info: `<span class="text-success">Make sure that the ${applicationformurl} url is valid
+            and hit save button</span>`,
+            resultsFromDb: result.rows[0].exists,
+          });
+        }
         next();
       }
     });

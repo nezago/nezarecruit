@@ -10,6 +10,7 @@ import {
   CREATE_TABLE_MANAGE_HOMEPAGE,
   CREATE_TABLE_JOB_LIST,
   CREATE_TABLE_JOB_LIST_TMP,
+  CREATE_TABLE_APPLICATION_FORM_URLS,
 } from '../settings/SQLqueries';
 
 dotenv.config();
@@ -41,6 +42,9 @@ const migrateTables = async (isDone) => {
 
   console.log('creating table job_list ...');
   await connect().query(CREATE_TABLE_JOB_LIST);
+
+  console.log('creating table application_form_urls ...');
+  await connect().query(CREATE_TABLE_APPLICATION_FORM_URLS);
 
   if (isDone) { isDone(); }
   process.exit(0);
