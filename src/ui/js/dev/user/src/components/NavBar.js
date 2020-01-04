@@ -58,14 +58,14 @@ class NavBar extends Component {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                        Manage Jobs
+                Manage Jobs
               </button>
               <div
                 className="dropdown-menu"
                 aria-labelledby="jobsDropdownBtn"
               >
                 <NavLink to="/create-a-job">Create a job</NavLink>
-                <NavLink to="/manage-unhandled-jobs">Unhandled jobs</NavLink>
+                <NavLink to="/manage-unlinked-jobs">Unlinked jobs</NavLink>
                 <NavLink to="/save-new-application-form-url">Save application form url</NavLink>
               </div>
             </div>

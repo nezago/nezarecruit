@@ -9,6 +9,7 @@ import {
   GETT_ALL_APPLICATION_FORM_URLS,
   CHECK_IF_APPLICATION_FORM_URL_EXISTS,
   ADDDING_NEW_JOB,
+  GET_ALL_JOBS,
 } from './db/settings/SQLqueries';
 import { saveEmailInDB } from './apply-models';
 
@@ -109,8 +110,7 @@ export const addNewJob = (req, res, next) => {
     isUrlRegistered,
   } = req.body;
 
-  connect().query(
-    isUrlRegistered ? ADDDING_NEW_JOB : ADDDING_NEW_JOB_TMP,
+  connect().query(isUrlRegistered ? ADDDING_NEW_JOB : ADDDING_NEW_JOB_TMP,
     [jobtitle, companyname, companyemail, jobcreatoremail, jobdeadline,
       jobdescription, customemailmsgtoapplicant, jobrequirements, applicationformurl],
     (err, results) => {
@@ -183,7 +183,7 @@ export const addNewJob = (req, res, next) => {
                   next();
                 } else if (state.rowCount === 1) {
                   res.status(201).send(`
-                    <span class="text-danger>
+                    <span class="text-danger">
                     <p>
                     Congratulations! Your job details has been accepted,
                     and saved in our databases, but our servers were not able to send you email feedback to your address, 
@@ -217,12 +217,12 @@ export const addNewJob = (req, res, next) => {
           }
         });
       }
-    },
-  );
+    });
 };
 
 export const getAllJobs = (req, res, next) => {
-  connect().query(GET_ALL_JOBS_TMP, (err, results) => {
+  const { isTMP } = req.query;
+  connect().query(isTMP === 'true' ? GET_ALL_JOBS_TMP : GET_ALL_JOBS, (err, results) => {
     if (err) {
       res.status(500).send(`<span class="text-danger">
       Sorry! Something strange occured, try again!</spna>`);

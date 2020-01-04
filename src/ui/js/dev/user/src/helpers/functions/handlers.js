@@ -868,8 +868,10 @@ export const handleSaveJobBtnClicked = (component) => {
   const jobdeadline = jobdeadlinefield.value;
   const companyemail = companyemailfield.value;
   const jobrequirements = jobRequirementDisplayDiv.innerHTML;
-  const applicationformurl = urlTextInputField.value;
+  const applicationformurltmp = urlTextInputField.value;
   let isJobValid = false;
+
+  const applicationformurl = isUrlRegistered ? applicationformurltmp : '';
 
   if (jobtitle.length === 0) {
     jobtitleError.innerHTML = 'Enter the job title please!';
@@ -1078,4 +1080,59 @@ export const handleApplicationFormUrlEditorInitialize = (component) => {
   urlCheckingResultSpan.innerHTML = '';
   urlFormSaveResultsContainerDiv.classList.add('hidden-div');
   urlResultsFromDb.innerHTML = '';
+};
+
+
+/**
+ * =====================================================================
+ * =====================================================================
+ * =====================FUNCTIONS TO HANDLE mANAGEuNLINKEDjOBS==========
+ * =====================================================================
+ * =====================================================================
+ */
+
+export const handleSingleJobClicked = (component, job) => {
+  const {
+    jobsListDiv,
+    backToListDiv,
+    jobDetailsDiv,
+  } = component.state.necessaryFields;
+  jobsListDiv.classList.add('hidden-div');
+  backToListDiv.classList.remove('hidden-div');
+  jobDetailsDiv.classList.remove('hidden-div');
+
+  const jobDetails = `
+  <div><h3>${job.job_title}</h3></div>
+
+  <table class="table table-hover table-responsive">
+
+    <tbody>
+      <tr>
+        <td><span>Job deadline : </span></td>
+        <td><span>${getDateFromDateTime(job.job_deadline)}</span></td>
+      </tr>
+      <tr>
+        <td><span>Company name : </span></td>
+        <td><span>${job.company_name}</span></td>
+      </tr>
+      <tr>
+        <td><span>Job description : </span></td>
+        <td><span>${job.job_description}</span></td>
+      </tr>
+      <tr>
+        <td><span>Job requirements : </span></td>
+        <td> <span>${job.job_requirements}</span></td>
+      </tr>
+      <tr>
+        <td><span>Application form url : </span></td>
+        <td>
+          <span>${job.application_form_url.length !== 0 ? job.application_form_url
+    : '<button class="btn btn-sm btn-outline-danger rounded-corners">No Url found for this job, please click here to add it!</button>'}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  `;
+  jobDetailsDiv.innerHTML = jobDetails;
 };

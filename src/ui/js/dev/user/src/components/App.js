@@ -17,7 +17,7 @@ import ManageApplicantEmailsLayout from './layouts/ManageApplicantEmailsLayout';
 import ManageHomepageLayout from './layouts/ManageHomepageLayout';
 import CreateJobLayout from './layouts/CreateJobLayout';
 import LoggedInUserProfileLayout from './layouts/LoggedInUserProfileLayout';
-import ManageUnhandledJobs from './layouts/ManageUnhandledJobs';
+import ManageUnlinkedJobs from './layouts/ManageUnlinkedJobs';
 import SavingNewApplicationFormUrlInDb from './layouts/SavingNewApplicationFormUrlInDb';
 
 function App() {
@@ -50,8 +50,8 @@ function App() {
             />
             <Route
               exact
-              path="/manage-unhandled-jobs"
-              component={ManageUnhandledJobs}
+              path="/manage-unlinked-jobs"
+              component={ManageUnlinkedJobs}
             />
             <Route
               exact

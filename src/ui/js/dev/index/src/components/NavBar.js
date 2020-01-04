@@ -21,7 +21,7 @@ class NavBar extends Component {
   }
 
   componentDidMount() {
-    axios.get('/jobs/get-all-jobs').then((res) => {
+    axios.get('/jobs/get-all-jobs?isTMP=false').then((res) => {
       this.setState({ postedJobs: res.data });
     }).catch((err) => {
       this.setState({ errorDuringJobRetrieval: err.response.data });
@@ -63,7 +63,6 @@ class NavBar extends Component {
               onClick={() => handleOptionClicked(necessaryFields)}
             >
               {job.job_title}
-
             </NavLink>
           </div>
         </div>

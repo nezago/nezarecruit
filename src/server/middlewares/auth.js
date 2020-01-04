@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken';
 
 export const authenticate = (req, res, next) => {
   let token;
-  if (req.query.redirect) {
+
+  if (req.query.redirect === 'true') {
     token = req.query.oauth;
   } else {
     token = req.headers.authorization.split(' ')[1];

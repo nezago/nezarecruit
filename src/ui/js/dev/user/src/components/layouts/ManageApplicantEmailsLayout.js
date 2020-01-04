@@ -80,6 +80,7 @@ class ManageApplicantEmailsLayout extends Component {
           {allSentEmailsList}
         </div>
 
+        {/** Go back to list btn */}
         <div id="back-to-list" className="position-fixed-top-right hidden-div">
           <button
             type="button"
