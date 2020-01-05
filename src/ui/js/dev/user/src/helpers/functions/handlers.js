@@ -936,7 +936,7 @@ export const handleSaveJobBtnClicked = (component) => {
 };
 
 /** initializing job details editor */
-export const handleJobDetailsEditorsInitialize = (necessaryFields) => {
+export const handleJobDetailsEditorsInitialize = (component, job) => {
   const {
     jobtitlefield,
     companynamefield,
@@ -951,7 +951,7 @@ export const handleJobDetailsEditorsInitialize = (necessaryFields) => {
     spinnerBorder,
     spinnerGrow,
     spanSaveJob,
-  } = necessaryFields;
+  } = component.state.necessaryFields;
 
   /** SHOWING ANNIMATION WHILE WAITING FOR THE RESULT TO COME */
   spinnerBorder.classList.remove('spinner-border');
@@ -972,13 +972,14 @@ export const handleJobDetailsEditorsInitialize = (necessaryFields) => {
   const customemailtosendtouserDoc = customemailtosendtouseriframe.contentDocument
     || customemailtosendtouseriframe.contentWindow.document;
 
-  jobdescriptioniDoc.body.innerHTML = '';
-  customemailtosendtouserDoc.body.innerHTML = '';
-  jobtitlefield.value = '';
-  companynamefield.value = '';
-  companyemailfield.value = '';
+  // job ? component.setState({ jobdeadline: new Date(job.job_deadline) }) : new Date();
+  jobdescriptioniDoc.body.innerHTML = job ? job.job_description : '';
+  customemailtosendtouserDoc.body.innerHTML = job ? job.custom_email_msg_to_applicants : '';
+  jobtitlefield.value = job ? job.job_title : '';
+  companynamefield.value = job ? job.company_name : '';
+  companyemailfield.value = job ? job.company_email : '';
   jobRequirementInputField.value = '';
-  jobRequirementDisplayDiv.innerHTML = '';
+  jobRequirementDisplayDiv.innerHTML = job ? job.job_requirements : '';
   urlTextInputField.value = '';
 };
 
@@ -1090,16 +1091,30 @@ export const handleApplicationFormUrlEditorInitialize = (component) => {
  * =====================================================================
  * =====================================================================
  */
+export const handleEditJobClicked = (component, job) => {
+  component.props.history.push({
+    pathname: '/create-a-job',
+    state: { job },
+  });
+  // console.log()
+};
 
 export const handleSingleJobClicked = (component, job) => {
   const {
     jobsListDiv,
     backToListDiv,
     jobDetailsDiv,
+    jobDetailsHolderDiv,
   } = component.state.necessaryFields;
   jobsListDiv.classList.add('hidden-div');
   backToListDiv.classList.remove('hidden-div');
   jobDetailsDiv.classList.remove('hidden-div');
+
+  /** creating editBtn */
+  const editBtn = document.createElement('button');
+  editBtn.innerText = 'Edit this job';
+  editBtn.setAttribute('class', 'btn btn-sm btn-primary rounded-corners');
+  editBtn.addEventListener('click', () => handleEditJobClicked(component, job));
 
   const jobDetails = `
   <div><h3>${job.job_title}</h3></div>
@@ -1127,12 +1142,13 @@ export const handleSingleJobClicked = (component, job) => {
         <td><span>Application form url : </span></td>
         <td>
           <span>${job.application_form_url.length !== 0 ? job.application_form_url
-    : '<button class="btn btn-sm btn-outline-danger rounded-corners">No Url found for this job, please click here to add it!</button>'}</span>
+    : '<span class="text-danger">No url found, click the edit</span>'}
         </td>
       </tr>
     </tbody>
   </table>
   
   `;
-  jobDetailsDiv.innerHTML = jobDetails;
+  jobDetailsHolderDiv.innerHTML = jobDetails;
+  jobDetailsHolderDiv.appendChild(editBtn);
 };

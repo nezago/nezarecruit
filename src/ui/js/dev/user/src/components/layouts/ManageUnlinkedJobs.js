@@ -22,6 +22,8 @@ class ManageUnlinkedJobs extends Component {
       jobsListDiv: document.getElementById('jobs-list'),
       backToListDiv: document.getElementById('back-to-list'),
       jobDetailsDiv: document.getElementById('job-details'),
+      jobDetailsHolderDiv: document.getElementById('job-details-holder-div'),
+
     };
     this.setState({ necessaryFields });
   }
@@ -85,7 +87,9 @@ class ManageUnlinkedJobs extends Component {
             Go back to list
           </button>
         </div>
-        <div id="job-details" className="hidden-div">descholar</div>
+        <div id="job-details" className="hidden-div">
+          <div id="job-details-holder-div" />
+        </div>
 
       </div>
     );

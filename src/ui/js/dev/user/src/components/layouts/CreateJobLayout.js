@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable react/destructuring-assignment */
@@ -32,6 +33,7 @@ import {
   FaTypo3,
   FaPlusCircle,
 } from 'react-icons/fa';
+
 import {
   handleTypingEmailInIframe,
   displayFontFamilies,
@@ -93,7 +95,15 @@ class CreateJobLayout extends Component {
       urlCheckSpinnerHolderSpan: document.getElementById('url-check-spinner-holder-span'),
     };
     this.setState({ necessaryFields });
-    handleJobDetailsEditorsInitialize(necessaryFields);
+
+    const { state } = this.props.location;
+    let job;
+    if (state) {
+      job = state.job;
+    } else {
+      console.log('The state is undefined');
+    }
+    handleJobDetailsEditorsInitialize(this, job);
   }
 
   handlejobdeadline = (date) => {
@@ -460,7 +470,7 @@ class CreateJobLayout extends Component {
             <div className="form-group form-row">
               <div className="col-md-6">
                 <button
-                  onClick={() => handleJobDetailsEditorsInitialize(this.state.necessaryFields)}
+                  onClick={() => handleJobDetailsEditorsInitialize(this)}
                   type="button"
                   className="btn btn-primary rounded-corners"
                 >
