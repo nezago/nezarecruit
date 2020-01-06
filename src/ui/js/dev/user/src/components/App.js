@@ -15,10 +15,11 @@ import NavBar from './NavBar';
 import ManageApplicationsLayout from './layouts/ManageApplicationsLayout';
 import ManageApplicantEmailsLayout from './layouts/ManageApplicantEmailsLayout';
 import ManageHomepageLayout from './layouts/ManageHomepageLayout';
-import CreateJobLayout from './layouts/CreateJobLayout';
+import CreateOrEditJobLayout from './layouts/CreateOrEditJobLayout';
 import LoggedInUserProfileLayout from './layouts/LoggedInUserProfileLayout';
 import ManageUnlinkedJobs from './layouts/ManageUnlinkedJobs';
 import SavingNewApplicationFormUrlInDb from './layouts/SavingNewApplicationFormUrlInDb';
+import ManageActiveJobs from './layouts/ManageActiveJobs';
 
 function App() {
   return (
@@ -45,13 +46,18 @@ function App() {
             />
             <Route
               exact
-              path="/create-a-job"
-              component={CreateJobLayout}
+              path="/create-or-edit-a-job"
+              component={CreateOrEditJobLayout}
             />
             <Route
               exact
               path="/manage-unlinked-jobs"
               component={ManageUnlinkedJobs}
+            />
+            <Route
+              exact
+              path="/manage-all-active-jobs"
+              component={ManageActiveJobs}
             />
             <Route
               exact

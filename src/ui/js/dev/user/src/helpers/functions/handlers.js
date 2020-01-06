@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 /* eslint-disable no-plusplus */
@@ -10,13 +11,7 @@ import {
   getUserInfo,
 } from '../../../../../../../helpers/resources/list-of-needed-resouces';
 import { validateEmail } from '../../../../../../../helpers/functions/validations';
-
-/** Date and times */
-export const getCurrentYear = () => new Date().getFullYear();
-export const getCurrentMonth = () => { };
-
-export const getDateFromDateTime = (datetime) => datetime.split('T')[0];
-export const getTimeFromDateTime = (datetime) => (datetime.split('T')[1]).split('.')[0];
+import { getCurrentYear, getDateFromDateTime, getTimeFromDateTime } from '../../../../../../../helpers/functions/general-handlers';
 
 /** handlers */
 export const handleAsideNavItemClicked = (event, necessaryFields) => {
@@ -853,7 +848,7 @@ export const handleSaveJobBtnClicked = (component) => {
     spanSaveJob,
   } = component.state.necessaryFields;
 
-  const { isUrlRegistered } = component.state;
+  const { job } = component.state;
 
   const jobtitle = jobtitlefield.value;
   const jobdescriptioniDoc = jobdescriptioniframe.contentDocument
@@ -870,6 +865,9 @@ export const handleSaveJobBtnClicked = (component) => {
   const jobrequirements = jobRequirementDisplayDiv.innerHTML;
   const applicationformurltmp = urlTextInputField.value;
   let isJobValid = false;
+
+  /** setting up a isUrlRegistered variable depending on what is in the state */
+  const { isUrlRegistered } = component.state;
 
   const applicationformurl = isUrlRegistered ? applicationformurltmp : '';
 
@@ -897,20 +895,6 @@ export const handleSaveJobBtnClicked = (component) => {
 
     companyemailfieldError.innerHTML = '';
 
-    const datatosend = {
-      jobtitle,
-      jobdescription,
-      customemailmsgtoapplicant,
-      companyname,
-      companyemail,
-      jobcreatoremail,
-      jobdeadline,
-      jobrequirements,
-      applicationformurl,
-      isJobValid,
-      isUrlRegistered,
-    };
-
     /** SHOWING ANNIMATION WHILE WAITING FOR THE RESULT TO COME */
     spinnerGrow.forEach((currSpinner) => {
       currSpinner.classList.add('spinner-grow');
@@ -922,11 +906,42 @@ export const handleSaveJobBtnClicked = (component) => {
     spinnerBorder.classList.add('text-warning');
     spanSaveJob.innerHTML = '<span class="text-17">Processing</span>';
 
-    axios.post(isUrlRegistered ? '/jobs/add-new-job' : '/jobs/add-new-job-tmp',
-      datatosend, { headers: getOauth() }).then((res) => {
+    /** preparing a url */
+    let isJobEditing = false;
+    let job_id;
+    let isJobFromTmp = false;
+    if (job) {
+      isJobEditing = true;
+      job_id = job.job.job_id;
+      isJobFromTmp = job.isJobFromTmp;
+    } else {
+      isJobEditing = false;
+    }
+
+    /** DATA TO SEND TO THE DATABASE */
+
+    const datatosend = {
+      job_id,
+      jobtitle,
+      jobdescription,
+      customemailmsgtoapplicant,
+      companyname,
+      companyemail,
+      jobcreatoremail,
+      jobdeadline,
+      jobrequirements,
+      applicationformurl,
+      isJobValid,
+      isUrlRegistered,
+      isJobEditing,
+      isJobFromTmp,
+    };
+
+    console.log(datatosend);
+    axios.post('/jobs/add-or-edit-job', datatosend, { headers: getOauth() }).then((res) => {
       saveJobdetailsResultDiv.classList.remove('hidden-div');
-      saveJobdetailsResultContainer.innerHTML = res.data;
       jobDetailsEditorDiv.classList.add('hidden-div');
+      saveJobdetailsResultContainer.innerHTML = res.data;
     }).catch((err) => {
       saveJobdetailsResultDiv.classList.remove('hidden-div');
       saveJobdetailsResultContainer.innerHTML = err.response.data;
@@ -936,7 +951,7 @@ export const handleSaveJobBtnClicked = (component) => {
 };
 
 /** initializing job details editor */
-export const handleJobDetailsEditorsInitialize = (component, job) => {
+export const handleJobDetailsEditorsInitialize = (component, necessaryFields, job) => {
   const {
     jobtitlefield,
     companynamefield,
@@ -951,7 +966,7 @@ export const handleJobDetailsEditorsInitialize = (component, job) => {
     spinnerBorder,
     spinnerGrow,
     spanSaveJob,
-  } = component.state.necessaryFields;
+  } = necessaryFields;
 
   /** SHOWING ANNIMATION WHILE WAITING FOR THE RESULT TO COME */
   spinnerBorder.classList.remove('spinner-border');
@@ -972,15 +987,16 @@ export const handleJobDetailsEditorsInitialize = (component, job) => {
   const customemailtosendtouserDoc = customemailtosendtouseriframe.contentDocument
     || customemailtosendtouseriframe.contentWindow.document;
 
-  // job ? component.setState({ jobdeadline: new Date(job.job_deadline) }) : new Date();
-  jobdescriptioniDoc.body.innerHTML = job ? job.job_description : '';
-  customemailtosendtouserDoc.body.innerHTML = job ? job.custom_email_msg_to_applicants : '';
-  jobtitlefield.value = job ? job.job_title : '';
-  companynamefield.value = job ? job.company_name : '';
-  companyemailfield.value = job ? job.company_email : '';
+  job ? component.setState({ jobdeadline: new Date(getDateFromDateTime(job.job.job_deadline)) })
+    : new Date();
+  jobdescriptioniDoc.body.innerHTML = job ? job.job.job_description : '';
+  customemailtosendtouserDoc.body.innerHTML = job ? job.job.custom_email_msg_to_applicants : '';
+  jobtitlefield.value = job ? job.job.job_title : '';
+  companynamefield.value = job ? job.job.company_name : '';
+  companyemailfield.value = job ? job.job.company_email : '';
   jobRequirementInputField.value = '';
-  jobRequirementDisplayDiv.innerHTML = job ? job.job_requirements : '';
-  urlTextInputField.value = '';
+  jobRequirementDisplayDiv.innerHTML = job ? job.job.job_requirements : '';
+  urlTextInputField.value = job ? job.job.application_form_url : '';
 };
 
 /**
@@ -1087,18 +1103,18 @@ export const handleApplicationFormUrlEditorInitialize = (component) => {
 /**
  * =====================================================================
  * =====================================================================
- * =====================FUNCTIONS TO HANDLE mANAGEuNLINKEDjOBS==========
+ * =====================FUNCTIONS TO HANDLE ALL JOBS==========
  * =====================================================================
  * =====================================================================
  */
 export const handleEditJobClicked = (component, job) => {
   component.props.history.push({
-    pathname: '/create-a-job',
+    pathname: '/create-or-edit-a-job',
     state: { job },
   });
-  // console.log()
 };
 
+/** handle single job clicked */
 export const handleSingleJobClicked = (component, job) => {
   const {
     jobsListDiv,
@@ -1117,31 +1133,31 @@ export const handleSingleJobClicked = (component, job) => {
   editBtn.addEventListener('click', () => handleEditJobClicked(component, job));
 
   const jobDetails = `
-  <div><h3>${job.job_title}</h3></div>
+  <div><h3>${job.job.job_title}</h3></div>
 
   <table class="table table-hover table-responsive">
 
     <tbody>
       <tr>
         <td><span>Job deadline : </span></td>
-        <td><span>${getDateFromDateTime(job.job_deadline)}</span></td>
+        <td><span>${getDateFromDateTime(job.job.job_deadline)}</span></td>
       </tr>
       <tr>
         <td><span>Company name : </span></td>
-        <td><span>${job.company_name}</span></td>
+        <td><span>${job.job.company_name}</span></td>
       </tr>
       <tr>
         <td><span>Job description : </span></td>
-        <td><span>${job.job_description}</span></td>
+        <td><span>${job.job.job_description}</span></td>
       </tr>
       <tr>
         <td><span>Job requirements : </span></td>
-        <td> <span>${job.job_requirements}</span></td>
+        <td> <span>${job.job.job_requirements}</span></td>
       </tr>
       <tr>
         <td><span>Application form url : </span></td>
         <td>
-          <span>${job.application_form_url.length !== 0 ? job.application_form_url
+          <span>${job.job.application_form_url.length !== 0 ? job.job.application_form_url
     : '<span class="text-danger">No url found, click the edit</span>'}
         </td>
       </tr>
@@ -1151,4 +1167,16 @@ export const handleSingleJobClicked = (component, job) => {
   `;
   jobDetailsHolderDiv.innerHTML = jobDetails;
   jobDetailsHolderDiv.appendChild(editBtn);
+};
+
+export const handleBackToListClickedFromJobDetails = (component) => {
+  const {
+    jobsListDiv,
+    backToListDiv,
+    jobDetailsDiv,
+  } = component.state.necessaryFields;
+
+  jobsListDiv.classList.remove('hidden-div');
+  backToListDiv.classList.add('hidden-div');
+  jobDetailsDiv.classList.add('hidden-div');
 };

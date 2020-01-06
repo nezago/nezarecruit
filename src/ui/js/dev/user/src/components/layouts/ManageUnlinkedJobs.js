@@ -1,9 +1,10 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import axios from 'axios';
-import {
-  getDateFromDateTime, handleSingleJobClicked,
-} from '../../helpers/functions/handlers';
+import { handleSingleJobClicked, handleBackToListClickedFromJobDetails } from '../../helpers/functions/handlers';
+import { getDateFromDateTime } from '../../../../../../../helpers/functions/general-handlers';
 
 class ManageUnlinkedJobs extends Component {
   constructor(props) {
@@ -15,8 +16,6 @@ class ManageUnlinkedJobs extends Component {
     axios.get('/jobs/get-all-jobs?isTMP=true').then((res) => {
       const allUnLinkedJobs = res.data;
       this.setState({ allUnLinkedJobs });
-    }).catch((err) => {
-      console.log(err.response.data);
     });
     const necessaryFields = {
       jobsListDiv: document.getElementById('jobs-list'),
@@ -32,7 +31,6 @@ class ManageUnlinkedJobs extends Component {
     const { allUnLinkedJobs } = this.state;
     let unlinkedJobList;
     if (allUnLinkedJobs) {
-      console.log(allUnLinkedJobs);
       if (allUnLinkedJobs.length === 0) {
         unlinkedJobList = (
           <tr className="text-danger">
@@ -48,7 +46,7 @@ class ManageUnlinkedJobs extends Component {
           <tr
             key={job.job_id}
             className="hand-cursor color-rigth-grey-transparent"
-            onClick={() => handleSingleJobClicked(this, job)}
+            onClick={() => handleSingleJobClicked(this, { job, isJobFromTmp: true })}
           >
             <td><span className="mr-5">{job.job_id}</span></td>
             <td><span className="mr-5">{job.job_title}</span></td>
@@ -83,6 +81,7 @@ class ManageUnlinkedJobs extends Component {
           <button
             type="button"
             className="btn btn-sm btn-info rounded-corners"
+            onClick={() => handleBackToListClickedFromJobDetails(this)}
           >
             Go back to list
           </button>

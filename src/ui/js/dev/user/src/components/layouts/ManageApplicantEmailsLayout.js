@@ -5,10 +5,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { getOauth } from '../../../../../../../helpers/resources/list-of-needed-resouces';
 import {
-  getDateFromDateTime,
   handleCloseSingleResultClicked,
   handleSingleSentEmailClicked, handleBackToListClickedFromEmailDetails,
 } from '../../helpers/functions/handlers';
+
+import { getDateFromDateTime } from '../../../../../../../helpers/functions/general-handlers';
 
 class ManageApplicantEmailsLayout extends Component {
   constructor(props) {

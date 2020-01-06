@@ -12,7 +12,7 @@ import HomepageContainer from './containers/HomepageContainer';
 
 function App() {
   return (
-    <div className="index-background">
+    <div className="index-background mt-5">
       <Provider store={store}>
         <Router>
           <Route>
@@ -24,7 +24,7 @@ function App() {
             />
             <Route
               exact
-              path="/apply-for-software-developer"
+              path="/jobs/apply-for-software-developer/:job_id"
               component={SoftwareDevFormApply}
             />
           </Route>

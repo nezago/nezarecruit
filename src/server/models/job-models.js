@@ -10,6 +10,10 @@ import {
   CHECK_IF_APPLICATION_FORM_URL_EXISTS,
   ADDDING_NEW_JOB,
   GET_ALL_JOBS,
+  EDITING_JOB,
+  EDITING_JOB_TMP,
+  DELETE_JOB_FROM_TMP,
+  GET_PARTICULAR_JOB,
 } from './db/settings/SQLqueries';
 import { saveEmailInDB } from './apply-models';
 
@@ -96,8 +100,9 @@ export const checkIfApplicationFormUrlIsRegistered = (req, res, next) => {
 };
 
 /** JOBS */
-export const addNewJob = (req, res, next) => {
+export const addOrEditJob = (req, res, next) => {
   const {
+    job_id,
     jobtitle,
     jobdescription,
     companyname,
@@ -108,12 +113,49 @@ export const addNewJob = (req, res, next) => {
     jobrequirements,
     applicationformurl,
     isUrlRegistered,
+    isJobEditing,
+    isJobFromTmp,
   } = req.body;
 
-  connect().query(isUrlRegistered ? ADDDING_NEW_JOB : ADDDING_NEW_JOB_TMP,
-    [jobtitle, companyname, companyemail, jobcreatoremail, jobdeadline,
-      jobdescription, customemailmsgtoapplicant, jobrequirements, applicationformurl],
+  console.log(req.body);
+  let QUERY_TO_EXECUTE;
+  let PARAMS;
+  let isUrlAddedToTmp = false;
+
+  if (isUrlRegistered) {
+    if (isJobEditing) {
+      if (isJobFromTmp) {
+        QUERY_TO_EXECUTE = ADDDING_NEW_JOB;
+        PARAMS = [jobtitle, companyname, companyemail, jobcreatoremail, jobdeadline,
+          jobdescription, customemailmsgtoapplicant, jobrequirements, applicationformurl];
+        isUrlAddedToTmp = true;
+      } else if (!isJobFromTmp) {
+        QUERY_TO_EXECUTE = EDITING_JOB;
+        PARAMS = [jobtitle, companyname, companyemail, jobcreatoremail, jobdeadline,
+          jobdescription, customemailmsgtoapplicant, jobrequirements, applicationformurl, job_id];
+      }
+    } else if (!isJobEditing) {
+      QUERY_TO_EXECUTE = ADDDING_NEW_JOB;
+      PARAMS = [jobtitle, companyname, companyemail, jobcreatoremail, jobdeadline,
+        jobdescription, customemailmsgtoapplicant, jobrequirements, applicationformurl];
+    }
+  } else if (!isUrlRegistered) {
+    if (isJobEditing) {
+      QUERY_TO_EXECUTE = EDITING_JOB_TMP;
+      PARAMS = [jobtitle, companyname, companyemail, jobcreatoremail, jobdeadline,
+        jobdescription, customemailmsgtoapplicant, jobrequirements, applicationformurl, job_id];
+    } else if (!isJobEditing) {
+      QUERY_TO_EXECUTE = ADDDING_NEW_JOB_TMP;
+      PARAMS = [jobtitle, companyname, companyemail, jobcreatoremail, jobdeadline,
+        jobdescription, customemailmsgtoapplicant, jobrequirements, applicationformurl];
+    }
+  }
+
+  connect().query(QUERY_TO_EXECUTE, PARAMS,
     (err, results) => {
+      if (isUrlAddedToTmp) {
+        connect().query(DELETE_JOB_FROM_TMP, [job_id]);
+      }
       if (err) {
         res.status(500).send(`<span class="text-danger">
            Ooops! Something unexpected occured! so please refresh and refill the form</span>`);
@@ -220,12 +262,30 @@ export const addNewJob = (req, res, next) => {
     });
 };
 
+/** GETTING ALL JOBS */
 export const getAllJobs = (req, res, next) => {
   const { isTMP } = req.query;
   connect().query(isTMP === 'true' ? GET_ALL_JOBS_TMP : GET_ALL_JOBS, (err, results) => {
     if (err) {
       res.status(500).send(`<span class="text-danger">
       Sorry! Something strange occured, try again!</spna>`);
+    } else if (results) {
+      res.status(200).send(results.rows);
+      next();
+    }
+  });
+};
+
+/** GETTING A PARTICULAR JOB */
+export const getParticularJob = (req, res, next) => {
+  const { job_id } = req.params;
+  connect().query(GET_PARTICULAR_JOB, [job_id], (err, results) => {
+    if (err) {
+      res.status(500).send(`
+      <span class="text-danger">
+        Sorry! Something unexpected occured, we were not able to retrieve this job profile
+      </span>
+      `);
     } else if (results) {
       res.status(200).send(results.rows);
       next();

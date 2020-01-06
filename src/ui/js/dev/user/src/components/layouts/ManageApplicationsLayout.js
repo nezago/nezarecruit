@@ -28,7 +28,6 @@ import {
 import axios from 'axios';
 import classnames from 'classnames';
 import {
-  getCurrentYear,
   handleSingleApplicantClicled,
   handleBackToListClickedFromApplicantDetails,
   handleCloseSingleResultClicked,
@@ -40,6 +39,7 @@ import {
   handleSendEmailMsgBtnClicked,
 } from '../../helpers/functions/handlers';
 import { getOauth } from '../../../../../../../helpers/resources/list-of-needed-resouces';
+import { getCurrentYear } from '../../../../../../../helpers/functions/general-handlers';
 
 class ManageApplicationsLayout extends Component {
   constructor(props) {

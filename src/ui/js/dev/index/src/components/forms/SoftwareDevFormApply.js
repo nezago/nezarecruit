@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-shadow */
@@ -5,6 +6,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import {
   handleFnameTyping,
   displayYearOfBirth,
@@ -22,6 +24,7 @@ import {
 } from '../../helper-functions/handlers';
 import { checkEmailFromBb } from '../../actions/retrieveDataFromDb';
 import { submitNewApplicationForm } from '../../actions/sendDataToDb';
+import { handleDisplayJobProfile, handleApplyForThisJobBtnClicked, handleGoBackToJoDetailsClicked } from '../../helpers/functions/handlers';
 
 class SoftwareDevFormApply extends Component {
   constructor(props) {
@@ -71,6 +74,11 @@ class SoftwareDevFormApply extends Component {
       codingexperienceError: document.getElementById('codingExperienceError'),
       currentlyeployedError: document.getElementById('currentlyeployedError'),
       sendApplicationBtn: document.getElementById('send-application-btn'),
+      jobDescriptionAndRequirementsDiv: document.getElementById('job-description-and-requirements'),
+      jobDetailsDiv: document.getElementById('job-details-div'),
+      applicationDiv: document.getElementById('application-div'),
+      goBackToJobDetailsDiv: document.getElementById('back-to-job-details'),
+      feedBackDiv: document.getElementById('feedback-div'),
     };
     this.setState({ fields });
     displayNationality(fields);
@@ -78,6 +86,15 @@ class SoftwareDevFormApply extends Component {
     displayYearOfBirth(fields);
     displyEducationLevels(fields);
     displayCodingExperience(fields);
+
+    /** retrieving job's profile */
+    const { job_id } = this.props.match.params;
+    axios.get(`/jobs/jobs/${job_id}`).then((res) => {
+      const job = res.data;
+      handleDisplayJobProfile(fields, job);
+    }).catch((err) => {
+      console.log(err.response.data);
+    });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -114,14 +131,40 @@ class SoftwareDevFormApply extends Component {
     return (
       <main
         id="applicationFormDiv"
-        className="shadows mb-5 mt-5 width-98 text-white black-bordered-element black-transparent-element rounded-corners padding-15"
+        className="shadows mb-5 centered-div width-98 text-white black-bordered-element black-transparent-element rounded-corners padding-15"
       >
+        {/** JOB DETAILS */}
+        <div id="job-details-div">
+          <div id="job-description-and-requirements" className="width-80" />
+          <div className="form-group form-row">
+            <button
+              className="btn btn-primary btn-sm btn-block text-22 rounded-corners"
+              type="button"
+              onClick={() => handleApplyForThisJobBtnClicked(this)}
+            >
+              Apply for this job
+            </button>
+          </div>
+        </div>
+
+        {/** FEEDBACK */}
         <div className="hidden-div text-22 text-white padding-15 width-40" id="feedback-div" />
-        <div id="application-div">
+
+        {/** Go back to job-details btn */}
+        <div id="back-to-job-details" className="position-fixed-top-right hidden-div">
+          <button
+            type="button"
+            className="btn btn-sm btn-primary rounded-corners"
+            onClick={() => handleGoBackToJoDetailsClicked(this)}
+          >
+            Go back to job details
+          </button>
+        </div>
+        <div id="application-div" className="hidden-div">
           <div className="application-form width-50">
             <div>
               <h3 className="text-center text-success">
-                Apply for junior software engineer at Neza softwares
+                Apply for software engineer
               </h3>
 
               {/** Family name */}

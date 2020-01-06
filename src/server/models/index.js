@@ -24,8 +24,9 @@ import {
   addNewApplicationFormUrl,
   getAllApplicationFormUrls,
   checkIfApplicationFormUrlIsRegistered,
-  addNewJob,
+  addOrEditJob,
   getAllJobs,
+  getParticularJob,
 } from './job-models';
 
 export default {
@@ -45,6 +46,7 @@ export default {
   addNewApplicationFormUrl,
   getAllApplicationFormUrls,
   checkIfApplicationFormUrlIsRegistered,
-  addNewJob,
+  addOrEditJob,
   getAllJobs,
+  getParticularJob,
 };

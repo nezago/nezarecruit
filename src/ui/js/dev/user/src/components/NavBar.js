@@ -64,8 +64,9 @@ class NavBar extends Component {
                 className="dropdown-menu"
                 aria-labelledby="jobsDropdownBtn"
               >
-                <NavLink to="/create-a-job">Create a job</NavLink>
+                <NavLink to="/create-or-edit-a-job">Create a job</NavLink>
                 <NavLink to="/manage-unlinked-jobs">Unlinked jobs</NavLink>
+                <NavLink to="/manage-all-active-jobs">All active jobs</NavLink>
                 <NavLink to="/save-new-application-form-url">Save application form url</NavLink>
               </div>
             </div>

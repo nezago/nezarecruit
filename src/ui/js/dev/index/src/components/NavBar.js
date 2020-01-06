@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { Component } from 'react';
 import {
@@ -46,29 +47,22 @@ class NavBar extends Component {
 
   render() {
     const {
-      isTogglerOpen, necessaryFields, postedJobs, errorDuringJobRetrieval,
+      isTogglerOpen, necessaryFields, postedJobs,
     } = this.state;
     let jobsTitles;
     if (postedJobs) {
       jobsTitles = postedJobs.map((job) => (
         <div key={job.job_id}>
-          <div
-            className="dropdown-menu"
-            aria-labelledby="jobsDropdownBtn"
+          <NavLink
+            className="dropdown-item"
+            navlink-to-components="true"
+            to={`/jobs${job.application_form_url}/${job.job_id}`}
+            onClick={() => handleOptionClicked(necessaryFields)}
           >
-            <NavLink
-              className="dropdown-item"
-              navlink-to-components="true"
-              to={`${job.application_form_url}`}
-              onClick={() => handleOptionClicked(necessaryFields)}
-            >
-              {job.job_title}
-            </NavLink>
-          </div>
+            {job.job_title}
+          </NavLink>
         </div>
       ));
-    } else if (errorDuringJobRetrieval) {
-      console.log(errorDuringJobRetrieval);
     }
     return (
       <div>
@@ -112,7 +106,13 @@ class NavBar extends Component {
                       >
                         Jobs
                       </button>
-                      {jobsTitles}
+                      <div
+                        className="dropdown-menu"
+                        aria-labelledby="jobsDropdownBtn"
+                      >
+                        {jobsTitles}
+                      </div>
+
                     </div>
 
                   </li>

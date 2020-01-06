@@ -274,7 +274,8 @@ CREATE TABLE IF NOT EXISTS job_list_tmp (
         custom_email_msg_to_applicants TEXT,
         job_requirements TEXT,
         application_form_url VARCHAR(255),
-        job_created_on TIMESTAMPTZ); 
+        job_created_on TIMESTAMPTZ,
+        job_edited_on TIMESTAMPTZ); 
 `;
 
 export const ADDDING_NEW_JOB_TMP = `
@@ -288,8 +289,29 @@ INSERT INTO job_list_tmp(
     custom_email_msg_to_applicants,
     job_requirements,
     application_form_url,
-    job_created_on
-) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,NOW());
+    job_created_on,
+    job_edited_on
+) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,NOW(),NOW());
+`;
+
+/** UPDATING TABLE job_list_tmp */
+export const EDITING_JOB_TMP = `
+UPDATE job_list_tmp SET 
+    job_title=$1,
+    company_name=$2,
+    company_email=$3,
+    job_creator_email=$4,
+    job_deadline=$5,
+    job_description=$6,
+    custom_email_msg_to_applicants=$7,
+    job_requirements=$8,
+    application_form_url=$9,
+    job_edited_on=NOW() WHERE job_id=$10;
+`;
+
+/** deleting a job from a table job_list_tmp */
+export const DELETE_JOB_FROM_TMP = `
+DELETE FROM job_list_tmp WHERE job_id=$1;
 `;
 
 /** GETTING ALL JOBS */
@@ -318,7 +340,8 @@ CREATE TABLE IF NOT EXISTS job_list (
         custom_email_msg_to_applicants TEXT,
         job_requirements TEXT,
         application_form_url VARCHAR(255),
-        job_created_on TIMESTAMPTZ); 
+        job_created_on TIMESTAMPTZ,
+        job_edited_on TIMESTAMPTZ); 
 `;
 
 export const ADDDING_NEW_JOB = `
@@ -332,8 +355,23 @@ INSERT INTO job_list(
     custom_email_msg_to_applicants,
     job_requirements,
     application_form_url,
-    job_created_on
-) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,NOW());
+    job_created_on,
+    job_edited_on
+) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,NOW(),NOW());
+`;
+
+export const EDITING_JOB = `
+UPDATE job_list SET 
+    job_title=$1,
+    company_name=$2,
+    company_email=$3,
+    job_creator_email=$4,
+    job_deadline=$5,
+    job_description=$6,
+    custom_email_msg_to_applicants=$7,
+    job_requirements=$8,
+    application_form_url=$9,
+    job_edited_on=NOW() WHERE job_id=$10;
 `;
 
 /** GETTING ALL JOBS */
@@ -341,6 +379,9 @@ export const GET_ALL_JOBS = `
 SELECT * FROM job_list ORDER BY job_id DESC;
 `;
 
+export const GET_PARTICULAR_JOB = `
+SELECT * FROM job_list WHERE job_id=$1;
+`;
 /**
  * =========================================================================================
  * =========================================================================================
