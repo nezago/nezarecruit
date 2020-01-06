@@ -468,7 +468,8 @@ class CreateOrEditJobLayout extends Component {
             <div className="form-group form-row">
               <div className="col-md-6">
                 <button
-                  onClick={() => handleJobDetailsEditorsInitialize(this)}
+                  onClick={() => handleJobDetailsEditorsInitialize(this,
+                    this.state.necessaryFields, null)}
                   type="button"
                   className="btn btn-primary rounded-corners"
                 >
