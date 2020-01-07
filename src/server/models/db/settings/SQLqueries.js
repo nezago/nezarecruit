@@ -411,3 +411,36 @@ SELECT * FROM application_form_urls ORDER BY url_id DESC;
 export const CHECK_IF_APPLICATION_FORM_URL_EXISTS = `
 SELECT EXISTS(SELECT 1 FROM application_form_urls WHERE application_form_url = $1);
 `;
+
+/**
+ * ==============================================================================
+ * ==============================================================================
+ * =====================TABLE USER-LOGS==========================================
+ * ==============================================================================
+ * ==============================================================================
+ */
+export const CREATE_TABLE_USER_LOGS = `
+DROP TABLE IF EXISTS user_logs CASCADE; 
+CREATE TABLE IF NOT EXISTS user_logs(
+    user_log_id SERIAL PRIMARY KEY,
+    user_id INT,
+    user_action VARCHAR(255),
+    user_log_time TIMESTAMPTZ,
+    CONSTRAINT user_log_fk FOREIGN KEY(user_id) 
+    REFERENCES users(user_id));
+`;
+
+/** INSERTING NEW LOG */
+export const ADD_NEW_USER_LOG = `
+INSERT INTO user_logs(user_id, user_action, user_log_time) VALUES($1, $2, NOW());
+`;
+
+/** GETTING ALL LOGS */
+export const GET_ALL_LOGS = `
+SELECT * FROM user_logs ORDER BY user_log_id DESC;
+`;
+
+/** GETTING A PARTICULAR LOG */
+export const GET_PARTICULAR_LOG = `
+SELECT * FROM user_logs WHERE user_id
+`;
