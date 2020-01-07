@@ -24,7 +24,9 @@ import {
 } from '../../helper-functions/handlers';
 import { checkEmailFromBb } from '../../actions/retrieveDataFromDb';
 import { submitNewApplicationForm } from '../../actions/sendDataToDb';
-import { handleDisplayJobProfile, handleApplyForThisJobBtnClicked, handleGoBackToJoDetailsClicked } from '../../helpers/functions/handlers';
+import {
+  handleDisplayJobProfile, handleApplyForThisJobBtnClicked, handleGoBackToJoDetailsClicked,
+} from '../../helpers/functions/handlers';
 
 class SoftwareDevFormApply extends Component {
   constructor(props) {
@@ -93,7 +95,7 @@ class SoftwareDevFormApply extends Component {
       const job = res.data;
       handleDisplayJobProfile(fields, job);
     }).catch((err) => {
-      console.log(err.response.data);
+      handleDisplayJobProfile(fields, err.response.data);
     });
   }
 

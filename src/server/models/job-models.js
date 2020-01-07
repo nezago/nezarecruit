@@ -280,13 +280,16 @@ export const getParticularJob = (req, res, next) => {
   const { job_id } = req.params;
   connect().query(GET_PARTICULAR_JOB, [job_id], (err, results) => {
     if (err) {
-      res.status(500).send(`
+      res.status(500).send({
+        isJobRetrieved: false,
+        result: `
       <span class="text-danger">
         Sorry! Something unexpected occured, we were not able to retrieve this job profile
       </span>
-      `);
+      `,
+      });
     } else if (results) {
-      res.status(200).send(results.rows);
+      res.status(200).send({ isJobRetrieved: true, result: results.rows });
       next();
     }
   });

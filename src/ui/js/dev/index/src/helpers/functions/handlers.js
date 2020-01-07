@@ -20,18 +20,16 @@ export const handleToggler = (component) => {
 /** JOB PROFILE */
 export const handleDisplayJobProfile = (necessaryFields, job) => {
   const { jobDescriptionAndRequirementsDiv } = necessaryFields;
-  const jobDetails = `
+  const jobDetails = job.isJobRetrieved ? (`
   <div class="text-center color-rigth-grey-transparent border-darken-4 rounded-corners mb-2 width-98">
-  <h3>${job[0].job_title} at ${job[0].company_name}</h3><br/><hr/>
+  <h3>${job.result[0].job_title} at ${job.result[0].company_name}</h3><br/><hr/>
   <span class="text-22">Job deadline : </span>
-  <span class="text-17">${getDateFromDateTime(job[0].job_deadline)}</span><br/>
+  <span class="text-17">${getDateFromDateTime(job.result[0].job_deadline)}</span><br/>
   <span class="text-22">Job description:</span>
-  <span>${job[0].job_description}</span><br/>
+  <span>${job.result[0].job_description}</span><br/>
   <span class="text-22">Job Requirements</span>
-  <span>${job[0].job_requirements}</span><br/>
-  </div>
-  `;
-  console.log(job);
+  <span>${job.result[0].job_requirements}</span><br/>
+  </div>`) : job.result;
   jobDescriptionAndRequirementsDiv.innerHTML = jobDetails;
 };
 
