@@ -29,6 +29,15 @@ import {
   getParticularJob,
 } from './job-models';
 
+import {
+  addNewUserLog,
+  getAllUsersLogs,
+  getUserLogByUserId,
+  getUserLogByLogId,
+  getUserLogByDates,
+  getUserLogByDatesAndUserId,
+} from './user-logs-models';
+
 export default {
   addNewUserToDb,
   checkIfEmailExistFromTableUsers,
@@ -49,4 +58,10 @@ export default {
   addOrEditJob,
   getAllJobs,
   getParticularJob,
+  addNewUserLog,
+  getAllUsersLogs,
+  getUserLogByUserId,
+  getUserLogByLogId,
+  getUserLogByDates,
+  getUserLogByDatesAndUserId,
 };

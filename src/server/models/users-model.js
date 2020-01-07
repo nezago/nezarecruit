@@ -69,6 +69,7 @@ export const userLogin = (req, res, next) => {
         const foundUserPassword = foundUser.password;
         if (checkPassword(password, foundUserPassword)) {
           const userInfoToSend = {
+            user_id: foundUser.user_id,
             fname: foundUser.fname,
             midname: foundUser.middle_name,
             lname: foundUser.lname,

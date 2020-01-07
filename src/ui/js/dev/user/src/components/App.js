@@ -5,12 +5,10 @@ import '../../../../../styles/nezado-custom-styles.css';
 import 'react-datepicker/dist/react-datepicker.min.css';
 
 /** OTHER IMPORTING */
-import { Provider } from 'react-redux';
 import { HashRouter as Router, Route } from 'react-router-dom';
 
 /** IMPORTING COMPONENTS */
 import React from 'react';
-import store from '../store';
 import NavBar from './NavBar';
 import ManageApplicationsLayout from './layouts/ManageApplicationsLayout';
 import ManageApplicantEmailsLayout from './layouts/ManageApplicantEmailsLayout';
@@ -24,54 +22,52 @@ import ManageActiveJobs from './layouts/ManageActiveJobs';
 function App() {
   return (
     <div>
-      <Provider store={store}>
-        <Router>
-          <Route>
-            <NavBar />
-            <div className="mt-5" />
-            <Route
-              exact
-              path="/manage-all-applications"
-              component={ManageApplicationsLayout}
-            />
-            <Route
-              exact
-              path="/manage-all-applicants-e-mails"
-              component={ManageApplicantEmailsLayout}
-            />
-            <Route
-              exact
-              path="/manage-homepage"
-              component={ManageHomepageLayout}
-            />
-            <Route
-              exact
-              path="/create-or-edit-a-job"
-              component={CreateOrEditJobLayout}
-            />
-            <Route
-              exact
-              path="/manage-unlinked-jobs"
-              component={ManageUnlinkedJobs}
-            />
-            <Route
-              exact
-              path="/manage-all-active-jobs"
-              component={ManageActiveJobs}
-            />
-            <Route
-              exact
-              path="/user-profile"
-              component={LoggedInUserProfileLayout}
-            />
-            <Route
-              exact
-              path="/save-new-application-form-url"
-              component={SavingNewApplicationFormUrlInDb}
-            />
-          </Route>
-        </Router>
-      </Provider>
+      <Router>
+        <Route>
+          <NavBar />
+          <div className="mt-5" />
+          <Route
+            exact
+            path="/"
+            component={LoggedInUserProfileLayout}
+          />
+          <Route
+            exact
+            path="/manage-all-applications"
+            component={ManageApplicationsLayout}
+          />
+          <Route
+            exact
+            path="/manage-all-applicants-e-mails"
+            component={ManageApplicantEmailsLayout}
+          />
+          <Route
+            exact
+            path="/manage-homepage"
+            component={ManageHomepageLayout}
+          />
+          <Route
+            exact
+            path="/create-or-edit-a-job"
+            component={CreateOrEditJobLayout}
+          />
+          <Route
+            exact
+            path="/manage-unlinked-jobs"
+            component={ManageUnlinkedJobs}
+          />
+          <Route
+            exact
+            path="/manage-all-active-jobs"
+            component={ManageActiveJobs}
+          />
+          <Route
+            exact
+            path="/save-new-application-form-url"
+            component={SavingNewApplicationFormUrlInDb}
+          />
+        </Route>
+      </Router>
     </div>
 
   );

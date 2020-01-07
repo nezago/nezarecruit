@@ -55,6 +55,11 @@ export const CHECK_EMAIL_FROM_TABLE_USERS = `
 SELECT EXISTS(SELECT 1 FROM users WHERE email = $1);
 `;
 
+/** CHECKING IF A USER_ID EXISTS FROM TABLE USERS OR NOT */
+export const CHECK_USER_ID_FROM_TABLE_USERS = `
+SELECT EXISTS(SELECT 1 FROM users WHERE user_id = $1);
+`;
+
 /** GET A USER BY EMAIL */
 export const GET_USER_BY_EMAIL = `
 SELECT * FROM users WHERE email=$1;
@@ -441,6 +446,21 @@ SELECT * FROM user_logs ORDER BY user_log_id DESC;
 `;
 
 /** GETTING A PARTICULAR LOG */
-export const GET_PARTICULAR_LOG = `
-SELECT * FROM user_logs WHERE user_id
+export const GET_PARTICULAR_LOG_BY_USER_ID = `
+SELECT * FROM user_logs WHERE user_id=$1;
+`;
+
+/** GETTING A PARTICULAR LOG */
+export const GET_PARTICULAR_LOG_BY_LOG_ID = `
+SELECT * FROM user_logs WHERE user_log_id=$1;
+`;
+
+/** GETTING A PARTICULAR LOG */
+export const GET_PARTICULAR_LOG_BY_LOG_DATES = `
+SELECT * FROM user_logs WHERE user_log_time BETWEEN $1 AND $2;
+`;
+
+/** GETTING A PARTICULAR LOG */
+export const GET_PARTICULAR_LOG_BY_LOG_DATES_AND_USER_ID = `
+SELECT * FROM user_logs WHERE user_id=$1 AND user_log_time BETWEEN $2 AND $3;
 `;

@@ -95,7 +95,7 @@ class NavBar extends Component {
               <Row>
                 <div className="col-md-12 text-center">
                   {userAuthorities === 'SUPERUSER' ? SUPERUSER_NAV_ITEMS : ''}
-                  <NavLink className="btn btn-sm btn-outline-primary" to="/user-profile">{userFname}</NavLink>
+                  <NavLink className="btn btn-sm btn-outline-primary" to="/">{userFname}</NavLink>
                   <button
                     className="btn btn-sm btn-outline-danger rounded-corners"
                     type="button"

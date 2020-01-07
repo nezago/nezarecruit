@@ -1,4 +1,6 @@
 import { validateEmail, validatePassword, validateFname } from '../../helpers/functions/validations';
+import connect from '../models/db/settings/connectToDb';
+import { CHECK_USER_ID_FROM_TABLE_USERS } from '../models/db/settings/SQLqueries';
 
 
 /** ====================================================================================
@@ -92,8 +94,7 @@ export const validateJob = (req, res, next) => {
   } = req.body;
   if (jobtitle.length === 0) {
     res.status(400).send(`<span class="text-danger">
-    You must precise your job title</span
-    `);
+    You must precise your job title</span>    `);
   } else if (companyname.length === 0) {
     res.status(400).send(`<span class="text-danger">
     Enter your company name</span>`);
@@ -113,5 +114,64 @@ export const validateJob = (req, res, next) => {
     and resend your job</span>`);
   } else {
     next();
+  }
+};
+
+/**
+ * ==============================================================================
+ * ==============================================================================
+ * ===============================VALIDATE USER LOGS=============================
+ * ==============================================================================
+ * ==============================================================================
+ */
+
+export const validateUserLog = (req, res, next) => {
+  const {
+    userid, useraction,
+  } = req.body;
+
+  if (userid) {
+    if (userid) {
+      connect().query(CHECK_USER_ID_FROM_TABLE_USERS, [parseInt(userid)], (err, result) => {
+        if (err) {
+          res.status({
+            isUserVerifiedFromDb: false,
+            info: `<span class="text-danger">Sorry! Something wrong occured, 
+          so please refresh the browser and try again!</span>`,
+          });
+        } else if (result) {
+          if (result.rows[0].exists) {
+            res.status(200).send({
+              isUserVerifiedFromDb: true,
+              info: '<span class="text-success">The user exists in our database</span>',
+            });
+            /** CHECKING IF THE USER_ACTION IS NOT EMPTY */
+            if (useraction) {
+              next();
+            } else {
+              res.status(400).send({
+                isUserLogValid: false,
+                info: '<span class="text-danger">Sorry! The user log is not well captured</span>',
+              });
+            }
+          } else {
+            res.status(404).send({
+              isUserVerifiedFromDb: true,
+              info: '<span class="text-danger">Sorry, this user doesn\'t exist in our databases</span>',
+            });
+          }
+        } else {
+          res.status(500).send({
+            isUserVerifiedFromDb: false,
+            info: '<span class="text-danger">Sorry! Failed to verify a user from the database</span>',
+          });
+        }
+      });
+    }
+  } else {
+    res.status(400).send({
+      isUserVerifiedFromDb: false,
+      info: '<span class="text-danger">Failed to get user-id, you can refresh the browser, and try again!</span>',
+    });
   }
 };

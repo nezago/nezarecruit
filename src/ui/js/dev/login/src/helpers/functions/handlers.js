@@ -117,7 +117,13 @@ export const handleSubmitSignupForm = (component, inputFields, submitForm) => {
             if (dob.length !== 0) {
               dobError.innerHTML = '';
               submitForm({
-                fname, midname, lname, dateofbirth: dob, email, password, userauthorities: 'SUPERUSER',
+                fname,
+                midname,
+                lname,
+                dateofbirth: dob,
+                email,
+                password,
+                userauthorities: 'SUPERUSER',
               });
             } else {
               dobError.innerHTML = 'Enter your date of birth';
