@@ -117,7 +117,6 @@ export const addOrEditJob = (req, res, next) => {
     isJobFromTmp,
   } = req.body;
 
-  console.log(req.body);
   let QUERY_TO_EXECUTE;
   let PARAMS;
   let isUrlAddedToTmp = false;

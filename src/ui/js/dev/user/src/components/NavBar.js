@@ -67,7 +67,7 @@ class NavBar extends Component {
                 <NavLink to="/create-or-edit-a-job">Create a job</NavLink>
                 <NavLink to="/manage-unlinked-jobs">Unlinked jobs</NavLink>
                 <NavLink to="/manage-all-active-jobs">All active jobs</NavLink>
-                <NavLink to="/save-new-application-form-url">Save application form url</NavLink>
+                <NavLink to="/save-new-application-form-url">Register a url</NavLink>
               </div>
             </div>
 

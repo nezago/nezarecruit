@@ -26,7 +26,7 @@ class SavingNewApplicationFormUrlInDb extends Component {
       urlCheckSpinnerHolderSpan: document.getElementById('url-check-spinner-holder-span'),
     };
     this.setState({ necessaryFields });
-    // handleApplicationFormUrlEditorInitialize(this);
+    // handleApplicationFormUrlEditorInitialize(necessaryFields);
   }
 
   render() {
@@ -39,7 +39,7 @@ class SavingNewApplicationFormUrlInDb extends Component {
               placeholder="Type or paste an application form url here"
               className="form-control form-control-lg col-md-10"
               id="url-text-input-field"
-              onChange={() => handleApplicationFormUrlTyping(this)}
+              onChange={() => handleApplicationFormUrlTyping(this.state.necessaryFields, this)}
             />
             <button
               type="button"
@@ -75,7 +75,7 @@ class SavingNewApplicationFormUrlInDb extends Component {
               type="button"
               className="col-md-6 btn btn-sm btn-danger"
             >
-Go back to your profile
+              Go back to your profile
             </button>
           </div>
         </div>

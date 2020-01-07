@@ -937,7 +937,6 @@ export const handleSaveJobBtnClicked = (component) => {
       isJobFromTmp,
     };
 
-    console.log(datatosend);
     axios.post('/jobs/add-or-edit-job', datatosend, { headers: getOauth() }).then((res) => {
       saveJobdetailsResultDiv.classList.remove('hidden-div');
       jobDetailsEditorDiv.classList.add('hidden-div');
@@ -1006,13 +1005,13 @@ export const handleJobDetailsEditorsInitialize = (component, necessaryFields, jo
  * ==============================================================================
  * ==============================================================================
  * */
-export const handleApplicationFormUrlTyping = (component) => {
+export const handleApplicationFormUrlTyping = (necessaryFields, component) => {
   const {
     urlTextInputField,
     urlCheckingDiv,
     urlCheckingResultSpan,
     urlCheckSpinnerHolderSpan,
-  } = component.state.necessaryFields;
+  } = necessaryFields;
   const applicationformurl = urlTextInputField.value;
   if (applicationformurl.length !== 0) {
     urlCheckingDiv.classList.remove('hidden-div');

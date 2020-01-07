@@ -103,6 +103,8 @@ class CreateOrEditJobLayout extends Component {
       this.setState({ job });
     }
     handleJobDetailsEditorsInitialize(this, necessaryFields, job);
+
+    handleApplicationFormUrlTyping(necessaryFields, this);
   }
 
   handlejobdeadline = (date) => {
@@ -380,7 +382,9 @@ class CreateOrEditJobLayout extends Component {
                     id="url-text-input-field"
                     placeholder="eg.: https://recruit.neza.com/jobs/14345"
                     className="col-md-8 form-control form-control-sm rounded-corners"
-                    onChange={() => handleApplicationFormUrlTyping(this)}
+                    onChange={
+                      () => handleApplicationFormUrlTyping(this.state.necessaryFields, this)
+                    }
                   />
                 </label>
                 {/** checking in database, if the url he/she is looking for is saved in db */}
