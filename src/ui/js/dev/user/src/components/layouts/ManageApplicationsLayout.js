@@ -283,7 +283,7 @@ class ManageApplicationsLayout extends Component {
     return (
       <div className="color-dark-purple h-100 position-absolute-top-left w-100 mt-5">
         {/** LEFT-SIDE BAR */}
-        <div className=" aside-bar position-absolute-top-left text-white h-100">
+        <div className="aside-bar position-absolute-top-left text-white h-100">
           <ul className="nav flex-column mr-auto">
             {/** ALL APPLICATIONS TAB */}
             <li>

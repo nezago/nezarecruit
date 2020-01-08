@@ -447,7 +447,7 @@ SELECT * FROM user_logs ORDER BY user_log_id DESC;
 
 /** GETTING A PARTICULAR LOG */
 export const GET_PARTICULAR_LOG_BY_USER_ID = `
-SELECT * FROM user_logs WHERE user_id=$1;
+SELECT * FROM user_logs WHERE user_id=$1 ORDER BY user_log_id DESC;
 `;
 
 /** GETTING A PARTICULAR LOG */

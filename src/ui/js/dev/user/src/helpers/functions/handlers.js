@@ -11,9 +11,17 @@ import {
   getUserInfo,
 } from '../../../../../../../helpers/resources/list-of-needed-resouces';
 import { validateEmail } from '../../../../../../../helpers/functions/validations';
-import { getCurrentYear, getDateFromDateTime, getTimeFromDateTime } from '../../../../../../../helpers/functions/general-handlers';
+import {
+  getCurrentYear, getDateFromDateTime, getTimeFromDateTime,
+} from '../../../../../../../helpers/functions/general-handlers';
 
-/** handlers */
+/**
+ * =============================================================================
+ * =============================================================================
+ * ==========FUNCTIONS TO HANDLE MANAGE APPLICATIONS LAYOUT=====================
+ * =============================================================================
+ * =============================================================================
+*/
 export const handleAsideNavItemClicked = (event, necessaryFields) => {
   const currClickedTabId = event.target.id;
   const currClickedDiv = document.getElementById(currClickedTabId);
@@ -108,6 +116,11 @@ export const handleSingleApplicantClicled = (event, application, necessaryFields
 
     axios.post('/applications/update-read-from-application-table',
       { application_id: application.application_id });
+    /** saving a log */
+    const useraction = `reviewed application of an applicant with email ${application.email}`;
+    axios.post('/user-logs/add-new-user-log',
+      { userid: getUserInfo().user_id, useraction }, { headers: getOauth() });
+
     applicantDetails.innerHTML = (`
   <div class="color-grey-transparent">
     <div>
@@ -183,7 +196,7 @@ export const handleSingleSentEmailClicked = (event, singleSentEmail, necessaryFi
   } = necessaryFields;
   if (event.target.tagName !== 'BUTTON') {
     /**
-     * ********PREPARING WORKING EVIRONMENT***********
+     * ********PREPARING WORKING ENVIRONMENT***********
      *
      *  1.hiding and unhiding some divs
      *
@@ -465,6 +478,7 @@ export const displayFontSizes = (fontSize) => {
   });
 };
 
+/** SENDING AN EMAIL */
 export const handleSendEmailMsgBtnClicked = (necessaryFields) => {
   const {
     recipientEmail,
@@ -479,7 +493,6 @@ export const handleSendEmailMsgBtnClicked = (necessaryFields) => {
     sendEmailResultContainer,
     sendEmailErrorDiv,
   } = necessaryFields;
-
 
   const emailMsgHtml = emailMsgIframe.contentDocument || emailMsgIframe.contentWindow.document;
   const emailAddr = recipientEmail.value;
@@ -539,6 +552,11 @@ export const handleSendEmailMsgBtnClicked = (necessaryFields) => {
         sendEmailResultContainer.innerHTML = res.data.message;
         axios.post('/applications/update-replied-from-application-table',
           { email: emailAddr, status: true });
+
+        /** saving a log */
+        const useraction = `sent email to ${emailAddr}`;
+        axios.post('/user-logs/add-new-user-log',
+          { userid: getUserInfo().user_id, useraction }, { headers: getOauth() });
       }).catch((err) => {
         emailingDiv.classList.add('hidden-div');
         sendEmailResultDiv.classList.remove('hidden-div');
@@ -548,10 +566,12 @@ export const handleSendEmailMsgBtnClicked = (necessaryFields) => {
   }
 };
 
-/** ============================================================================
- *
- * HANDLE MANAGE HOMEPAGE
- *
+/**
+ *============================================================================
+ *============================================================================
+ *========================HANDLE MANAGE HOMEPAGE==============================
+ *============================================================================
+ * ===========================================================================
  */
 export const displayFontSizesInManageHomepage = (fontSizeField) => {
   getFontSizes().forEach((currFontSize) => {
@@ -721,10 +741,10 @@ export const handleSaveAmanage = (necessaryFields) => {
   } else {
     currUserEmail = '';
   }
-  const whatNezarecruitDoc = whyNezarecruitIframe.contentDocument
-    || whyNezarecruitIframe.contentWindow.document;
-  const whyNezaRecruitDoc = emailMsgIframe.contentDocument
+  const whatNezarecruitDoc = emailMsgIframe.contentDocument
     || emailMsgIframe.contentWindow.document;
+  const whyNezaRecruitDoc = whyNezarecruitIframe.contentDocument
+    || whyNezarecruitIframe.contentWindow.document;
 
   const whatNezaHtml = whatNezarecruitDoc.body.innerHTML;
   const whyNezaHtml = whyNezaRecruitDoc.body.innerHTML;
@@ -756,6 +776,11 @@ export const handleSaveAmanage = (necessaryFields) => {
         dataToSend, { headers: getOauth() }).then((res) => {
         saveManageResultDiv.classList.remove('hidden-div');
         saveManageResultContainer.innerHTML = `<span>${res.data}</span>`;
+
+        /** saving a log */
+        const useraction = 'saved a new manage homepage';
+        axios.post('/user-logs/add-new-user-log',
+          { userid: getUserInfo().user_id, useraction }, { headers: getOauth() });
       }).catch((err) => {
         saveManageResultDiv.classList.remove('hidden-div');
         saveManageResultContainer.innerHTML = `<span>${err.response.data}</span>`;
@@ -941,6 +966,32 @@ export const handleSaveJobBtnClicked = (component) => {
       saveJobdetailsResultDiv.classList.remove('hidden-div');
       jobDetailsEditorDiv.classList.add('hidden-div');
       saveJobdetailsResultContainer.innerHTML = res.data;
+      /** saving a log */
+      let useraction;
+      if (isUrlRegistered) {
+        if (isJobEditing) {
+          if (isJobFromTmp) {
+            // creating new job
+            useraction = `moved job from temp to active job list, NAME OF JOB : ${jobtitle}`;
+          } else if (!isJobFromTmp) {
+            // editing a job
+            useraction = `edited active job, NAME OF JOB : ${jobtitle}`;
+          }
+        } else if (!isJobEditing) {
+          // creating a new job
+          useraction = `created new job, NAME OF JOB : ${jobtitle}`;
+        }
+      } else if (!isUrlRegistered) {
+        if (isJobEditing) {
+          // editing  a job
+          useraction = `edited a tmp job, NAME OF JOB : ${jobtitle}`;
+        } else if (!isJobEditing) {
+          // creating a new job
+          useraction = `created a new tmp job, NAME OF JOB : ${jobtitle}`;
+        }
+      }
+      axios.post('/user-logs/add-new-user-log',
+        { userid: getUserInfo().user_id, useraction }, { headers: getOauth() });
     }).catch((err) => {
       saveJobdetailsResultDiv.classList.remove('hidden-div');
       saveJobdetailsResultContainer.innerHTML = err.response.data;
@@ -1067,6 +1118,11 @@ export const handleSaveApplicationFormUrlBtnClicked = (component) => {
           urlFormSaveResultsContainerDiv.classList.remove('hidden-div');
           urlCheckingDiv.classList.add('hidden-div');
           urlResultsFromDb.innerHTML = result.info;
+
+          /** saving a log */
+          const useraction = `registered a url, NAME OF THE URL ${applicationformurl}`;
+          axios.post('/user-logs/add-new-user-log',
+            { userid: getUserInfo().user_id, useraction }, { headers: getOauth() });
         } else {
           urlCheckSpinnerHolderSpan.classList.add('hidden-div');
           urlCheckingResultSpan.innerHTML = result.info;

@@ -310,6 +310,14 @@ figure.homepage-book-cover-back{
 }
 
 /* COLORS */
+.color-primary{
+  background-color: rgb(75, 3, 75);
+  color:rgb(255, 255, 255);
+}
+.color-accent{
+  background-color: rgb(229, 5, 236);
+  color:rgb(255, 255, 255);
+}
 .color-black {
   background: #000;
   color: #fff;
@@ -350,6 +358,9 @@ figure.homepage-book-cover-back{
 
 .centered-div{
   margin: 10% auto;
+}
+.centered-element{
+  margin: auto auto auto auto;
 }
 /* SHOWING THE MANAGE APPLICATIONS PROFILE*/
 .aside-bar {

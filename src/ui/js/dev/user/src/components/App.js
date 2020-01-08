@@ -18,6 +18,7 @@ import LoggedInUserProfileLayout from './layouts/LoggedInUserProfileLayout';
 import ManageUnlinkedJobs from './layouts/ManageUnlinkedJobs';
 import SavingNewApplicationFormUrlInDb from './layouts/SavingNewApplicationFormUrlInDb';
 import ManageActiveJobs from './layouts/ManageActiveJobs';
+import DefaultLoginHomepage from './layouts/DefaultLoginHomepage';
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
           <Route
             exact
             path="/"
-            component={LoggedInUserProfileLayout}
+            component={DefaultLoginHomepage}
           />
           <Route
             exact
@@ -65,6 +66,12 @@ function App() {
             exact
             path="/save-new-application-form-url"
             component={SavingNewApplicationFormUrlInDb}
+          />
+
+          <Route
+            exact
+            path="/user-profile/:userfname"
+            component={LoggedInUserProfileLayout}
           />
         </Route>
       </Router>
