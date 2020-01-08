@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { getUserInfo, getOauth } from '../../../../../../../helpers/resources/list-of-needed-resouces';
