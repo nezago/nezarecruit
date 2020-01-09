@@ -9,6 +9,7 @@ import { Container, Row } from 'reactstrap';
 import DatePicker from 'react-datepicker';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { FaLock, FaLockOpen } from 'react-icons/fa';
 import { submitNewUser } from '../../actions/sendDataToDb';
 import { checkEmailFromTableUsers } from '../../actions/retrieveDataFromDb';
 import {
@@ -18,6 +19,7 @@ import {
   handleEmailTyping,
   handlePasswordTyping,
   handleConfirmPasswordTyping,
+  handleIdCardNumberTyping,
 } from '../../helpers/functions/handlers';
 
 class SignupForm extends Component {
@@ -41,29 +43,23 @@ class SignupForm extends Component {
   }
 
   componentDidMount() {
-    const dateInput = document.getElementById('dateOfBirth');
-    const fnameError = document.getElementById('fnameError');
-    const dobError = document.getElementById('dobError');
-    const emailError = document.getElementById('emailError');
-    const passwordField = document.getElementById('password');
-    const passwordError = document.getElementById('passwordError');
-    const confirmpasswordField = document.getElementById('confirmpassword');
-    const confirmpasswordError = document.getElementById('confirmpasswordError');
-    let inputFields;
-
-    if (dateInput && fnameError && dobError && emailError && passwordField && passwordError
-      && confirmpasswordField && confirmpasswordError) {
-      inputFields = {
-        dateInput,
-        fnameError,
-        dobError,
-        emailError,
-        passwordField,
-        passwordError,
-        confirmpasswordField,
-        confirmpasswordError,
-      };
-    }
+    const inputFields = {
+      dateInput: document.getElementById('dateOfBirth'),
+      fnameError: document.getElementById('fnameError'),
+      dobError: document.getElementById('dobError'),
+      emailError: document.getElementById('emailError'),
+      passwordField: document.getElementById('password'),
+      passwordError: document.getElementById('passwordError'),
+      confirmpasswordField: document.getElementById('confirmpassword'),
+      confirmpasswordError: document.getElementById('confirmpasswordError'),
+      checkIdCardNumberDiv: document.getElementById('check-id-card-number-div'),
+      idCardNumberInputField: document.getElementById('id-card-input-field'),
+      resultDivHolder: document.getElementById('result-div-holder'),
+      unlockSignupFormBtn: document.getElementById('unlock-signup-form-btn'),
+      spanLocked: document.getElementById('span-locked'),
+      spanUnlocked: document.getElementById('span-unlocked'),
+      spanLockInfoHolder: document.getElementById('span-locked-info-holder'),
+    };
     this.setState({ inputFields });
   }
 
@@ -99,7 +95,55 @@ class SignupForm extends Component {
           id="applicationFormDiv"
           className="shadows mb-5 mt-5 width-98 text-white black-bordered-element black-transparent-element rounded-corners padding-15"
         >
-          <div className="col-md-4 application-form">
+
+          {/** CHECKING FIRST IF THE USER IS ALLOWED TO SIGNUP */}
+          <div
+            className="p-5 rounded-corners color-grey-transparent heigth-40 width-60 centered-div"
+            id="check-id-card-number-div"
+          >
+            <div className="form-group form-row mb-2">
+              <input
+                type="text"
+                id="id-card-input-field"
+                className="form-control form-control-lg col-md-12 rounded-corners"
+                placeholder="Enter your ID Card number here"
+                onChange={() => handleIdCardNumberTyping(this)}
+              />
+            </div>
+            <div
+              className=" color-black p-5 mb-2 rounded-corners text-center"
+              id="result-div-holder"
+            >
+              <h3>Your Id card is your key to unlock the Signup form</h3>
+
+            </div>
+            <div className="mb-2 form-group form-row">
+              <button
+                type="button"
+                className="btn btn-danger btn-sm btn-block rounded-corners"
+                id="unlock-signup-form-btn"
+                disabled
+              >
+                <span className="text-22 mr-2" id="span-locked">
+                  <FaLock />
+                  <FaLock />
+                  <FaLock />
+                </span>
+                <span className="text-22" id="span-locked-info-holder">Signup form is Locked</span>
+                <span className="text-22 ml-2 hidden-div" id="span-unlocked">
+                  <FaLockOpen />
+                  <FaLockOpen />
+                  <FaLockOpen />
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/** APPLICATION FORM */}
+          <div
+            id="application-container"
+            className="col-md-4 application-form hidden-div"
+          >
             <div>
               <h3 className="text-center text-success">Register</h3>
 

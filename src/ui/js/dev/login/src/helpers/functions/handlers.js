@@ -1,9 +1,11 @@
 /* eslint-disable prefer-destructuring */
+import axios from 'axios';
 import {
   validateFname,
   validateEmail,
   validatePassword,
 } from '../../../../../../../helpers/functions/validations';
+
 
 /** DATES AND TIMES */
 export const handleDateOfBirth = (dateOfBirth) => {
@@ -142,5 +144,42 @@ export const handleSubmitSignupForm = (component, inputFields, submitForm) => {
     }
   } else {
     fnameError.innerHTML = 'Family name must have atleast 2 characters!';
+  }
+};
+
+/**
+ * ================================================================================
+ * ================================================================================
+ * ==========================FUNCTIONS TO HANDLE CHECK ID CARD NUMBER==============
+ * ================================================================================
+ * ================================================================================
+ */
+export const handleIdCardNumberTyping = (component) => {
+  const {
+    idCardNumberInputField,
+    resultDivHolder,
+    unlockSignupFormBtn,
+    spanLocked,
+    spanUnlocked,
+    spanLockInfoHolder,
+  } = component.state.inputFields;
+  const typedIdCardNumber = idCardNumberInputField.value;
+  if (typedIdCardNumber.length === 16) {
+    resultDivHolder.innerHTML = '<span class="spinner-border spinner-border-lg text-warning"/>';
+    axios.post('/user-id-card-number/check-if-id-card-number-exists',
+      { useridcardnumber: typedIdCardNumber }).then((res) => {
+      const response = res.data;
+      if (response.isUserIdchecked) {
+        if (response.info) {
+          resultDivHolder.innerHTML = '<span class="text-success">Congratulations, Go ahead!</span>';
+        } else {
+          resultDivHolder.innerHTML = '<span class="text-danger">Sorry! This ID Card number is not registered yet</span>';
+        }
+      }
+    }).catch((err) => {
+      console.log(err.response.data);
+    });
+  } else {
+    resultDivHolder.innerHTML = 16 - typedIdCardNumber.length;
   }
 };
