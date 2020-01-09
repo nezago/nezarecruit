@@ -13,11 +13,18 @@ import {
   CREATE_TABLE_APPLICATION_FORM_URLS,
   CREATE_TABLE_USER_LOGS,
   CREATE_TABLE_USERS_ID_CARD_NUMBERS,
+  ADD_DEFAULT_USER_ID_CARD_NUMBER,
 } from '../settings/SQLqueries';
 
 dotenv.config();
 
 const migrateTables = async (isDone) => {
+  console.log('creating table users_id_card_numbers ...');
+  await connect().query(CREATE_TABLE_USERS_ID_CARD_NUMBERS);
+
+  console.log('inserting descholar\'s as default user in users_id_card_numbers ...');
+  await connect().query(ADD_DEFAULT_USER_ID_CARD_NUMBER);
+
   console.log('creating table users... ');
   await connect().query(CREATE_TABLE_USERS);
 
@@ -50,9 +57,6 @@ const migrateTables = async (isDone) => {
 
   console.log('creating table user_logs ...');
   await connect().query(CREATE_TABLE_USER_LOGS);
-
-  console.log('creating table users_id_card_numbers ...');
-  await connect().query(CREATE_TABLE_USERS_ID_CARD_NUMBERS);
 
   if (isDone) { isDone(); }
   process.exit(0);

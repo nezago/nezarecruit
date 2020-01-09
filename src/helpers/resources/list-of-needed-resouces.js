@@ -308,3 +308,9 @@ export const getUserInfo = () => {
   const token = localStorage.getItem('oauth');
   return jwt.decode(token);
 };
+
+export const getUserAuthorities = () => [
+  'SUPERUSER',
+  'ADMIN',
+  'NORMAL USER',
+];

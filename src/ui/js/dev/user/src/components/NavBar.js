@@ -89,8 +89,7 @@ class NavBar extends Component {
                 className="dropdown-menu"
                 aria-labelledby="jobsDropdownBtn"
               >
-                <NavLink to="/create-or-edit-a-job">Add a User</NavLink>
-                <NavLink to="/manage-unlinked-jobs">Register user&apos;s ID Number</NavLink>
+                <NavLink to="/register-new-user-id-number">Register user&apos;s ID Number</NavLink>
                 <NavLink to="/manage-all-active-jobs">View all users</NavLink>
                 <NavLink to="/save-new-application-form-url">Get a particular user</NavLink>
               </div>

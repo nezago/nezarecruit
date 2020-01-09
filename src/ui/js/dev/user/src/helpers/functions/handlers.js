@@ -9,8 +9,9 @@ import {
   getFontSizes,
   getOauth,
   getUserInfo,
+  getUserAuthorities,
 } from '../../../../../../../helpers/resources/list-of-needed-resouces';
-import { validateEmail } from '../../../../../../../helpers/functions/validations';
+import { validateEmail, validateFname } from '../../../../../../../helpers/functions/validations';
 import {
   getCurrentYear, getDateFromDateTime, getTimeFromDateTime,
 } from '../../../../../../../helpers/functions/general-handlers';
@@ -1234,4 +1235,248 @@ export const handleBackToListClickedFromJobDetails = (component) => {
   jobsListDiv.classList.remove('hidden-div');
   backToListDiv.classList.add('hidden-div');
   jobDetailsDiv.classList.add('hidden-div');
+};
+
+/**
+ * ==============================================================================
+ * ==============================================================================
+ * ==========FUNCTIONS TO HANDLE REGISTER ID CARD NUMBER FOR USERS===============
+ * ==============================================================================
+ * ==============================================================================
+ */
+
+// displaying user-authorities
+export const displayUserAuthorities = (necessaryFields) => {
+  const { userauthoritiesSelectField } = necessaryFields;
+
+  getUserAuthorities().forEach((currAuth) => {
+    userauthoritiesSelectField.add(new Option(currAuth, currAuth));
+  });
+};
+
+// handling userfnametyping
+export const handleUserfnameTyping = (component) => {
+  const {
+    userfnameField,
+    userfnameErrorSpan,
+  } = component.state.necessaryFields;
+
+  const userfnameValue = userfnameField.value;
+
+  if (validateFname(userfnameValue) && userfnameValue.length >= 3) {
+    userfnameErrorSpan.innerHTML = '';
+    component.setState({ userfnameValue });
+  } else {
+    userfnameErrorSpan.innerHTML = `Invalid name. A valid family name doesn't include a number, 
+    nor special character nor space, or has more than 3 characters`;
+  }
+};
+
+// handling userfname blur
+export const handleUserfnameBlur = (component) => {
+  const {
+    userfnameField,
+    userfnameErrorSpan,
+  } = component.state.necessaryFields;
+
+  if (userfnameField.value.length < 3) {
+    userfnameErrorSpan.innerHTML = 'This field must contain a value with more than 3 characters!';
+    userfnameField.classList.add('field-error');
+  } else {
+    userfnameErrorSpan.innerHTML = '';
+    userfnameField.classList.remove('field-error');
+  }
+};
+
+// handling userIDCardNumber typing
+export const handleUserIdCardNumberTyping = (component) => {
+  const {
+    useridcarnumberField,
+    idCardErrorSpan,
+  } = component.state.necessaryFields;
+  const typedIdCardNo = useridcarnumberField.value;
+
+  if (typedIdCardNo.length >= 4) {
+    idCardErrorSpan.innerHTML = `
+    <span class="spinner-border spinner-border-sm text-warning"/>
+    <span class="spinner-grow spinner-border-sm text-warning"></span>
+    `;
+    axios.post('/user-id-card-number/check-if-id-card-number-exists',
+      { useridcardnumber: typedIdCardNo }).then((res) => {
+      const response = res.data;
+      if (response) {
+        if (response.isUserIdchecked) {
+          if (response.info) {
+            idCardErrorSpan.innerHTML = 'Sorry! You cannot register this ID Card, twice!';
+            component.setState({ isIdCardAlreadyRegistered: true });
+          } else {
+            component.setState({ isIdCardAlreadyRegistered: false });
+            idCardErrorSpan.innerHTML = '<span class="text-success">ID Card number valid</span>';
+          }
+        }
+      }
+    });
+  } else {
+    idCardErrorSpan.innerHTML = 4 - typedIdCardNo.length;
+  }
+};
+
+// handle userIDcardNumber blur
+export const handleUserIdCardNumberBlur = (component) => {
+  const {
+    useridcarnumberField,
+    idCardErrorSpan,
+    saveIdCardInDbBtn,
+  } = component.state.necessaryFields;
+  if (useridcarnumberField.value.length < 4) {
+    idCardErrorSpan.innerHTML = 'This field needs a value of at least 4 characters!';
+    saveIdCardInDbBtn.setAttribute('disabled', true);
+    useridcarnumberField.classList.add('field-error');
+  } else {
+    idCardErrorSpan.innerHTML = '';
+    useridcarnumberField.classList.remove('field-error');
+  }
+};
+
+export const handleSelectUserAuthoritiesBlur = (component) => {
+  const {
+    userauthoritiesSelectField,
+    userauthoritiesErrorSpan,
+  } = component.state.necessaryFields;
+  if (userauthoritiesSelectField.value.length === 0) {
+    userauthoritiesErrorSpan.innerHTML = 'You must select this users\' authorities!';
+    userauthoritiesSelectField.classList.add('field-error');
+  } else {
+    userauthoritiesErrorSpan.innerHTML = '';
+    userauthoritiesSelectField.classList.remove('field-error');
+  }
+};
+
+/** handle savebtn clicked */
+export const handleSaveIdCardNumberBtnClicked = (component) => {
+  const {
+    userfnameField,
+    userfnameErrorSpan,
+    usermidanameField,
+    userlnameField,
+    useridcarnumberField,
+    idCardErrorSpan,
+    userauthoritiesSelectField,
+    userauthoritiesErrorSpan,
+    idcardnumberResultContainerDiv,
+    idcardnumberResultHolderDiv,
+    idCardFormDiv,
+    saveIdCardNumberSpanInBtn,
+    spanSpinnerBorder, spanSpinnerGrow,
+  } = component.state.necessaryFields;
+
+  const addedbyemail = getUserInfo().email;
+  const userfname = userfnameField.value;
+  const usermidname = usermidanameField.value;
+  const userlname = userlnameField.value;
+  const useridcardnumber = useridcarnumberField.value;
+  const userauthorities = userauthoritiesSelectField.value;
+  const { isIdCardAlreadyRegistered } = component.state;
+
+  if (validateFname(userfname)) {
+    userfnameErrorSpan.innerHTML = '';
+    if (useridcardnumber.length >= 4) {
+      idCardErrorSpan.innerHTML = '';
+      if (!isIdCardAlreadyRegistered) {
+        idCardErrorSpan.innerHTML = '';
+        if (userauthorities) {
+          // when data are valid, we show the user that we are processing his/her request
+          spanSpinnerBorder.classList.add('spinner-border');
+          spanSpinnerBorder.classList.add('spinner-border-sm');
+          spanSpinnerBorder.classList.add('text-warning');
+          saveIdCardNumberSpanInBtn.innerHTML = 'Processing your request ';
+          spanSpinnerGrow.forEach((currSpan) => {
+            currSpan.classList.add('spinner-grow');
+            currSpan.classList.add('spinner-grow-sm');
+            currSpan.classList.add('text-warning');
+          });
+
+          // everything is okay now, we are ready to make a request
+          const dataToSend = {
+            userfname,
+            usermidname,
+            userlname,
+            useridcardnumber,
+            userauthorities,
+            addedbyemail,
+          };
+
+          axios.post('/user-id-card-number/add-new-id-card-number',
+            dataToSend, { headers: getOauth() }).then((res) => {
+            const response = res.data;
+            if (response.isUserIdSaved) {
+              idCardFormDiv.classList.add('hidden-div');
+              idcardnumberResultContainerDiv.classList.remove('hidden-div');
+              idcardnumberResultHolderDiv.innerHTML = response.info;
+
+              /** saving a log */
+              const useraction = `registered an ID Card Number, REGISTERED ID CARD NO: ${useridcardnumber}`;
+              axios.post('/user-logs/add-new-user-log',
+                { userid: getUserInfo().user_id, useraction }, { headers: getOauth() });
+            } else {
+              idCardFormDiv.classList.add('hidden-div');
+              idcardnumberResultContainerDiv.classList.remove('hidden-div');
+              idcardnumberResultHolderDiv.innerHTML = response.info;
+            }
+          }).catch((err) => {
+            const response = err.response.data;
+            idCardFormDiv.classList.add('hidden-div');
+            idcardnumberResultContainerDiv.classList.remove('hidden-div');
+            idcardnumberResultHolderDiv.innerHTML = response.info;
+          });
+        } else {
+          userauthoritiesErrorSpan.innerHTML = 'Please select this user\'s authorities';
+        }
+      } else {
+        idCardErrorSpan.innerHTML = `Sorry!, You cannot register this ID Card number,
+         because it is already registered!`;
+      }
+    } else {
+      idCardErrorSpan.innerHTML = 'Enter a valid ID Card Number';
+    }
+  } else {
+    userfnameErrorSpan.innerHTML = 'Please enter a valid first name!';
+  }
+};
+
+export const idCardEditorInitialize = (necessaryFields, component) => {
+  component.setState({ isIdCardAlreadyRegistered: undefined });
+  const {
+    userfnameField,
+    userfnameErrorSpan,
+    usermidanameField,
+    userlnameField,
+    useridcarnumberField,
+    idCardErrorSpan,
+    userauthoritiesSelectField,
+    userauthoritiesErrorSpan,
+    idcardnumberResultContainerDiv,
+    idCardFormDiv,
+    saveIdCardNumberSpanInBtn,
+    spanSpinnerBorder, spanSpinnerGrow,
+  } = necessaryFields;
+  userfnameField.value = '';
+  userfnameErrorSpan.innerHTML = '';
+  usermidanameField.innerHTML = '';
+  userlnameField.innerHTML = '';
+  useridcarnumberField.value = '';
+  idCardErrorSpan.innerHTML = '';
+  userauthoritiesSelectField.value = '';
+  userauthoritiesErrorSpan.innerHTML = '';
+  idcardnumberResultContainerDiv.classList.add('hidden-div');
+  idCardFormDiv.classList.remove('hidden-div');
+  saveIdCardNumberSpanInBtn.classList.innerHTML = 'Hit this button to save';
+  spanSpinnerBorder.classList.remove('spinner-border');
+  spanSpinnerBorder.classList.remove('spinner-border-sm');
+  spanSpinnerBorder.classList.remove('text-warning');
+  spanSpinnerGrow.forEach((curr) => {
+    curr.classList.remove('spinner-grow');
+    curr.classList.remove('spinner-grow-sm');
+    curr.classList.remove('text-warning');
+  });
 };

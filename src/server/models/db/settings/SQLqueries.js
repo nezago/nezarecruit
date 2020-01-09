@@ -8,6 +8,7 @@ export const CREATE_TABLE_USERS = `
     DROP TABLE IF EXISTS users CASCADE; 
     CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY, 
+    user_id_card_number INT, 
     fname VARCHAR(255),
     middle_name VARCHAR(255),
     lname VARCHAR(255),
@@ -16,9 +17,12 @@ export const CREATE_TABLE_USERS = `
     password VARCHAR(255),
     user_registered_at TIMESTAMPTZ,
     user_edited_at TIMESTAMPTZ,
-    user_authorities VARCHAR(255));`;
+    user_authorities VARCHAR(255),
+    CONSTRAINT user_id_card_number_fk FOREIGN KEY(user_id_card_number) 
+    REFERENCES users_id_card_numbers(user_id_card_id));`;
 
 export const ADD_DEFAULT_USER = (hashedKey) => (`INSERT INTO users(
+        user_id_card_number,
         fname,
         middle_name,
         lname,
@@ -29,6 +33,7 @@ export const ADD_DEFAULT_USER = (hashedKey) => (`INSERT INTO users(
         user_edited_at,
         user_authorities
     ) VALUES(
+        1,
         'MUGIRASE',
         'descholar',
         'Emmanuel',
@@ -93,9 +98,31 @@ export const CREATE_TABLE_USERS_ID_CARD_NUMBERS = `
         user_lname VARCHAR(255),
         user_id_card_number VARCHAR(255) UNIQUE,
         user_authorities VARCHAR(255),
+        user_added_by_email VARCHAR(255),
         user_added_on TIMESTAMPTZ,
         user_edited_on TIMESTAMPTZ);
 `;
+
+// adding default user
+export const ADD_DEFAULT_USER_ID_CARD_NUMBER = `
+INSERT INTO users_id_card_numbers(
+        user_fname,
+        user_midname,
+        user_lname,
+        user_id_card_number,
+        user_authorities,
+        user_added_by_email,
+        user_added_on,
+        user_edited_on
+    ) VALUES(
+        'MUGIRASE',
+        'descholar',
+        'Emmanuel',
+        '1199080042162021',
+        'SUPERUSER',
+        'emmamugira@gmail.com',
+        NOW(),
+        NOW());`;
 
 /** adding new id card */
 export const ADD_NEW_USER_ID_CARD_NUMBER = `
@@ -105,8 +132,9 @@ INSERT INTO users_id_card_numbers(
     user_lname,
     user_id_card_number,
     user_authorities,
+    user_added_by_email,
     user_added_on,
-    user_edited_on) VALUES($1,$2,$3,$4,$5,NOW(),NOW());
+    user_edited_on) VALUES($1,$2,$3,$4,$5,$6,NOW(),NOW());
 `;
 
 /** getting all id-cards */

@@ -19,6 +19,7 @@ import ManageUnlinkedJobs from './layouts/ManageUnlinkedJobs';
 import SavingNewApplicationFormUrlInDb from './layouts/SavingNewApplicationFormUrlInDb';
 import ManageActiveJobs from './layouts/ManageActiveJobs';
 import DefaultLoginHomepage from './layouts/DefaultLoginHomepage';
+import RegisterUserIdCardNumber from './layouts/RegisterUserIdCardNumber';
 
 function App() {
   return (
@@ -72,6 +73,12 @@ function App() {
             exact
             path="/user-profile/:userfname"
             component={LoggedInUserProfileLayout}
+          />
+
+          <Route
+            exact
+            path="/register-new-user-id-number"
+            component={RegisterUserIdCardNumber}
           />
         </Route>
       </Router>

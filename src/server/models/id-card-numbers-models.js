@@ -13,9 +13,10 @@ export const addNewIdCardNumber = (req, res, next) => {
     userlname,
     useridcardnumber,
     userauthorities,
+    addedbyemail,
   } = req.body;
   connect().query(ADD_NEW_USER_ID_CARD_NUMBER,
-    [userfname, usermidname, userlname, useridcardnumber, userauthorities],
+    [userfname, usermidname, userlname, useridcardnumber, userauthorities, addedbyemail],
     (err, result) => {
       if (err) {
         res.status(500).send({

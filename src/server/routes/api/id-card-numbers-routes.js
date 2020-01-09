@@ -8,10 +8,13 @@ const idCardNumberRouter = new Router();
 idCardNumberRouter.post('/add-new-id-card-number',
   validateUserIdCardNumber, authenticate, models.addNewIdCardNumber);
 
-idCardNumberRouter.get('/get-all-id-card-numbers', authenticate, models.getAllIdCardNumbers);
+idCardNumberRouter.get('/get-all-id-card-numbers',
+  authenticate, models.getAllIdCardNumbers);
 
-idCardNumberRouter.post('/get-particular-id-card-number', models.getParticularIdCardNumberByIdCardNumber);
+idCardNumberRouter.post('/get-particular-id-card-number',
+  models.getParticularIdCardNumberByIdCardNumber);
 
-idCardNumberRouter.post('/check-if-id-card-number-exists', models.checkIfIdCardNumberExists);
+idCardNumberRouter.post('/check-if-id-card-number-exists',
+  models.checkIfIdCardNumberExists);
 
 export default idCardNumberRouter;
