@@ -38,6 +38,13 @@ import {
   getUserLogByDatesAndUserId,
 } from './user-logs-models';
 
+import {
+  addNewIdCardNumber,
+  getAllIdCardNumbers,
+  checkIfIdCardNumberExists,
+  getParticularIdCardNumberByIdCardNumber,
+} from './id-card-numbers-models';
+
 export default {
   addNewUserToDb,
   checkIfEmailExistFromTableUsers,
@@ -64,4 +71,8 @@ export default {
   getUserLogByLogId,
   getUserLogByDates,
   getUserLogByDatesAndUserId,
+  addNewIdCardNumber,
+  getAllIdCardNumbers,
+  checkIfIdCardNumberExists,
+  getParticularIdCardNumberByIdCardNumber,
 };

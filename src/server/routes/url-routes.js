@@ -11,7 +11,7 @@ myUrls.get('/', (req, res, next) => {
   next();
 });
 
-myUrls.get('/enter-nezado', (req, res, next) => {
+myUrls.get('/enter-nezago', (req, res, next) => {
   const loginPage = path.join(__dirname, '../../ui/views/login.pug');
   res.render(loginPage);
   next();

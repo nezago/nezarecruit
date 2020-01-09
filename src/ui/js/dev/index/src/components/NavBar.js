@@ -122,7 +122,7 @@ class NavBar extends Component {
             <Nav className="form-inline mt-auto ml-auto" navbar>
               <nav>
                 <ul>
-                  <li><a href="/enter-nezado">Gate</a></li>
+                  <li><a href="/enter-nezago">Gate</a></li>
                 </ul>
               </nav>
             </Nav>

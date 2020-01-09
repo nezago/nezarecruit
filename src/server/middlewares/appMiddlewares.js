@@ -17,6 +17,7 @@ const appMiddlewares = (app, path, express) => {
   app.use('/manage-homepage', routes.manageHomepageRouter);
   app.use('/jobs', routes.jobRouter);
   app.use('/user-logs', routes.userLogRouter);
+  app.use('/user-id-card-number', routes.idCardNumberRouter);
 };
 
 export default appMiddlewares;

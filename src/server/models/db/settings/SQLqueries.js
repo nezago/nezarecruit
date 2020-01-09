@@ -50,6 +50,16 @@ export const ADD_NEW_USER = `INSERT INTO users(
         user_authorities)
 VALUES($1, $2, $3, $4, $5, $6, NOW(), NOW(), $7);`;
 
+/** GETTING ALL USERS */
+export const getAllUsers = `
+SELECT * FROM users ORDER BY user_id DESC;
+`;
+
+/** GET USER BY ID OR EMAIL */
+export const getUserByIdOrEmail = `
+SELECT * FROM users WHERE user_id=$1 OR email=$2 ORDER BY user_id DESC;
+`;
+
 /** CHECKING IF AN EMAIL EXISTS FROM TABLE USERS OR NOT */
 export const CHECK_EMAIL_FROM_TABLE_USERS = `
 SELECT EXISTS(SELECT 1 FROM users WHERE email = $1);
@@ -66,6 +76,53 @@ SELECT * FROM users WHERE email=$1;
 `;
 /** ============================================================================= */
 /** ============================================================================= */
+
+/**
+ * ==============================================================================
+ * ==============================================================================
+ * ======================ALLOWED USERS (USER'S ID CARD NUMBERS)==================
+ * ==============================================================================
+ * ==============================================================================
+ */
+export const CREATE_TABLE_USERS_ID_CARD_NUMBERS = `
+    DROP TABLE IF EXISTS users_id_card_numbers CASCADE; 
+    CREATE TABLE IF NOT EXISTS users_id_card_numbers (
+        user_id_card_id SERIAL PRIMARY KEY,
+        user_fname VARCHAR(255),
+        user_midname VARCHAR(255),
+        user_lname VARCHAR(255),
+        user_id_card_number VARCHAR(255) UNIQUE,
+        user_authorities VARCHAR(255),
+        user_added_on TIMESTAMPTZ,
+        user_edited_on TIMESTAMPTZ);
+`;
+
+/** adding new id card */
+export const ADD_NEW_USER_ID_CARD_NUMBER = `
+INSERT INTO users_id_card_numbers(
+    user_fname,
+    user_midname,
+    user_lname,
+    user_id_card_number,
+    user_authorities,
+    user_added_on,
+    user_edited_on) VALUES($1,$2,$3,$4,$5,NOW(),NOW());
+`;
+
+/** getting all id-cards */
+export const GET_ALL_USERS_ID_CARD_NUMBERS = `
+SELECT * FROM users_id_card_numbers ORDER BY user_id_card_id DESC;
+`;
+
+/** getting particular id-card */
+export const GET_PARTICULAR_ID_CARD_NUMBER_BY_ID_CARD_NUMBER = `
+SELECT * FROM users_id_card_numbers WHERE user_id_card_number=$1;
+`;
+
+/** checking if id-card exists */
+export const CHECK_IF_ID_CARD_NUMBER_EXISTS = `
+SELECT EXISTS(SELECT 1 FROM users_id_card_numbers WHERE user_id_card_number=$1);
+`;
 
 
 /** 2. TABLE APPLICATION FOR MEMBERSHIP */
