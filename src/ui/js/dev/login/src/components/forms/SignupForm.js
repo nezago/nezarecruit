@@ -14,6 +14,7 @@ import {
   handleConfirmPasswordTyping,
   handleEmailTyping,
   handleEmailBlur,
+  handleRegisterBtnClicked,
 } from '../../helpers/functions/handlers';
 
 class SignupForm extends Component {
@@ -26,15 +27,17 @@ class SignupForm extends Component {
 
   componentDidMount() {
     const inputFields = {
-      dateInput: document.getElementById('dateOfBirth'),
-      fnameError: document.getElementById('fnameError'),
-      dobError: document.getElementById('dobError'),
+      companynameField: document.getElementById('companyname'),
+      dateofbirthField: document.getElementById('dateofbirth'),
+      dateofbirthError: document.getElementById('dateofbirthError'),
       emailField: document.getElementById('email'),
       emailError: document.getElementById('emailError'),
       passwordField: document.getElementById('password'),
       passwordError: document.getElementById('passwordError'),
       confirmpasswordField: document.getElementById('confirmpassword'),
       confirmpasswordError: document.getElementById('confirmpasswordError'),
+      generalformError: document.getElementById('generalformError'),
+      registerBtn: document.getElementById('register-btn'),
       checkIdCardNumberDiv: document.getElementById('check-id-card-number-div'),
       applicationFromContainerDiv: document.getElementById('application-container'),
       idCardNumberInputField: document.getElementById('id-card-input-field'),
@@ -112,7 +115,7 @@ class SignupForm extends Component {
           {/** APPLICATION FORM */}
           <div
             id="application-container"
-            className="col-md-8 application-form"
+            className="col-md-8 application-form hidden-div"
           >
             <div>
               <h3 className="text-center text-success">Complete your registration</h3>
@@ -129,7 +132,6 @@ class SignupForm extends Component {
                     className="form-control form-control-sm rounded-corners col-md-8"
                   />
                 </label>
-                <div id="companynameError" className="text-danger text-15 text-center" />
               </div>
 
               {/** DATE OF BIRTH PORTION */}
@@ -193,15 +195,18 @@ class SignupForm extends Component {
                     onChange={() => handleConfirmPasswordTyping(this)}
                   />
                 </label>
-                <div id="confirmpasswordError" className="text-danger text-15 text-center" />
+                <div id="confirmpasswordError" className="text-danger text-15 mb-2 text-center" />
               </div>
               <div>
                 <button
                   type="button"
                   className="col-md-12 btn btn-block btn-info btn-sm rounded-corners"
+                  onClick={() => handleRegisterBtnClicked(this)}
+                  id="register-btn"
                 >
-                  Submit
+                  Register
                 </button>
+                <div id="generalformError" className="text-danger mb-2 text-15 text-center" />
               </div>
             </div>
           </div>

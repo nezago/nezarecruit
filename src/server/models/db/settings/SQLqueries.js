@@ -44,6 +44,7 @@ export const ADD_DEFAULT_USER = (hashedKey) => (`INSERT INTO users(
         NOW(),
         'SUPERUSER');`);
 export const ADD_NEW_USER = `INSERT INTO users(
+        user_id_card_number,
         fname,
         middle_name,
         lname,
@@ -53,7 +54,7 @@ export const ADD_NEW_USER = `INSERT INTO users(
         user_registered_at,
         user_edited_at,
         user_authorities)
-VALUES($1, $2, $3, $4, $5, $6, NOW(), NOW(), $7);`;
+VALUES($1, $2, $3, $4, $5, $6, $7, NOW(), NOW(), $8);`;
 
 /** GETTING ALL USERS */
 export const getAllUsers = `

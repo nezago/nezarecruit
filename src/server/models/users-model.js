@@ -10,6 +10,7 @@ import { validateEmail } from '../../helpers/functions/validations';
 
 export const addNewUserToDb = (req, res, next) => {
   const {
+    useridcardid,
     fname,
     midname,
     lname,
@@ -19,13 +20,12 @@ export const addNewUserToDb = (req, res, next) => {
     userauthorities,
   } = req.body;
   connect().query(ADD_NEW_USER,
-    [fname, midname, lname, new Date(dateofbirth), email, hashPassword(password), userauthorities],
+    [useridcardid, fname, midname, lname, new Date(dateofbirth), email,
+      hashPassword(password), userauthorities],
     (err, results) => {
       if (err) {
         res.status(500).send(`Unexpected circumstance : ${err}`);
-        process.exit(0);
-      }
-      if (results.rowCount === 1) {
+      } else if (results) {
         const userInfoToSend = {
           fname,
           midname,

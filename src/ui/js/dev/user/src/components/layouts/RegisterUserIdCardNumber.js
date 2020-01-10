@@ -117,6 +117,23 @@ class RegisterUserIdCardNumber extends Component {
                 <span id="userauthoritiesErrorSpan" />
               </div>
 
+              {/** user-authorities */}
+              <label htmlFor="userstatus" className="form-group form-row">
+                <span className="col-md-4 hand-cursor">User status : </span>
+                <select
+                  id="userstatus"
+                  className="custom-select custom-select-sm rounded-corners col-md-8"
+                  onBlur={() => handleSelectUserAuthoritiesBlur(this)}
+                >
+                  <option value="">---Select a user status here---</option>
+                  <option value="true">Active</option>
+                  <option value="false">Not Active</option>
+                </select>
+              </label>
+              <div className="text-danger text-10 text-center mb-2">
+                <span id="userauthoritiesErrorSpan" />
+              </div>
+
               {/** save btn portion */}
               <button
                 type="button"

@@ -12,6 +12,7 @@ import { CHECK_USER_ID_FROM_TABLE_USERS } from '../models/db/settings/SQLqueries
  */
 export const validateSignup = (req, res, next) => {
   const {
+    useridcardid,
     fname,
     dateofbirth,
     email,
@@ -26,8 +27,26 @@ export const validateSignup = (req, res, next) => {
     res.status(400).send('The email you are saving is invalid!');
   } else if (!validatePassword(password, email)[1]) {
     res.status(400).send(validatePassword(password, email)[0]);
-  } else {
-    next();
+  } else if (useridcardid) {
+    connect().query(CHECK_USER_ID_FROM_TABLE_USERS, [useridcardid], (err, result) => {
+      if (err) {
+        res.status(500).send({
+          isUserVerifiedFromDb: false,
+          info: `<span class="text-danger">Sorry! Failed to check you from our databases,
+          please refersh the page and try again!</span>`,
+        });
+      } else if (result) {
+        if (!result.rows[0].exists) {
+          res.status(400).send({
+            isUserVerifiedFromDb: true,
+            info: `<span class="text-danger">Sorry! You are trying to register,
+            but your id card number seems to miss from our databases</span>`,
+          });
+        } else {
+          next();
+        }
+      }
+    });
   }
 };
 

@@ -48,6 +48,8 @@ export const handleIdCardNumberTyping = (component) => {
           lockedBtn.classList.remove('hidden-div');
           unlockedBtn.classList.add('hidden-div');
         }
+      } else {
+        console.log(`user not checked because of : ${response}`);
       }
     }).catch((err) => {
       console.log(err.response.data);
@@ -140,5 +142,90 @@ export const handleConfirmPasswordTyping = (component) => {
     confirmpasswordError.innerHTML = 'Passwords missmatching';
   } else {
     confirmpasswordError.innerHTML = '';
+  }
+};
+
+// handle register-btn clicked
+export const handleRegisterBtnClicked = (component) => {
+  const {
+    // companynameField,
+    dateofbirthField,
+    dateofbirthError,
+    emailField,
+    emailError,
+    passwordField,
+    passwordError,
+    confirmpasswordField,
+    confirmpasswordError,
+    generalformError,
+    registerBtn,
+  } = component.state.inputFields;
+  // const companynameValue = companynameField.value;
+  const dateofbirthValue = dateofbirthField.value;
+  const emailValue = emailField.value;
+  const passwordValue = passwordField.value;
+  const confirmpasswordValue = confirmpasswordField.value;
+  const {
+    user_id_card_id,
+    user_id_card_number,
+    user_fname,
+    user_midname,
+    user_lname,
+    user_authorities,
+  } = component.state.thisUser;
+  const { isEmailTaken } = component.state;
+
+  if (user_id_card_number && user_fname && user_midname && user_lname && user_authorities) {
+    if (dateofbirthValue.length !== 0) {
+      dateofbirthError.innerHTML = '';
+      if (validateEmail(emailValue)) {
+        emailError.innerHTML = '';
+        if (!isEmailTaken) {
+          if (validatePassword(passwordValue, emailValue)[1]) {
+            passwordError.innerHTML = '';
+            if (passwordValue === confirmpasswordValue) {
+              confirmpasswordError.innerHTML = '';
+
+              registerBtn.innerHTML = `
+              <span class="spinner-border spinner-border-sm text-warning"/>
+              <span class="spinner-grow spinner-grow-sm text-warning"/>
+              `;
+              registerBtn.setAttribute('disabled', true);
+              /** NOW EVERYTHING IS COOL */
+              const dataToSend = {
+                useridcardid: user_id_card_id,
+                fname: user_fname,
+                midname: user_midname,
+                lname: user_lname,
+                dateofbirth: dateofbirthValue,
+                email: emailValue,
+                password: passwordValue,
+                userauthorities: user_authorities,
+              };
+
+              axios.post('/users/register-new-user', dataToSend).then((res) => {
+                const { login, token } = res.data;
+                if (login) {
+                  window.localStorage.setItem('oauth', token);
+                  window.location.replace(`/auth/auth-user?redirect=true&oauth=${window.localStorage.getItem('oauth')}`);
+                }
+              }).catch((err) => {
+                generalformError.innerHTML = err.response.data.info;
+              });
+            } else {
+              confirmpasswordError.innerHTML = 'Password mismacthes';
+            }
+          } else {
+            passwordError.innerHTML = validatePassword(passwordValue, emailValue)[0];
+          }
+        } else { emailError.innerHTML = 'Sorry! You cannot save an already registered email'; }
+      } else {
+        emailError.innerHTML = 'You cannot save an invalid email';
+      }
+    } else {
+      dateofbirthError.innerHTML = 'Please select your date of birth';
+    }
+  } else {
+    generalformError.innerHTML = 'Your ID Number is not verified';
   }
 };
