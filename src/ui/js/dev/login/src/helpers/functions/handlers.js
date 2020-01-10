@@ -1,151 +1,8 @@
 /* eslint-disable prefer-destructuring */
 import axios from 'axios';
 import {
-  validateFname,
-  validateEmail,
-  validatePassword,
+  validatePassword, validateEmail,
 } from '../../../../../../../helpers/functions/validations';
-
-
-/** DATES AND TIMES */
-export const handleDateOfBirth = (dateOfBirth) => {
-  if (dateOfBirth.length === 0) {
-    if (dateOfBirth.includes('/')) {
-      return dateOfBirth.replace('/', '-');
-    }
-    if (dateOfBirth.includes('.')) {
-      return dateOfBirth.replace('.', '-');
-    }
-  }
-  return 'Enter date please!';
-};
-
-/** DATES ONLY */
-export const handleCurrDate = () => {
-  const today = new Date();
-  const currYear = today.getFullYear();
-  const currMonth = today.getMonth() + 1;
-  const currDate = today.getDate();
-
-  return `${currYear}-${currMonth}-${currDate}`;
-};
-
-/** DATES AND TYM */
-export const handleCurrDateTime = () => {
-  const currTime = new Date();
-  const hours = currTime.getHours();
-  const minutes = currTime.getMinutes();
-  const secs = currTime.getSeconds();
-  const currDate = handleCurrDate();
-
-  return `${currDate} ${hours}:${minutes}:${secs}`;
-};
-
-/** HANDLE FNAME TYPING */
-export const handleFnameTyping = (event, component, inputFields) => {
-  const fname = event.target.value;
-  const { fnameError } = inputFields;
-  if (validateFname(fname)) {
-    fnameError.innerHTML = '';
-    component.setState({ fname });
-  } else {
-    fnameError.innerHTML = 'Invalid family name!';
-  }
-};
-
-/** HANDLE FIELD TYPING */
-export const handleTyping = (event, component) => {
-  component.setState({ [event.target.name]: event.target.value });
-};
-
-/** HANDLE EMAIL TYPING */
-export const handleEmailTyping = (event, inputFields, checkEmail) => {
-  const { emailError } = inputFields;
-  const email = event.target.value;
-  if (validateEmail(email)) {
-    emailError.innerHTML = '';
-    checkEmail({ email });
-  } else {
-    emailError.innerHTML = 'Invalid email';
-  }
-};
-
-/** HANDLE PASSWORD TYPING */
-export const handlePasswordTyping = (event, component, inputFields) => {
-  const { passwordError } = inputFields;
-  const password = event.target.value;
-  if (validatePassword(password)[1]) {
-    passwordError.innerHTML = '';
-    component.setState({ password });
-  } else {
-    passwordError.innerHTML = validatePassword(password)[0];
-  }
-};
-
-/** HANDLE CONFIRM PASSWORD TYPING */
-export const handleConfirmPasswordTyping = (event, component, inputFields) => {
-  const { password } = component.state;
-  const confirmpassword = event.target.value;
-  const { confirmpasswordError } = inputFields;
-  if (password === confirmpassword) {
-    confirmpasswordError.innerHTML = '';
-    component.setState({ password, confirmpassword });
-  } else {
-    component.setState({ confirmpassword: '' });
-    confirmpasswordError.innerHTML = 'Passwords missmatch';
-  }
-};
-
-/** HANDLE SUBMIT THE FORM */
-export const handleSubmitSignupForm = (component, inputFields, submitForm) => {
-  const {
-    fname, midname, lname, email, password, confirmpassword,
-  } = component.state;
-  const dob = inputFields.dateInput.value;
-  const {
-    fnameError, dobError, emailError, passwordError, confirmpasswordError,
-  } = inputFields;
-
-  if (fname.length >= 2) {
-    fnameError.innerHTML = '';
-    if (validateFname(fname)) {
-      fnameError.innerHTML = '';
-      if (validateEmail(email)) {
-        emailError.innerHTML = '';
-        if (validatePassword(password)[1]) {
-          passwordError.innerHTML = '';
-          if (password === confirmpassword) {
-            confirmpasswordError.innerHTML = '';
-            if (dob.length !== 0) {
-              dobError.innerHTML = '';
-              submitForm({
-                fname,
-                midname,
-                lname,
-                dateofbirth: dob,
-                email,
-                password,
-                userauthorities: 'SUPERUSER',
-              });
-            } else {
-              dobError.innerHTML = 'Enter your date of birth';
-            }
-          } else {
-            confirmpasswordError.innerHTML = 'Your passwords don\'t match';
-          }
-        } else {
-          passwordError.innerHTML = validatePassword(password)[0];
-        }
-      } else {
-        emailError.innerHTML = 'Enter valid email!';
-      }
-    } else {
-      fnameError.innerHTML = 'Enter valid family name, valid family name is made of letters only!';
-    }
-  } else {
-    fnameError.innerHTML = 'Family name must have atleast 2 characters!';
-  }
-};
 
 /**
  * ================================================================================
@@ -158,10 +15,8 @@ export const handleIdCardNumberTyping = (component) => {
   const {
     idCardNumberInputField,
     resultDivHolder,
-    unlockSignupFormBtn,
-    spanLocked,
-    spanUnlocked,
-    spanLockInfoHolder,
+    lockedBtn,
+    unlockedBtn,
   } = component.state.inputFields;
   const typedIdCardNumber = idCardNumberInputField.value;
   if (typedIdCardNumber.length === 16) {
@@ -170,10 +25,28 @@ export const handleIdCardNumberTyping = (component) => {
       { useridcardnumber: typedIdCardNumber }).then((res) => {
       const response = res.data;
       if (response.isUserIdchecked) {
-        if (response.info) {
-          resultDivHolder.innerHTML = '<span class="text-success">Congratulations, Go ahead!</span>';
+        if (response.isUserExists) {
+          if (response.isUserActive) {
+            if (response.isUserRetrieved) {
+              resultDivHolder.innerHTML = '<span class="text-success">Congratulations, Go ahead!</span>';
+              lockedBtn.classList.add('hidden-div');
+              unlockedBtn.classList.remove('hidden-div');
+              component.setState({ thisUser: response.thisUser[0] });
+            } else {
+              resultDivHolder.innerHTML = `<span class="text-danger">Your ID Card number is registered,
+              and your account is active, but we failed to get your info from the database, this is not your fault,
+              please refresh and type again your id card number to try again. Thank you for your good understanding!
+              </span>`;
+            }
+          } else {
+            resultDivHolder.innerHTML = '<span class="text-danger">Sorry! Your account is closed!</span>';
+            lockedBtn.classList.remove('hidden-div');
+            unlockedBtn.classList.add('hidden-div');
+          }
         } else {
           resultDivHolder.innerHTML = '<span class="text-danger">Sorry! This ID Card number is not registered yet</span>';
+          lockedBtn.classList.remove('hidden-div');
+          unlockedBtn.classList.add('hidden-div');
         }
       }
     }).catch((err) => {
@@ -181,5 +54,91 @@ export const handleIdCardNumberTyping = (component) => {
     });
   } else {
     resultDivHolder.innerHTML = 16 - typedIdCardNumber.length;
+  }
+};
+
+export const handleClickHereToSignupBtnClicked = (component) => {
+  const {
+    checkIdCardNumberDiv, applicationFromContainerDiv,
+  } = component.state.inputFields;
+  checkIdCardNumberDiv.classList.add('hidden-div');
+  applicationFromContainerDiv.classList.remove('hidden-div');
+};
+
+/**
+ * =====================================================================================
+ * =====================================================================================
+ * ======================FUNCTIONS TO HANDLE SIGNUP FORM================================
+ * =====================================================================================
+ * =====================================================================================
+ */
+
+// handle email typing
+export const handleEmailTyping = (component) => {
+  const { emailField, emailError } = component.state.inputFields;
+  if (validateEmail(emailField.value)) {
+    emailError.innerHTML = '<span class="spinner-border"/>';
+    axios.post('/users/check-existance-of-email', { email: emailField.value }).then((res) => {
+      if (res.data) {
+        emailError.innerHTML = 'This email is taken';
+        component.setState({ isEmailTaken: true });
+      } else {
+        emailError.innerHTML = '';
+        component.setState({ isEmailTaken: false });
+      }
+    // eslint-disable-next-line no-unused-vars
+    }).catch((err) => {
+      emailError.innerHTML = 'Couldn\'t Check from the database, delete it and re-type it, or refresh the page';
+      component.setState({ isEmailTaken: undefined });
+    });
+  } else {
+    emailError.innerHTML = 'Invalid Email';
+  }
+};
+
+// handle email blur
+export const handleEmailBlur = (component) => {
+  const { emailField } = component.state.inputFields;
+  if (emailField.value.length === 0) {
+    emailField.classList.add('field-error');
+  } else {
+    emailField.classList.remove('field-error');
+  }
+};
+
+// handle password typing
+export const handlePasswordTyping = (component) => {
+  const {
+    emailField, passwordField, passwordError,
+  } = component.state.inputFields;
+  const passwordValue = passwordField.value;
+  const emailValue = emailField.value;
+  if (validatePassword(passwordValue, emailValue)[1]) {
+    passwordError.innerHTML = `<span class="text-success">
+    ${validatePassword(passwordValue, emailValue)[0]}</span>`;
+  } else {
+    passwordError.innerHTML = validatePassword(passwordValue, emailValue)[0];
+  }
+};
+
+// handle password blur
+export const handlePasswordBlur = (component) => {
+  const { passwordField } = component.state.inputFields;
+  if (passwordField.value.length < 4) {
+    passwordField.classList.add('field-error');
+  } else {
+    passwordField.classList.remove('field-error');
+  }
+};
+
+// handle conform password typing
+export const handleConfirmPasswordTyping = (component) => {
+  const {
+    passwordField, confirmpasswordField, confirmpasswordError,
+  } = component.state.inputFields;
+  if (passwordField.value !== confirmpasswordField.value) {
+    confirmpasswordError.innerHTML = 'Passwords missmatching';
+  } else {
+    confirmpasswordError.innerHTML = '';
   }
 };

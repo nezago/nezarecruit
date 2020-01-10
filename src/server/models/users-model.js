@@ -48,7 +48,6 @@ export const checkIfEmailExistFromTableUsers = (req, res, next) => {
       connect().query(CHECK_EMAIL_FROM_TABLE_USERS, [email], (err, results) => {
         if (err) {
           res.status(500).send('Something unexpected occured, couldn\'t check the existance of the email!');
-          process.exit(0);
         }
         res.status(200).json(results.rows[0].exists);
         next();

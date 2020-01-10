@@ -1,44 +1,26 @@
-/* eslint-disable react/no-unused-state */
-/* eslint-disable no-restricted-globals */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-unused-state */
+
 import React, { Component } from 'react';
 import { Container, Row } from 'reactstrap';
 import DatePicker from 'react-datepicker';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { FaLock, FaLockOpen } from 'react-icons/fa';
-import { submitNewUser } from '../../actions/sendDataToDb';
-import { checkEmailFromTableUsers } from '../../actions/retrieveDataFromDb';
 import {
-  handleTyping,
-  handleFnameTyping,
-  handleSubmitSignupForm,
-  handleEmailTyping,
-  handlePasswordTyping,
-  handleConfirmPasswordTyping,
   handleIdCardNumberTyping,
+  handleClickHereToSignupBtnClicked,
+  handlePasswordTyping,
+  handlePasswordBlur,
+  handleConfirmPasswordTyping,
+  handleEmailTyping,
+  handleEmailBlur,
 } from '../../helpers/functions/handlers';
 
 class SignupForm extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      fname: '',
-      midname: '',
-      lname: '',
-      email: '',
-      date: new Date('1999-12-01'),
-      password: '',
-      confirmpassword: '',
-    };
-    this.props = {
-      submitNewUser: PropTypes.func.isRequired,
-      checkEmailFromTableUsers: PropTypes.func.isRequired,
-      dataFromDb: PropTypes.object.isRequired,
+      dateofbirth: new Date('2000-05-01'),
     };
   }
 
@@ -47,47 +29,27 @@ class SignupForm extends Component {
       dateInput: document.getElementById('dateOfBirth'),
       fnameError: document.getElementById('fnameError'),
       dobError: document.getElementById('dobError'),
+      emailField: document.getElementById('email'),
       emailError: document.getElementById('emailError'),
       passwordField: document.getElementById('password'),
       passwordError: document.getElementById('passwordError'),
       confirmpasswordField: document.getElementById('confirmpassword'),
       confirmpasswordError: document.getElementById('confirmpasswordError'),
       checkIdCardNumberDiv: document.getElementById('check-id-card-number-div'),
+      applicationFromContainerDiv: document.getElementById('application-container'),
       idCardNumberInputField: document.getElementById('id-card-input-field'),
       resultDivHolder: document.getElementById('result-div-holder'),
-      unlockSignupFormBtn: document.getElementById('unlock-signup-form-btn'),
-      spanLocked: document.getElementById('span-locked'),
-      spanUnlocked: document.getElementById('span-unlocked'),
-      spanLockInfoHolder: document.getElementById('span-locked-info-holder'),
+      lockedBtn: document.getElementById('locked-btn'),
+      unlockedBtn: document.getElementById('unlocked-btn'),
     };
     this.setState({ inputFields });
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps) {
-      const { dataFromDb } = nextProps;
-      if (dataFromDb) {
-        const { isEmailExistsFromUsers } = dataFromDb;
-        const emailError = document.getElementById('emailError');
-        if (!isEmailExistsFromUsers) {
-          emailError.innerHTML = '';
-          this.setState({ email: document.getElementById('email').value });
-        } else {
-          emailError.innerHTML = 'This email is already taken by another user!';
-        }
-      }
-    }
-  }
-
-  dateOfBirthSelect = (date) => {
-    this.setState({ date });
+  handleSelectDateOfBirth = (date) => {
+    this.setState({ dateofbirth: date });
   }
 
   render() {
-    const {
-      midname, lname, date, inputFields,
-    } = this.state;
-    const { submitNewUser: submitFunc, checkEmailFromTableUsers: checkFunc } = this.props;
     return (
       <Container>
 
@@ -121,7 +83,7 @@ class SignupForm extends Component {
               <button
                 type="button"
                 className="btn btn-danger btn-sm btn-block rounded-corners"
-                id="unlock-signup-form-btn"
+                id="locked-btn"
                 disabled
               >
                 <span className="text-22 mr-2" id="span-locked">
@@ -130,7 +92,15 @@ class SignupForm extends Component {
                   <FaLock />
                 </span>
                 <span className="text-22" id="span-locked-info-holder">Signup form is Locked</span>
-                <span className="text-22 ml-2 hidden-div" id="span-unlocked">
+              </button>
+              <button
+                type="button"
+                className="btn btn-success btn-sm btn-block rounded-corners hidden-div"
+                id="unlocked-btn"
+                onClick={() => handleClickHereToSignupBtnClicked(this)}
+              >
+                <span className="text-22" id="span-locked-info-holder">Click Here to signup</span>
+                <span className="text-22 ml-2" id="span-unlocked">
                   <FaLockOpen />
                   <FaLockOpen />
                   <FaLockOpen />
@@ -142,148 +112,93 @@ class SignupForm extends Component {
           {/** APPLICATION FORM */}
           <div
             id="application-container"
-            className="col-md-4 application-form hidden-div"
+            className="col-md-8 application-form"
           >
             <div>
-              <h3 className="text-center text-success">Register</h3>
+              <h3 className="text-center text-success">Complete your registration</h3>
+              <hr />
 
-              <div className="form-group form-row">
-                <label
-                  htmlFor="fname"
-                  className="col-md-4 hand-cursor"
-                >
-                  Family name :
-                </label>
-                <input
-                  type="text"
-                  name="fname"
-                  id="fname"
-                  placeholder="eg.: KAMIKAZI"
-                  className="col-md-8 form-control-sm form-control rounded-corners"
-                  onChange={() => handleFnameTyping(event, this, inputFields)}
-                />
-              </div>
-              <div className="text-center text-danger">
-                <span id="fnameError" />
-              </div>
-              <div className="form-group form-row">
-                <label
-                  htmlFor="midname"
-                  className="col-md-4 hand-cursor"
-                >
-                  Middle name :
-                </label>
-                <input
-                  type="text"
-                  name="midname"
-                  id="midname"
-                  placeholder="eg.: Anne"
-                  className="col-md-8 form-control-sm form-control rounded-corners"
-                  onChange={() => handleTyping(event, this)}
-                  value={midname}
-                />
-              </div>
-              <div className="form-group form-row">
-                <label
-                  htmlFor="lname"
-                  className="col-md-4 hand-cursor"
-                >
-                  Last name :
-                </label>
-                <input
-                  type="text"
-                  name="lname"
-                  id="lname"
-                  placeholder="eg.: Maria"
-                  className="col-md-8 form-control-sm form-control rounded-corners"
-                  onChange={() => handleTyping(event, this)}
-                  value={lname}
-                />
-              </div>
-              <div className="form-group form-row">
-                <label
-                  htmlFor="dateOfBirth"
-                  className="col-md-4 hand-cursor"
-                >
-                  Date of birth :
-                </label>
-                <div className="col-md-8 form-control form-control-sm rounded-corners text-center">
-                  <DatePicker
-                    selected={date}
-                    dateFormat="yyyy-MM-dd"
-                    id="dateOfBirth"
-                    className="form-control form-control-sm"
-                    onChange={this.dateOfBirthSelect}
-                  />
-                </div>
-              </div>
+              {/** COMPNY NAME PORTION */}
               <div>
-                <span id="dobError" />
-              </div>
-              <div className="form-group form-row">
-                <label
-                  htmlFor="email"
-                  className="col-md-4 hand-cursor"
-                >
-                  Email :
+                <label className="form-group form-row" htmlFor="companyname">
+                  <span className="col-md-4 hand-cursor">Your Company Name</span>
+                  <input
+                    type="text"
+                    placeholder="Eg.: NezaGo Inc."
+                    id="companyname"
+                    className="form-control form-control-sm rounded-corners col-md-8"
+                  />
                 </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="eg.: you@nezado.com"
-                  className="col-md-8 form-control-sm form-control rounded-corners"
-                  onChange={() => handleEmailTyping(event, inputFields, checkFunc)}
-                />
+                <div id="companynameError" className="text-danger text-15 text-center" />
               </div>
-              <div className="text-center text-danger">
-                <span id="emailError" />
-              </div>
-              <div className="form-group form-row">
-                <label
-                  htmlFor="password"
-                  className="col-md-4 hand-cursor"
-                >
-                  Password :
+
+              {/** DATE OF BIRTH PORTION */}
+              <div>
+                <label className="form-group form-row" htmlFor="dateofbirth">
+                  <span className="col-md-4 hand-cursor">Your Birthday</span>
+                  <div className="form-control form-control-sm rounded-corners text-center col-md-8">
+                    <DatePicker
+                      selected={this.state.dateofbirth}
+                      dateFormat="yyyy-MM-dd"
+                      className="form-control form-control-sm"
+                      onChange={this.handleSelectDateOfBirth}
+                      id="dateofbirth"
+                    />
+                  </div>
                 </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="eg.: mypassword"
-                  className="col-md-8 form-control-sm form-control rounded-corners"
-                  onChange={() => handlePasswordTyping(event, this, inputFields)}
-                />
+                <div id="dateofbirthError" className="text-danger text-15" />
               </div>
-              <div className="text-center text-danger">
-                <span id="passwordError" />
-              </div>
-              <div className="form-group form-row">
-                <label
-                  htmlFor="confirmpassword"
-                  className="col-md-4 hand-cursor"
-                >
-                  Confirm Password :
+
+              {/** EMAIL PORTION */}
+              <div>
+                <label className="form-group form-row" htmlFor="email">
+                  <span className="col-md-4 hand-cursor">Your Email</span>
+                  <input
+                    className="form-control form-control-sm rounded-corners col-md-8"
+                    type="text"
+                    id="email"
+                    placeholder="Eg.: example@nezago.com"
+                    onChange={() => handleEmailTyping(this)}
+                    onBlur={() => handleEmailBlur(this)}
+                  />
                 </label>
-                <input
-                  type="password"
-                  name="confirmpassword"
-                  id="confirmpassword"
-                  placeholder="eg.: myconfirmpassword"
-                  className="col-md-8 form-control-sm form-control rounded-corners"
-                  onChange={() => handleConfirmPasswordTyping(event, this, inputFields)}
-                />
+                <div id="emailError" className="text-danger text-15 text-center" />
               </div>
-              <div className="text-center text-danger">
-                <span id="confirmpasswordError" />
+
+              {/** PASSWORD PORTION */}
+              <div>
+                <label className="form-group form-row" htmlFor="password">
+                  <span className="col-md-4 hand-cursor">Choose a password</span>
+                  <input
+                    className="form-control form-control-sm rounded-corners col-md-8"
+                    type="password"
+                    id="password"
+                    placeholder="Eg.: myp3a$$%sSwoRD"
+                    onChange={() => handlePasswordTyping(this)}
+                    onBlur={() => handlePasswordBlur(this)}
+                  />
+                </label>
+                <div id="passwordError" className="text-danger text-15 text-center mb-2" />
+              </div>
+
+              {/** CONFIRM PASSWORD PORTION */}
+              <div>
+                <label className="form-group form-row" htmlFor="confirmpassword">
+                  <span className="col-md-4 hand-cursor">Confirm password</span>
+                  <input
+                    className="form-control form-control-sm rounded-corners col-md-8"
+                    type="password"
+                    id="confirmpassword"
+                    placeholder="Eg.: myp3a$$%sSwoRD"
+                    onChange={() => handleConfirmPasswordTyping(this)}
+                  />
+                </label>
+                <div id="confirmpasswordError" className="text-danger text-15 text-center" />
               </div>
               <div>
                 <button
                   type="button"
                   className="col-md-12 btn btn-block btn-info btn-sm rounded-corners"
-                  onClick={
-                    () => handleSubmitSignupForm(this, inputFields, submitFunc)
-                  }
                 >
                   Submit
                 </button>
@@ -296,9 +211,4 @@ class SignupForm extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  dataFromDb: state.myReducers,
-});
-
-export default connect(mapStateToProps,
-  { checkEmailFromTableUsers, submitNewUser })(SignupForm);
+export default SignupForm;

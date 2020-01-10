@@ -15,7 +15,8 @@ export const validatePassword = (password, email) => {
       passwordInfo = 'We believe your password is strong!';
       return [passwordInfo, true];
     }
-    passwordInfo = 'Your password must include at least one capital letter, one number digit, one special character, and be between 8 to 15 characters!';
+    passwordInfo = `Your password must include at least one capital letter, one number digit,
+     one special character, and be between 8 to 15 characters!`;
     return [passwordInfo, false];
   }
   passwordInfo = 'Your password must not be the same as your email!';

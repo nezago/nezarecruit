@@ -1,4 +1,0 @@
-export const GET_ERRORS = 'GET_ERRORS';
-export const ADD_NEW_USER = 'ADD_NEW_USER';
-export const CHECK_IF_EMAIL_EXISTS_FROM_USERS = 'CHECK_IF_EMAIL_EXISTS_FROM_USERS';
-export const LOGIN = 'LOGIN';

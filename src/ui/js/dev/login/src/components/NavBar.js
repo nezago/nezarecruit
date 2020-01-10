@@ -11,9 +11,7 @@ import {
   Input,
   Button,
 } from 'reactstrap';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { submitLoginForm } from '../actions/sendDataToDb';
 
 class NavBar extends Component {
   constructor(props) {
@@ -106,8 +104,4 @@ class NavBar extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  dataFromDb: state.myReducers,
-});
-
-export default connect(mapStateToProps, { submitLoginForm })(NavBar);
+export default NavBar;
