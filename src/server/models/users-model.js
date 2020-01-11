@@ -5,6 +5,7 @@ import {
   ADD_NEW_USER,
   CHECK_EMAIL_FROM_TABLE_USERS,
   GET_USER_BY_EMAIL,
+  UPDATE_IS_REGISTRATION_COMPLETED_TO_TRUE,
 } from './db/settings/SQLqueries';
 import { validateEmail } from '../../helpers/functions/validations';
 
@@ -26,6 +27,7 @@ export const addNewUserToDb = (req, res, next) => {
       if (err) {
         res.status(500).send(`Unexpected circumstance : ${err}`);
       } else if (results) {
+        connect().query(UPDATE_IS_REGISTRATION_COMPLETED_TO_TRUE, [useridcardid]);
         const userInfoToSend = {
           fname,
           midname,
@@ -48,9 +50,10 @@ export const checkIfEmailExistFromTableUsers = (req, res, next) => {
       connect().query(CHECK_EMAIL_FROM_TABLE_USERS, [email], (err, results) => {
         if (err) {
           res.status(500).send('Something unexpected occured, couldn\'t check the existance of the email!');
+        } else if (results) {
+          res.status(200).send(results.rows[0].exists);
+          next();
         }
-        res.status(200).json(results.rows[0].exists);
-        next();
       });
     }
   }

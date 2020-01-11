@@ -19,7 +19,7 @@ export const addNewIdCardNumber = (req, res, next) => {
   } = req.body;
   connect().query(ADD_NEW_USER_ID_CARD_NUMBER,
     [userfname, usermidname, userlname, useridcardnumber,
-      userauthorities, addedbyemail, isuseractif],
+      userauthorities, addedbyemail, isuseractif, false],
     (err, result) => {
       if (err) {
         res.status(500).send({

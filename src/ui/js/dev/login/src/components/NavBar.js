@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
@@ -11,20 +12,24 @@ import {
   Input,
   Button,
 } from 'reactstrap';
-import PropTypes from 'prop-types';
+import { handleLoginEmailTyping, handleSubmitLoginForm } from '../helpers/functions/handlers';
 
 class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isTogglerOpen: false,
-      email: '',
-      password: '',
     };
-    this.props = {
-      submitLoginForm: PropTypes.func.isRequired,
-      dataFromDb: PropTypes.object.isRequired,
+  }
+
+  componentDidMount() {
+    const necessaryFields = {
+      emailField: document.getElementById('login-email'),
+      passwordField: document.getElementById('password'),
+      errorField: document.getElementById('errorField'),
+      loginBtn: document.getElementById('login-btn'),
     };
+    this.setState({ necessaryFields });
   }
 
   handleToggler = () => {
@@ -32,28 +37,8 @@ class NavBar extends Component {
     this.setState({ isTogglerOpen: !isTogglerOpen });
   }
 
-  handleTyping = (event) => {
-    event.preventDefault();
-    this.setState({ [event.target.name]: event.target.value });
-  }
-
-  handleSubmitTheForm = (event) => {
-    event.preventDefault();
-    const { email, password } = this.state;
-    if (email.length !== 0) {
-      if (password.length !== 0) {
-        const loginInfo = { email, password };
-        this.props.submitLoginForm(loginInfo);
-      } else {
-        console.log('Enter password!');
-      }
-    } else {
-      console.log('Enter Email');
-    }
-  }
-
   render() {
-    const { isTogglerOpen, email, password } = this.state;
+    const { isTogglerOpen } = this.state;
     return (
       <div>
         <Navbar dark expand="md" className="bg-custom sticky-element">
@@ -68,28 +53,27 @@ class NavBar extends Component {
               <Row>
                 <div className="col-md-12">
                   <div>
+                    <span id="errorField" className="text-danger text-12 col-md-2" />
                     <Input
                       type="text"
                       placeholder="email"
-                      className="rounded-corners form-control-sm col-md-5"
+                      className="rounded-corners form-control-sm col-md-4"
                       required
-                      name="email"
-                      onChange={this.handleTyping}
-                      value={email}
+                      id="login-email"
+                      onChange={() => handleLoginEmailTyping(this)}
                     />
                     <Input
                       type="password"
                       placeholder="password"
-                      className="rounded-corners form-control-sm col-md-5"
+                      className="rounded-corners form-control-sm col-md-4"
                       required
-                      name="password"
-                      onChange={this.handleTyping}
-                      value={password}
+                      id="password"
                     />
                     <Button
                       type="button"
                       className="btn-success rounded-corners btn-sm col-md-2"
-                      onClick={this.handleSubmitTheForm}
+                      id="login-btn"
+                      onClick={() => handleSubmitLoginForm(this)}
                     >
                       Enter
                     </Button>

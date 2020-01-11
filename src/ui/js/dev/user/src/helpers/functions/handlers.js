@@ -1306,7 +1306,7 @@ export const handleUserIdCardNumberTyping = (component) => {
       const response = res.data;
       if (response) {
         if (response.isUserIdchecked) {
-          if (response.info) {
+          if (response.isUserExists) {
             idCardErrorSpan.innerHTML = 'Sorry! You cannot register this ID Card, twice!';
             component.setState({ isIdCardAlreadyRegistered: true });
           } else {
@@ -1362,6 +1362,7 @@ export const handleSaveIdCardNumberBtnClicked = (component) => {
     useridcarnumberField,
     idCardErrorSpan,
     userauthoritiesSelectField,
+    userstatusField,
     userauthoritiesErrorSpan,
     idcardnumberResultContainerDiv,
     idcardnumberResultHolderDiv,
@@ -1376,6 +1377,7 @@ export const handleSaveIdCardNumberBtnClicked = (component) => {
   const userlname = userlnameField.value;
   const useridcardnumber = useridcarnumberField.value;
   const userauthorities = userauthoritiesSelectField.value;
+  const isuseractif = userstatusField.value;
   const { isIdCardAlreadyRegistered } = component.state;
 
   if (validateFname(userfname)) {
@@ -1404,6 +1406,7 @@ export const handleSaveIdCardNumberBtnClicked = (component) => {
             useridcardnumber,
             userauthorities,
             addedbyemail,
+            isuseractif,
           };
 
           axios.post('/user-id-card-number/add-new-id-card-number',

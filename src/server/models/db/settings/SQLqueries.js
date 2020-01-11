@@ -101,6 +101,7 @@ export const CREATE_TABLE_USERS_ID_CARD_NUMBERS = `
         user_authorities VARCHAR(255),
         user_added_by_email VARCHAR(255),
         is_user_activated BOOLEAN,
+        is_registration_completed BOOLEAN,
         user_added_on TIMESTAMPTZ,
         user_edited_on TIMESTAMPTZ);
 `;
@@ -115,6 +116,7 @@ INSERT INTO users_id_card_numbers(
         user_authorities,
         user_added_by_email,
         is_user_activated,
+        is_registration_completed,
         user_added_on,
         user_edited_on
     ) VALUES(
@@ -124,6 +126,7 @@ INSERT INTO users_id_card_numbers(
         '1199080042162021',
         'SUPERUSER',
         'emmamugira@gmail.com',
+        true,
         true,
         NOW(),
         NOW());`;
@@ -138,8 +141,9 @@ INSERT INTO users_id_card_numbers(
     user_authorities,
     user_added_by_email,
     is_user_activated,
+    is_registration_completed,
     user_added_on,
-    user_edited_on) VALUES($1,$2,$3,$4,$5,$6,$7,NOW(),NOW());
+    user_edited_on) VALUES($1,$2,$3,$4,$5,$6,$7,$8,NOW(),NOW());
 `;
 
 /** getting all id-cards */
@@ -162,7 +166,23 @@ export const CHECK_IF_USER_IS_ACTIF = `
 SELECT EXISTS(SELECT 1 FROM users_id_card_numbers WHERE user_id_card_number=$1 AND is_user_activated=true);
 `;
 
-/** 2. TABLE APPLICATION FOR MEMBERSHIP */
+/** updating isRegistrationCompleted */
+export const UPDATE_IS_REGISTRATION_COMPLETED_TO_TRUE = `
+UPDATE users_id_card_numbers SET is_registration_completed=true WHERE user_id_card_id=$1;
+`;
+
+/** updating isRegistrationCompleted */
+export const UPDATE_IS_REGISTRATION_COMPLETED_TO_FALSE = `
+UPDATE users_id_card_numbers SET is_registration_completed=false WHERE user_id_card_id=$1;
+`;
+
+/**
+ * =======================================================================================
+ * =======================================================================================
+ * ===================2. TABLE APPLICATION FOR MEMBERSHIP ================================
+ * =======================================================================================
+ * =======================================================================================
+ * */
 export const CREATE_TABLE_APPLY_FOR_SOFTWARE_DEV_JUNIOR = `DROP TABLE IF EXISTS 
      apply_for_software_dev_junior CASCADE;
      CREATE TABLE IF NOT EXISTS apply_for_software_dev_junior (

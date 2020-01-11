@@ -30,10 +30,10 @@ class SignupForm extends Component {
       companynameField: document.getElementById('companyname'),
       dateofbirthField: document.getElementById('dateofbirth'),
       dateofbirthError: document.getElementById('dateofbirthError'),
-      emailField: document.getElementById('email'),
-      emailError: document.getElementById('emailError'),
-      passwordField: document.getElementById('password'),
-      passwordError: document.getElementById('passwordError'),
+      emailField: document.getElementById('signup-email'),
+      emailError: document.getElementById('signupEmailError'),
+      passwordField: document.getElementById('signupPassword'),
+      passwordError: document.getElementById('signupPasswordError'),
       confirmpasswordField: document.getElementById('confirmpassword'),
       confirmpasswordError: document.getElementById('confirmpasswordError'),
       generalformError: document.getElementById('generalformError'),
@@ -158,13 +158,13 @@ class SignupForm extends Component {
                   <input
                     className="form-control form-control-sm rounded-corners col-md-8"
                     type="text"
-                    id="email"
+                    id="signup-email"
                     placeholder="Eg.: example@nezago.com"
                     onChange={() => handleEmailTyping(this)}
                     onBlur={() => handleEmailBlur(this)}
                   />
                 </label>
-                <div id="emailError" className="text-danger text-15 text-center" />
+                <div id="signupEmailError" className="text-danger text-15 text-center" />
               </div>
 
               {/** PASSWORD PORTION */}
@@ -174,13 +174,13 @@ class SignupForm extends Component {
                   <input
                     className="form-control form-control-sm rounded-corners col-md-8"
                     type="password"
-                    id="password"
+                    id="signupPassword"
                     placeholder="Eg.: myp3a$$%sSwoRD"
                     onChange={() => handlePasswordTyping(this)}
                     onBlur={() => handlePasswordBlur(this)}
                   />
                 </label>
-                <div id="passwordError" className="text-danger text-15 text-center mb-2" />
+                <div id="signupPasswordError" className="text-danger text-15 text-center mb-2" />
               </div>
 
               {/** CONFIRM PASSWORD PORTION */}

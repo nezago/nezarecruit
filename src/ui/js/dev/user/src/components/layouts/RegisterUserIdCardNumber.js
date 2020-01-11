@@ -28,6 +28,8 @@ class RegisterUserIdCardNumber extends Component {
       idCardErrorSpan: document.getElementById('idCardErrorSpan'),
       userauthoritiesSelectField: document.getElementById('userauthorities'),
       userauthoritiesErrorSpan: document.getElementById('userauthoritiesErrorSpan'),
+      userstatusField: document.getElementById('userstatus'),
+      userstatusError: document.getElementById('userstatusError'),
       idcardnumberResultContainerDiv: document.getElementById('id-card-number-results-container'),
       idcardnumberResultHolderDiv: document.getElementById('id-card-number-results-holder'),
       saveIdCardInDbBtn: document.getElementById('save-id-card-no-in-db-btn'),
@@ -117,13 +119,12 @@ class RegisterUserIdCardNumber extends Component {
                 <span id="userauthoritiesErrorSpan" />
               </div>
 
-              {/** user-authorities */}
+              {/** user-status */}
               <label htmlFor="userstatus" className="form-group form-row">
                 <span className="col-md-4 hand-cursor">User status : </span>
                 <select
                   id="userstatus"
                   className="custom-select custom-select-sm rounded-corners col-md-8"
-                  onBlur={() => handleSelectUserAuthoritiesBlur(this)}
                 >
                   <option value="">---Select a user status here---</option>
                   <option value="true">Active</option>
@@ -131,7 +132,7 @@ class RegisterUserIdCardNumber extends Component {
                 </select>
               </label>
               <div className="text-danger text-10 text-center mb-2">
-                <span id="userauthoritiesErrorSpan" />
+                <span id="userstatusError" />
               </div>
 
               {/** save btn portion */}

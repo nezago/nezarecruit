@@ -28,10 +28,15 @@ export const handleIdCardNumberTyping = (component) => {
         if (response.isUserExists) {
           if (response.isUserActive) {
             if (response.isUserRetrieved) {
-              resultDivHolder.innerHTML = '<span class="text-success">Congratulations, Go ahead!</span>';
-              lockedBtn.classList.add('hidden-div');
-              unlockedBtn.classList.remove('hidden-div');
-              component.setState({ thisUser: response.thisUser[0] });
+              if (!response.thisUser[0].is_registration_completed) {
+                resultDivHolder.innerHTML = '<span class="text-success">Congratulations, Go ahead!</span>';
+                lockedBtn.classList.add('hidden-div');
+                unlockedBtn.classList.remove('hidden-div');
+                component.setState({ thisUser: response.thisUser[0] });
+              } else {
+                resultDivHolder.innerHTML = `<span class="text-danger">Sorry! The ID Card Number you are trying
+                to use, has already done with the registration!</span>`;
+              }
             } else {
               resultDivHolder.innerHTML = `<span class="text-danger">Your ID Card number is registered,
               and your account is active, but we failed to get your info from the database, this is not your fault,
@@ -48,14 +53,14 @@ export const handleIdCardNumberTyping = (component) => {
           lockedBtn.classList.remove('hidden-div');
           unlockedBtn.classList.add('hidden-div');
         }
-      } else {
-        console.log(`user not checked because of : ${response}`);
       }
-    }).catch((err) => {
-      console.log(err.response.data);
+    }).catch(() => {
+      // console.log(err.response.data);
     });
   } else {
     resultDivHolder.innerHTML = 16 - typedIdCardNumber.length;
+    lockedBtn.classList.remove('hidden-div');
+    unlockedBtn.classList.add('hidden-div');
   }
 };
 
@@ -174,8 +179,9 @@ export const handleRegisterBtnClicked = (component) => {
     user_authorities,
   } = component.state.thisUser;
   const { isEmailTaken } = component.state;
+  console.log(component.state.thisUser);
 
-  if (user_id_card_number && user_fname && user_midname && user_lname && user_authorities) {
+  if (user_id_card_number && user_fname && user_authorities) {
     if (dateofbirthValue.length !== 0) {
       dateofbirthError.innerHTML = '';
       if (validateEmail(emailValue)) {
@@ -193,6 +199,7 @@ export const handleRegisterBtnClicked = (component) => {
               registerBtn.setAttribute('disabled', true);
               /** NOW EVERYTHING IS COOL */
               const dataToSend = {
+                useridcardnumber: user_id_card_number,
                 useridcardid: user_id_card_id,
                 fname: user_fname,
                 midname: user_midname,
@@ -202,7 +209,6 @@ export const handleRegisterBtnClicked = (component) => {
                 password: passwordValue,
                 userauthorities: user_authorities,
               };
-
               axios.post('/users/register-new-user', dataToSend).then((res) => {
                 const { login, token } = res.data;
                 if (login) {
@@ -227,5 +233,49 @@ export const handleRegisterBtnClicked = (component) => {
     }
   } else {
     generalformError.innerHTML = 'Your ID Number is not verified';
+  }
+};
+
+
+/**
+ * ====================================================================================
+ * ====================================================================================
+ * =====================FUNCTIONS TO HANDLE LOGIN FORM=================================
+ * ====================================================================================
+ * ====================================================================================
+ */
+export const handleLoginEmailTyping = (component) => {
+  const { emailField, errorField, loginBtn } = component.state.necessaryFields;
+  if (validateEmail(emailField.value)) {
+    loginBtn.classList.add('hidden-div');
+    errorField.innerHTML = '<span class="text-warning spinner-border spinner-grow-sm"/>';
+    axios.post('/users/check-existance-of-email', { email: emailField.value }).then((res) => {
+      if (res.data) {
+        loginBtn.classList.remove('hidden-div');
+        errorField.innerHTML = '';
+        component.setState({ isEmailValid: true });
+      } else {
+        loginBtn.classList.add('hidden-div');
+        errorField.innerHTML = 'The email you typed doesn\'t exist in our databases';
+      }
+    });
+  }
+};
+
+export const handleSubmitLoginForm = (component) => {
+  const { emailField, passwordField, errorField } = component.state.necessaryFields;
+
+  if (validateEmail(emailField.value)) {
+    errorField.innerHTML = '<span class="text-warning spinner-grow-sm spinner-border"/>';
+    const dataToSend = { email: emailField.value, password: passwordField.value };
+    axios.post('/users/login', dataToSend).then((res) => {
+      const gotenLoginInfo = res.data;
+      if (gotenLoginInfo.login) {
+        window.localStorage.setItem('oauth', gotenLoginInfo.token);
+        window.location.replace(`/auth/auth-user?redirect=true&oauth=${window.localStorage.getItem('oauth')}`);
+      }
+    }).catch((err) => {
+      errorField.innerHTML = err.response.data;
+    });
   }
 };

@@ -1,6 +1,6 @@
 import { validateEmail, validatePassword, validateFname } from '../../helpers/functions/validations';
 import connect from '../models/db/settings/connectToDb';
-import { CHECK_USER_ID_FROM_TABLE_USERS } from '../models/db/settings/SQLqueries';
+import { CHECK_USER_ID_FROM_TABLE_USERS, CHECK_IF_ID_CARD_NUMBER_EXISTS } from '../models/db/settings/SQLqueries';
 
 
 /**
@@ -12,12 +12,13 @@ import { CHECK_USER_ID_FROM_TABLE_USERS } from '../models/db/settings/SQLqueries
  */
 export const validateSignup = (req, res, next) => {
   const {
-    useridcardid,
+    useridcardnumber,
     fname,
     dateofbirth,
     email,
     password,
   } = req.body;
+  console.log(req.body);
 
   if (!validateFname(fname)) {
     res.status(400).send('Your familly name has illegal characters!');
@@ -27,8 +28,8 @@ export const validateSignup = (req, res, next) => {
     res.status(400).send('The email you are saving is invalid!');
   } else if (!validatePassword(password, email)[1]) {
     res.status(400).send(validatePassword(password, email)[0]);
-  } else if (useridcardid) {
-    connect().query(CHECK_USER_ID_FROM_TABLE_USERS, [useridcardid], (err, result) => {
+  } else if (useridcardnumber) {
+    connect().query(CHECK_IF_ID_CARD_NUMBER_EXISTS, [useridcardnumber], (err, result) => {
       if (err) {
         res.status(500).send({
           isUserVerifiedFromDb: false,
@@ -84,19 +85,35 @@ export const validateUserIdCardNumber = (req, res, next) => {
   } = req.body;
 
   if (userfname) {
-    if (useridcardnumber) {
-      if (userauthorities) {
-        next();
+    if (userauthorities) {
+      if (useridcardnumber) {
+        connect().query(CHECK_IF_ID_CARD_NUMBER_EXISTS, [useridcardnumber], (err, result) => {
+          if (err) {
+            res.status(500).send({
+              isUserIdSaved: false,
+              info: '<span class="text-danger">Enter user ID Card number</span>',
+            });
+          } else if (result) {
+            if (result.rows[0].exists) {
+              res.status(401).send({
+                isUserIdSaved: false,
+                info: '<span class="text-danger">You are not allowed to register this id card number because it is already registered</span>',
+              });
+            } else {
+              next();
+            }
+          }
+        });
       } else {
         res.status(400).send({
           isUserIdSaved: false,
-          info: '<span class="text-danger">Select one of the authorities</span>',
+          info: '<span class="text-danger">Enter user ID Card number</span>',
         });
       }
     } else {
       res.status(400).send({
         isUserIdSaved: false,
-        info: '<span class="text-danger">Enter a user ID Card number</span>',
+        info: '<span class="text-danger">Select user authorities</span>',
       });
     }
   } else {
